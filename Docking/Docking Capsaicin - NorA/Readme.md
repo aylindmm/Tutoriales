@@ -5,7 +5,10 @@ La capsaicina actúa como un inhibidor del crecimiento bacteriano indirecto al i
 
 A nivel molecular, los estudios de acoplamiento molecular (molecular docking) y dinámica molecular (MD) muestran que la bomba puede ser bloqueada por péptidos dentro de la cavidad de unión de la proteína NorA, específicamente interactuando con los residuos Glu222 y Arg310, mediante enlaces de hidrógeno (de 3.32 Å y 2.81 Å, respectivamente) y múltiples interacciones hidrofóbicas. Este tipo de interacción sugiere que el sitio de unión está dentro del canal transmembrana de NorA, impidiendo su función de expulsar compuestos como antibióticos o colorantes (como el bromuro de etidio), y facilitando su acumulación intracelular (Brawley et al., 2022) .
 
+---
 En esta práctica vamos a evaluar la capacidad de la capsaicina para unirse a NorA. Además, compararemos la afinidad de unión con la de otros compuestos similares.
+
 Para realizar un protocolo de docking, es fundamental contar con la estructura de referencia de la proteína blanco, preferentemente determinada experimentalmente. Además, es ideal conocer con precisión el sitio de unión del ligando, información que puede obtenerse a partir de estructuras previamente resueltas de complejos proteína-ligando. En este caso, utilizaremos como referencia la estructura 7LO8 (https://www.rcsb.org/structure/7LO8) de Protein Data Bank, que corresponde a NorA en complejo con el anticuerpo Fab36. Esta estructura revela el bloqueo del canal de eflujo por parte de Fab36, y dicha interfaz de contacto servirá como punto de partida para modelar la interacción con la capsaicina.
+
 --- 
 
