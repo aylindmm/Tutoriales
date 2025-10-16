@@ -1,5 +1,5 @@
 # Técnicas Experimentales: Docking Capsaicin - NorA
-### Aylin del Moral
+### Luis Castillo, Aylin del Moral
 ---
 La capsaicina actúa como un inhibidor del crecimiento bacteriano indirecto al interferir con uno de los mecanismos de resistencia más importantes de *Staphylococcus aureus*: la **bomba de expulsión NorA**. Esta bomba pertenece a la superfamilia de transportadores MFS (Major Facilitator Superfamily) y es responsable de expulsar antibióticos como las fluoroquinolonas (e.g., ciprofloxacina), disminuyendo su eficacia. Al bloquear esta bomba, la concentración intracelular de antibióticos aumenta, potenciando su efecto bactericida. En el estudio citado, la capsaicina mostró una concentración mínima efectiva (MEC) de 50 µg/mL en la cepa SA1199B de *S. aureus* (que sobreexpresa NorA), reduciendo significativamente la concentración inhibitoria mínima (MIC) de ciprofloxacina. El papel de la capsaicina no es directamente bactericida, sino que actúa como un inhibidor de la resistencia bacteriana, restaurando la eficacia de antibióticos mediante la inhibición de la bomba de eflujo NorA (Naaz et al., 2021).
 
@@ -21,6 +21,7 @@ Les recomiendo revisar los tips que les dan para que se den una idea de cómo fu
 •	Una cuenta en usegalaxy.com
 
 •	Pymol → Es un software de visualización molecular. Se puede descargar aquí https://www.pymol.org/
+# 
 
 ## Data
 • `Ligand_Fab36.pdb` - Este archivo contiene el péptido de Fab36 que bloquea al canal NorA.
@@ -28,6 +29,8 @@ Les recomiendo revisar los tips que les dan para que se den una idea de cómo fu
 • `Protein_NorA.pdb` - Contiene la estructura de la proteína blanco.
   
 • `CAPSAICIN.sdf` - Contiene la estructura de la capsaicina.
+
+# 
 
 ## Procedimiento
 ### Carga de datos
@@ -37,6 +40,8 @@ Les recomiendo revisar los tips que les dan para que se den una idea de cómo fu
 4.	Para evitar inconvenientes, a los archivos `.pdb`, en el menu desplegable de `“Auto-detect”`, seleccionar manualmente el formato `pdb`.
 5.	Selecióna el boton `“Start”` encontrado en el menú de abajo.
 <img width="1186" height="580" alt="Carga de datos" src="https://github.com/user-attachments/assets/e74439bd-f748-456e-b556-584dcfbc824b" />
+
+# 
 
 ### Convertir ligando a formato mol
 1.	Selecciona el boton `“Tools”` ubicado a la izquierda de la pantalla.
@@ -56,6 +61,8 @@ Les recomiendo revisar los tips que les dan para que se den una idea de cómo fu
 4.	Al terminar el proceso, cambia el nombre del archivo a Ligand (MOL) y guarda los cambios.
 <img width="1060" height="415" alt="name" src="https://github.com/user-attachments/assets/c79582e4-d9b5-4c77-ae99-6e4d7d158e9e" />
 
+# 
+
 ### Convertir capsaicina a formato mol
 1.	De la misma forma, con la herramienta `“Compound conversion”` ingresa los siguientes parametros.
 
@@ -69,6 +76,8 @@ d.	Los demás parametros puedes dejarlos con sus valores por defecto.
 
 2.	Al terminar el proceso, cambia el nombre del archivo a Capsaicin (MOL)
 
+# 
+
 ### Convertir Capsaicina a smile
 1.	De la misma forma, con la herramienta `“Compound conversion”` ingresa los siguientes parametros.
    
@@ -79,6 +88,8 @@ b.	**Output format**: SMILES format (SMI)
 c.	Los demás parametros puedes dejarlos con sus valores por defecto.
 
 2.	Al terminar el proceso, cambia el nombre del archivo a “Capsaicin (smi)”
+
+# 
 
 ### Construir una librería de compuestos similares a la Capsaicina
 1.	En el buscador de herramientas, escribe “ChEMBL database” que es la herramienta que utilizaremos y selecciona la primera ópcion.
@@ -100,6 +111,8 @@ f.	Los demás parametros dejarlos con sus valores por defecto
 
 <img width="1198" height="805" alt="ChEMBL" src="https://github.com/user-attachments/assets/caef9999-a54f-4c4e-a14d-8b3fdce71421" />
 
+# 
+
 ### Concatenar los compuestos encontrados con la capsaicina
 1.	En el buscador de herramientas, escribe `“Concatenate dataset”` que es la herramienta que utilizaremos y selecciona la primera ópcion.
 2.	Ingresa los siguientes parámetros:
@@ -108,6 +121,59 @@ b.	Haz clic en **Insert Dataset** y, en el nuevo cuadro de selección que aparec
 3.	Ejecuta el proceso
 4.	Al terminar el proceso, cambia el nombre al conjunto de datos de salida como “Compound library”
 <img width="758" height="352" alt="concatenar" src="https://github.com/user-attachments/assets/ca818969-91cd-4e31-9046-1029f20f626f" />
+
+# 
+___
+# Preparar archivos para docking
+Para el siguiente paso, es necesario aplicar un paso de procesamiento a la estructura de la proteína y a los candidatos de docking: cada una de las estructuras debe convertirse al formato PDBQT antes de utilizar la herramienta de docking `AutoDock Vina`.
+
+Además, el docking requiere definir las coordenadas de un sitio de unión. En la práctica, esto define una “caja” en la que el software intentará encontrar el sitio de unión óptimo. En este caso, ya conocemos la ubicación del sitio de unión, ya que la estructura PDB descargada contiene un ligando unido. Existe una herramienta en Galaxy que permite crear automáticamente un archivo de configuración para docking cuando ya se conocen las coordenadas del ligando.
+
+___
+# Tutorial
+## Generar archivos PDBQT y de configuración para docking
+### Preparar el receptor
+1. Busca la herramienta `Prepare receptor`
+2. Selecciona el archivo PDB: `Protein_NorA.pdb`
+3. Ejecuta el proceso: `Run Tool`
+4. Al finalizar el proceso, renombra el archivo generado a `Protein_NorA PDBQT`
+
+# 
+
+### Conversión de compuestos
+1. Busca la herramienta `Compound conversion` y ingresa los siguientes parámetros:
+
+a. **Molecular input file**: Compound library
+
+b. **Output format**: MDL MOL format (sdf, mol)
+
+c. **Generate 3D coordinates**: Yes
+
+d. **Add hydrogens appropriate for pH**: 7.4
+
+e. Los demás parametros como default y ejecutar el proceso.
+
+2. Al finalizar el proceso renombrar el archivo como `Prepared ligands`
+
+# 
+
+### Calculator la caja de búsqueda
+
+1. Busca la herramienta `Calculate the box parameters using RDKit`y ingresa los siguientes parámetros:
+
+a. **Input ligand or pocket**: Ligand (MOL)
+
+b. **x-axis buffer**: 5
+
+c. **y-axis buffer**: 5
+
+d. **z-axis buffer**: 5
+
+e. **Random seed**: 1
+
+2. Al finalizar el proceso renombrar el archivo generado como `Box configuration`
+
+# 
 
 
 
