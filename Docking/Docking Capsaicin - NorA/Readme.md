@@ -250,6 +250,11 @@ Para su reporte, incluyan la estructura del complejo capsaicina - NorA y una gr�
 
 ---
 
+# Resultado:
+<img width="710" height="622" alt="Captura de pantalla 2025-10-17 a la(s) 1 39 58 a m" src="https://github.com/user-attachments/assets/aa4b9f3a-4629-42b9-ac2f-4489aa52dc23" />
+<img width="898" height="688" alt="Captura de pantalla 2025-10-17 a la(s) 1 38 31 a m" src="https://github.com/user-attachments/assets/a254a093-fc3e-4c74-9665-ff2da779ef5c" />
+
+
 # Referencias
 
   Brawley, D. N., Sauer, D. B., Li, J., Zheng, X., Koide, A., Jedhe, G. S., Suwatthee, T., Song, J., Liu, Z., Arora, P. S., Koide, S., Torres, V. J., Wang, D.-N., & Traaseth, N. J. (2022). Structural basis for inhibition of the drug efflux pump NorA from Staphylococcus aureus. Nature Chemical Biology, 18(7), 706–712.
