@@ -188,7 +188,9 @@ e. **Random seed**: 1
 
 a. **Receptor**: `Protein_NorA PDBQT`
 
-b. **Ligands**: `Prepared ligands collection` (Los archivos pdbqt que generamos en el paso anterior)
+b. **Ligands** (selecciona `Dataset colection` para que puedas seleccionar el archivo): `Prepared ligands collection` (Los archivos pdbqt que generamos en el paso anterior)
+<img width="156" height="75" alt="Captura de pantalla 2025-10-16 a la(s) 5 48 51 p m" src="https://github.com/user-attachments/assets/0a5a61c5-6fbb-4c01-b702-0e9e974aca8a" />
+
 
 c. **Specify pH value for ligand protonation**: 7.4
 
@@ -199,7 +201,7 @@ e. **Box configuration**: `Box configuration RDKit`
 d. **Exhaustiveness**: dejar en blanco
 
 **Nota**: este paso les seguirá generando un error, pero pueden ignorarlo.
-<img width="293" height="110" alt="Captura de pantalla 2025-10-16 a la(s) 5 35 55 p m" src="https://github.com/user-attachments/assets/0de531d3-5cf6-4c20-8651-a5c6ef6707a8" />
+<img width="281" height="93" alt="Captura de pantalla 2025-10-16 a la(s) 7 22 21 p m" src="https://github.com/user-attachments/assets/c97d51eb-892c-4ca4-8386-ec6aeda15003" />
 
 ---
 Si todo sale bien, deben obtener un directorio con los resultados para cada ligando, para generar una tabla que contenga cada ligando y el score obtenido, ejecutaremos los siguientes comandos.
