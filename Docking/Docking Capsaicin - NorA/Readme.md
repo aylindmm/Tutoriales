@@ -200,12 +200,39 @@ e. **Box configuration**: `Box configuration RDKit`
 
 d. **Exhaustiveness**: dejar en blanco
 
-**Nota**: este paso les seguirá generando un error, pero pueden ignorarlo.
-<img width="281" height="93" alt="Captura de pantalla 2025-10-16 a la(s) 7 22 21 p m" src="https://github.com/user-attachments/assets/c97d51eb-892c-4ca4-8386-ec6aeda15003" />
+2. Al finalizar el proceso renombra el archivo generado como `Docking Results` 
+
+**Nota**: este paso les seguirá generando un error "⚠", pero pueden ignorarlo. <img width="284" height="74" alt="Captura de pantalla 2025-10-16 a la(s) 9 17 32 p m" src="https://github.com/user-attachments/assets/162c0468-bff0-43fd-8faf-7dee3c25229c" />
 
 ---
 Si todo sale bien, deben obtener un directorio con los resultados para cada ligando, para generar una tabla que contenga cada ligando y el score obtenido, ejecutaremos los siguientes comandos.
 
 ---
+#### 1. Busca la herramienta `Flatten collection` y ingresar los siguientes parámetros:
+a. **Input Collection**: Docking Results
 
+b. **Join collection identifiers using**: underscore (_) 
+
+1.1. Al finalizar el proceso renombra el archivo generado como `Docking Data Flattened` 
+
+#### 2. Busca la herramienta `Extract values from an SD-file` y ingresar los siguientes parámetros:
+a. **Input SD-file**: Docking Data Flattened (¡Recuerda seleccionar el ícono de ‘colección’!) <img width="45" height="40" alt="Captura de pantalla 2025-10-17 a la(s) 12 09 38 a m" src="https://github.com/user-attachments/assets/9a3f2393-edea-4f19-9862-e0ba7d1a1ee3" />
+
+b. **Include the property name as header**: Yes
+
+c. **Include SMILES as column in output**: Yes
+
+d. **Include molecule name as column in output**: Yes
+
+2.1 Dejar lo demás sin cambio
+2.2 Al finalizar el proceso renombra el archivo generado como `Docking SD-File` 
+
+#### 3. Busca la herramienta `Collapse Collection` y ingresar los siguientes parámetros:
+a. **Collection of files to collapse into single dataset**: Docking SD-File <img width="45" height="40" alt="Captura de pantalla 2025-10-17 a la(s) 12 09 38 a m" src="https://github.com/user-attachments/assets/9a3f2393-edea-4f19-9862-e0ba7d1a1ee3" />
+
+b. **Keep one header line**: Yes
+
+c. **Append File name**: No
+
+3.1. Al finalizar el proceso renombra el archivo generado como `Collapse Collection-Docking Capsaicin` 
 
