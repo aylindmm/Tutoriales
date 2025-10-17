@@ -215,6 +215,8 @@ b. **Join collection identifiers using**: underscore (_)
 
 1.1. Al finalizar el proceso renombra el archivo generado como `Docking Data Flattened` 
 
+# |
+
 #### 2. Busca la herramienta `Extract values from an SD-file` y ingresar los siguientes parámetros:
 a. **Input SD-file**: Docking Data Flattened (¡Recuerda seleccionar el ícono de ‘colección’!) <img width="45" height="40" alt="Captura de pantalla 2025-10-17 a la(s) 12 09 38 a m" src="https://github.com/user-attachments/assets/9a3f2393-edea-4f19-9862-e0ba7d1a1ee3" />
 
@@ -227,6 +229,8 @@ d. **Include molecule name as column in output**: Yes
 2.1 Dejar lo demás sin cambio
 2.2 Al finalizar el proceso renombra el archivo generado como `Docking SD-File` 
 
+# |
+
 #### 3. Busca la herramienta `Collapse Collection` y ingresar los siguientes parámetros:
 a. **Collection of files to collapse into single dataset**: Docking SD-File <img width="45" height="40" alt="Captura de pantalla 2025-10-17 a la(s) 12 09 38 a m" src="https://github.com/user-attachments/assets/9a3f2393-edea-4f19-9862-e0ba7d1a1ee3" />
 
@@ -236,3 +240,18 @@ c. **Append File name**: No
 
 3.1. Al finalizar el proceso renombra el archivo generado como `Collapse Collection-Docking Capsaicin` 
 
+
+---
+El archivo resultante de este paso, nombrado como `Collapse Collection-Docking Capsaicin` pueden visualizarlo en excel, de esta forma es fácil identificar el ligando con el mejor score, el cual es el que tiene el valor más negativo.
+
+Una vez terminado, pueden descargar el archivo de `Docking Results` el cual contiene todos los ligandos generados, y abrirlo en Pymol. Para ver el conjunto Proteína - Ligando, deben cargar en la misma sesión de Pymol el archivo Protein_NorA.pdb.
+
+Para su reporte, incluyan la estructura del complejo capsaicina - NorA y una gráfica que muestre los scores obtenidos por todos los ligando evaluados, destacando la posición de la Capsaicina.
+
+---
+
+# Referencias
+
+  Brawley, D. N., Sauer, D. B., Li, J., Zheng, X., Koide, A., Jedhe, G. S., Suwatthee, T., Song, J., Liu, Z., Arora, P. S., Koide, S., Torres, V. J., Wang, D.-N., & Traaseth, N. J. (2022). Structural basis for inhibition of the drug efflux pump NorA from Staphylococcus aureus. Nature Chemical Biology, 18(7), 706–712.
+
+  Naaz, F., Khan, A., Kumari, A., Ali, I., Ahmad, F., Ahmad Lone, B., Ahmad, N., Ali Khan, I., Rajput, V. S., Grover, A., & Shafi, S. (2021). 1,3,4-oxadiazole conjugates of capsaicin as potent NorA efflux pump inhibitors of Staphylococcus aureus. Bioorganic Chemistry, 113, 105031.
