@@ -8,6 +8,43 @@ El objetivo es identificar procesos biológicos, funciones moleculares y compone
 
 ---
 
+## Introducción
+
+Una ontología es una representación formal de un cuerpo de conocimiento dentro de un dominio dado. Las ontologías suelen constar de un conjunto de clases (o términos o conceptos) con relaciones que operan entre ellas. La Ontología Génica (GO, por sus siglas en inglés) describe nuestro conocimiento del dominio biológico.
+
+Se dividen en tres grupos:
+
+1. Función Molecular (Molecular Function)
+2. Componente Celular (Cellular Component)
+3. Proceso Biológico (Biological Process)
+
+Una anotación en GO es una declaración sobre la función de un gen en particular. Las anotaciones en GO se crean asociando un gen o producto génico con un término en GO. Juntas, estas declaraciones constituyen una "instantánea" del conocimiento biológico actual. Por lo tanto, las anotaciones en GO capturan declaraciones sobre cómo funciona un gen a nivel molecular, dónde en la célula funciona y a qué procesos biológicos (vías, programas) contribuye.
+
+Existen cuatro elementos de información que identifican de manera única una anotación en GO. Aunque hay componentes adicionales que un curador puede usar para indicar más información, como calificadores y extensiones de anotación, como mínimo, una anotación consta de:
+
+1. Producto génico (puede ser una proteína, RNA, etc.).
+2. Término en GO.
+3. Referencia.
+4. Evidencia.
+
+<img width="1317" height="600" alt="image" src="https://github.com/user-attachments/assets/d8726280-7a12-47bf-90d9-e4ca045e3a08" />
+
+El análisis de enriquecimiento es una técnica bioinformática que permite identificar funciones biológicas, rutas metabólicas o procesos celulares que están sobrerrepresentados en un conjunto de genes o proteínas de interés.
+
+En otras palabras, busca responder a la pregunta: *¿Qué tienen en común los genes que cambiaron su expresión?*
+
+Cuando realizas un experimento de expresión génica, obtienes una lista de genes que están sobreexpresados o subexpresados. Sin embargo, esa lista por sí sola no siempre revela el significado biológico del cambio. El análisis de enriquecimiento ayuda a interpretar esos resultados, agrupando los genes según su función conocida.
+
+¿Cómo funciona?
+
+1. Toma tu lista de genes (por ejemplo, los significativamente expresados según DESeq2) --> Muestra
+2. Compara esa lista con bases de datos biológicas, como Gene Ontology (GO), KEGG o Reactome. --> Término
+3. Evalúa estadísticamente si ciertos términos o rutas aparecen más frecuentemente de lo esperado por azar. El análisis toma en cuenta el total de genes presentes en el organismo de estudio. --> Universo.
+
+   <img width="505" height="263" alt="image" src="https://github.com/user-attachments/assets/41cca5e6-a37b-41e1-ae9e-a9ceeee03a9a" />
+
+Los términos enriquecidos son aquellos en los que la intersección entre Muestra y Término es significativa, sugiriendo una función biológica relevante para la condición que estudias. El análisis de enriquecimiento integra resultados genómicos con conocimiento biológico previo, lo que permite interpretar de forma funcional los resultados del análisis diferencial. Este análisis es una herramienta clave para pasar de una lista de genes a una comprensión biológica del fenómeno estudiado.
+
 ## Requisitos
 
 - R y Bioconductor instalados
@@ -103,7 +140,7 @@ El bubble plot resume visualmente los términos de GO más significativos:
 
 
 
-Las categorías pertenecientes al repositorio de GeneOntology son las siguientes:
+Las categorías pertenecientes al repositorio de Gene Ontology son las siguientes:
 
 | Categoría                   | Descripción                                          |
 | --------------------------- | ---------------------------------------------------- |
@@ -121,9 +158,8 @@ El resto de categorías pertenecen a distintos repositorios:
 ##  4. Explorar un término de GO de interés
 
 1. Elige un término GO que te parezca relevante en tus resultados.
-
 2. Busca su definición en la página oficial de [`Gene Ontology`](https://geneontology.org/)
-3. En g:Profiler, descarga los resultados en formato csv.
+3. En g:Profiler, descarga los resultados en formato csv. El botón de descarga se encuentra en la pestaña "Detailed results".
    
    <img width="1350" height="739" alt="image" src="https://github.com/user-attachments/assets/c287c412-96c8-45d5-bb6a-bb84f538068f" />
 
@@ -135,7 +171,7 @@ El resto de categorías pertenecen a distintos repositorios:
 
 ## 5. Reporte de resultados (plantilla sugerida)
 
-Puedes usar esta tabla para documentar tus hallazgos:
+Puedes usar esta tabla para documentar tus hallazgos principales:
 
 | Lista analizada  | Término GO | Categoría | p-ajustada | Genes en intersección | Descripción           |
 | ---------------- | ---------- | --------- | ---------- | --------------------- | --------------------- |
