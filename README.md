@@ -23,7 +23,6 @@ Cada tutorial incluye **código comentado, instrucciones paso a paso y referenci
 
 ## Cómo descargar este repositorio
 
-1. Clona el repositorio:
    
 ```bash
    git clone https://github.com/tu-usuario/LaBioRed-Tutorials.git
