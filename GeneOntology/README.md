@@ -71,9 +71,10 @@ Esto generará tres archivos de texto:
 
 Una vez que el análisis termine, g:Profiler mostrará los términos de GO enriquecidos organizados en categorías:
 
-<img width="1344" height="750" alt="image" src="https://github.com/user-attachments/assets/938ad686-91e5-4f4f-8e16-078e979384a3" />
 
 📈 Bubble plot (gráfico de burbujas)
+
+<img width="1344" height="750" alt="image" src="https://github.com/user-attachments/assets/938ad686-91e5-4f4f-8e16-078e979384a3" />
 
 El bubble plot resume visualmente los términos de GO más significativos:
 
@@ -88,6 +89,19 @@ El bubble plot resume visualmente los términos de GO más significativos:
   Colores más claros = menor significancia.
 
 *En resumen*: busca burbujas grandes y de color intenso, ya que indican procesos altamente enriquecidos con varios genes implicados.
+
+📊 Tabla de resultados
+
+<img width="936" height="403" alt="image" src="https://github.com/user-attachments/assets/92f5eea3-c493-4bf4-bb96-eff9d1116957" />
+
+| Columna               | Significado                                                           |
+| --------------------- | --------------------------------------------------------------------- |
+| **Term ID**           | Identificador del término GO (ej. GO:0008150)                         |
+| **Term name**         | Nombre descriptivo del proceso o función (ej. *cell differentiation*) |
+| **Source**            | Base de datos de origen (GO:BP, KEGG, Reactome, etc.)                 |
+| **Adjusted p-value**  | Significancia corregida (cuanto menor, más confiable el resultado)    |
+
+
 
 Las categorías pertenecientes al repositorio de GeneOntology son las siguientes:
 
