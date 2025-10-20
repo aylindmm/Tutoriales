@@ -62,6 +62,21 @@ Esto generará tres archivos de texto:
 2. Carga una de tus listas. Copia y pega los nombres de los genes, o sube el archivo .txt
 3. Selecciona el organismo correcto (por ejemplo, Homo sapiens, Mus musculus, Danio rerio, etc.)
 4. Haz clic en "Run" para iniciar el análisis
+<img width="1351" height="647" alt="image" src="https://github.com/user-attachments/assets/e83487ce-d724-4ba4-b67a-ba02ea7e6ae4" />
+
+
+## 3. Interpretación de resultados
+
+Una vez que el análisis termine, g:Profiler mostrará los términos de GO enriquecidos organizados en categorías:
+<img width="1344" height="750" alt="image" src="https://github.com/user-attachments/assets/938ad686-91e5-4f4f-8e16-078e979384a3" />
+
+Las pertenecientes al repositorio de GeneOntology son las siguientes:
+| Categoría                   | Descripción                                          |
+| --------------------------- | ---------------------------------------------------- |
+| **BP (Biological Process)** | Procesos biológicos en los que participan los genes  |
+| **MF (Molecular Function)** | Actividades moleculares o funciones de las proteínas |
+| **CC (Cellular Component)** | Partes de la célula donde actúan los genes/proteínas |
+
 
 
 
