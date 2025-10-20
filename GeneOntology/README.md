@@ -1,5 +1,8 @@
 #  Análisis de Enriquecimiento con Gene Ontology (GO)
 
+Aylin del Moral
+---
+
 Este tutorial describe cómo realizar un análisis de enriquecimiento funcional utilizando resultados del análisis diferencial de expresión de **DESeq2**, junto con la herramienta en línea **g:Profiler**.  
 El objetivo es identificar procesos biológicos, funciones moleculares y componentes celulares sobrerrepresentados en los genes diferencialmente expresados.
 
@@ -48,9 +51,21 @@ write.table(down_genes, "genes_down.txt", quote = FALSE, row.names = FALSE, col.
 
 Esto generará tres archivos de texto:
 
-genes_difexp.txt
+`genes_difexp.txt`
+`genes_up.txt`
+`genes_down.txt`
 
-genes_up.txt
+--- 
+##  2. Ejecutar el análisis en g:Profiler
 
-genes_down.txt
+1. Abre [`g:Profiler`](https://biit.cs.ut.ee/gprofiler/gost)
+2. Carga una de tus listas. Copia y pega los nombres de los genes, o sube el archivo .txt
+3. Selecciona el organismo correcto (por ejemplo, Homo sapiens, Mus musculus, Danio rerio, etc.)
+4. Haz clic en "Run" para iniciar el análisis
+
+
+
+
+
+
 
