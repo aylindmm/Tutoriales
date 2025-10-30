@@ -20,6 +20,7 @@ Aunque no tengas experiencia previa con GROMACS ni con DM, aprenderás paso a pa
 🔁 El flujo general de la simulación incluye:
 
 ![Flujo general de simulación](../workflow.png)
+
 <img width="1920" height="1080" alt="workflow" src="https://github.com/user-attachments/assets/3f4e6359-0fb2-44f7-aee8-964dbc6c381a" />
 
 
