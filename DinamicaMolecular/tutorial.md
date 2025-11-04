@@ -18,9 +18,7 @@ Existen diversos paquetes para realizar simulaciones de MD. Uno de los más util
 Aunque no tengas experiencia previa con GROMACS ni con DM, aprenderás paso a paso.
 
 🔁 El flujo general de la simulación incluye:
-
-![Flujo general de simulación](../workflow.png)
-
+<img width="1920" height="1080" alt="workflow" src="https://github.com/user-attachments/assets/3f4e6359-0fb2-44f7-aee8-964dbc6c381a" />
 
 💡**Antes de iniciar:**  
 - Asegúrate de tener tu cuenta activa en [Galaxy](https://usegalaxy.org/)
@@ -34,9 +32,9 @@ Aunque no tengas experiencia previa con GROMACS ni con DM, aprenderás paso a pa
 - [Configuración](#configuración)
 - [Solvatación](#solvatación)
 - [Minimización de energía](#minimización-de-energía)
-- [Equilibro](#equilibro)
--  [Equilibrio NVT](#equilibrio-NVT)
--  [Equilibrio NPT](#equilibrio-NPT)
+- [Equilibro del sistema](#equilibro-del-sistema)
+   - [Equilibrio NVT](#equilibrio-NVT)
+   - [Equilibrio NPT](#equilibrio-NPT)
 - [Simulación de producción](#simulación-de-producción)
 - [Análisis de resultados](#análisis-de-resultados)
 - [Conclusión](#conclusión)
@@ -64,7 +62,8 @@ Durante y después de la simulación, se generan archivos de trayectoria y energ
 Para cargar la estructura inicial: 
 1. **Crea un nuevo historial en Galaxy**
    1. En la esquina superior derecha de Galaxy, haz clic en *Histories*.
-   2. Selecciona *Create New History* ✚ . <!-- Falta añadir imagen -->
+   2. Selecciona *Create New History* ✚ .
+![newhistory](/DinamicaMolecular/Imágenes/newhistory.png)
    3. Ponle un nombre descriptivo, por ejemplo: Simulación_1AKI. 
    Esto te ayudará a mantener organizados todos los archivos de esta simulación.
 
@@ -72,6 +71,7 @@ Para cargar la estructura inicial:
    1. Busca la herramienta **Get PDB** en Galaxy.
    2. Ingresa el código de acceso PDB: `1AKI`.
    3. Ejecuta la herramienta y se decargará el archivo PDB de la proteína a tu historial.
+![PDB](/DinamicaMolecular/Imágenes/PDB.png)
 3. **Limpiar el archivo PDB (eliminar átomos que no son de la proteína)**   
    1. Busca la herramienta **Search in textfiles (grep)** en Galaxy.
    2. En el campo *Select lines from*, selecciona el archivo PDB que acabas de descargar (1AKI).
@@ -82,6 +82,7 @@ Para cargar la estructura inicial:
       -**Regular Expressión**: `HETATM`.
 
     4. Ejecuta la herramienta y obtendrás un nuevo archivo PDB limpio para la simulación.
+![textfiles](/DinamicaMolecular/Imágenes/textfiles.png)
 
 🔍 Explicación:
 Las líneas de un archivo PDB que comienzan con *HETATM* describen átomos que no pertenecen a la cadena principal de la proteína (como iones, ligandos o moléculas de agua). Al usar la opción *Don’t Match* con la expresión regular *HETATM*, el resultado conservará únicamente las líneas correspondientes a los átomos de proteína (ATOM), eliminando las demás.
@@ -90,6 +91,8 @@ Las líneas de un archivo PDB que comienzan con *HETATM* describen átomos que n
 En este tutorial analizaremos la lisozima de la clara de huevo de gallina, una enzima ampliamente estudiada por su capacidad para degradar los polisacáridos presentes en las paredes celulares de numerosas bacterias.
 Se trata de una proteína globular pequeña, compuesta por 129 residuos, caracterizada por su gran estabilidad, cualidades que la convierten en un modelo ideal para nuestros objetivos de estudio. <!-- Falta añadir imagen -->
 </pre>
+
+![1aki](/DinamicaMolecular/Imágenes/1aki.jpeg)
     
 ## 🧩 Configuración
 En este paso se utiliza la herramienta **GROMACS initial setup**, que toma como entrada un archivo PDB y genera tres archivos esenciales para la simulación de MD: 
@@ -115,7 +118,7 @@ La caja debe ser lo suficientemente grande para evitar que la proteína interact
 
 ### 💻 Práctica
 Primero, ejecuta la herramienta **GROMACS initial setup** con los siguientes parámetros:
-- **PDB input file**: `1AKI_clean.pdb` (estructura sin moléculas no proteicas)
+- **📄 PDB input file**: `1AKI_clean.pdb` (estructura sin moléculas no proteicas)
 - **Water model**: `SPC/E`
 - **Force field**: `OPLS/AA`
 - **Ignore hydrogens**: `No`
@@ -143,17 +146,19 @@ En el caso de la lisozima, cuya carga neta es +8, se añaden 8 iones de cloruro 
 ### 💻 Práctica
 Ejecuta la herramienta **GROMACS solvation and adding ions** con los siguientes parámetros:
 
- - **GRO structure file**: `archivo GRO generado en el paso anterior`
- - **Topology (TOP) file**: `GRO file produced by the structure configuration tool`
+ - **📄 GRO structure file**: `archivo GRO generado en el paso anterior`
+ - **📄 Topology (TOP) file**: `GRO file produced by the structure configuration tool`
  - **Input structure**: `Topology produced by setup`
  - **Water model for solvatation**: `SPC`
  - **Add ions to neutralise system**: `Yes, add ions`
  - **Specify salt concentration (sodium chloride) to add, in mol/liter**: `0`
  - **Generate detailed log**: `Yes`
  
-El resultado es un archivo **GRO** que contiene la proteína completamente rodeada por moléculas de agua, listo para el siguiente.
+![solvatacion](/DinamicaMolecular/Imágenes/solvatacion.png)
 
-## Minimización de energía
+El resultado es un archivo **GRO** que contiene la proteína completamente rodeada por moléculas de agua, listo para el siguiente paso.
+
+## ⚡ Minimización de energía
 Antes de iniciar la simulación de dinámica molecular, es necesario relajar la estructura del sistema mediante una minimización de energía (EM). Este paso corrige posibles choques entre átomos o geometrías poco realistas que podrían incrementar la energía potencial y generar inestabilidades durante la simulación. El objetivo es obtener una conformación inicial energéticamente estable.
 
 La herramienta GROMACS energy minimization permite dos modos de configuración en la sección “Entrada de parámetros”. En este tutorial se empleará la configuración predeterminada de Galaxy, que define automáticamente los parámetros necesarios a través de la interfaz y resulta adecuada para la mayoría de los casos.
@@ -163,9 +168,9 @@ Como alternativa, es posible cargar un archivo MDP (Molecular Dynamics Parameter
 ### 💻 Práctica
 Ejecuta la herramienta **GROMACS energy minimization** con los siguientes parámetros:
 
- - **GRO structure file**: `archivo GRO generado en el paso de solvatación`
- - **Topology (TOP) file**: `Topology`
- - **Parameter inpu**: `Use default (partially customisable) setting`
+ - **📄 GRO structure file**: `archivo GRO generado en el paso de solvatación`
+ - **📄 Topology (TOP) file**: `Topology`
+ - **Parameter inptu**: `Use default (partially customisable) setting`
  - **Choice of integrator**: `Generate a pair list with buffering` (most common choice for EM)
  - **Electrostatics**: `Fast smooth Particle-Mesh Ewald (SPME) electrostatics`
  - **Cut-off distance for the short-range neighbor list**: `1.0` (but irrelevant as we are using the Verlet scheme)
@@ -175,15 +180,142 @@ Ejecuta la herramienta **GROMACS energy minimization** con los siguientes parám
  - **Maximum step size**: `0.01`
  - **Generate detailed log**: `Yes`
 
-## Equilibrio
+## ⚖️ Equilibrio del sistema
+Tras la minimización de energía, el siguiente paso es equilibrar el sistema para asegurar que el solvente y los iones se distribuyan correctamente alrededor de la proteína y que las condiciones termodinámicas sean estables antes de la simulación de producción.
 
-## Simulación de producción
+El equilibrio se realiza en dos etapas sucesivas:
 
-## Análisis de resultados
+1. **Fase NVT (isotérmico-isocórico)**: Mantiene constantes el número de partículas, el volumen y la temperatura. En esta primera fase, se mantiene fijo el volumen mientras la temperatura del sistema se estabiliza mediante un termostato. La proteína se mantiene casi inmóvil utilizando el archivo de restricciones de posición generado durante la configuración inicial. Esto permite que el solvente se reorganice y se adapte al entorno de la proteína sin alterar su estructura principal.
 
-## Conclusión
+2. **Fase NPT (isotérmico-isobárico)**: Se mantiene constante el número de partículas, la presión y la temperatura. Una vez alcanzada la temperatura deseada, se procede a equilibrar la presión del sistema utilizando un barostato. En esta segunda fase se eliminan las restricciones de posición, permitiendo que tanto la proteína como el solvente se ajusten completamente a las condiciones de presión y densidad del sistema.
+
+Después de completar ambas etapas, el sistema se encuentra preparado y en equilibrio, listo para iniciar la simulación de dinámica molecular bajo condiciones controladas y estables.
+
+### 💻 Práctica
+
+### Equilibrio NVT 
+En esta primera etapa de equilibración, el sistema se mantiene a volumen constante, permitiendo que la temperatura se estabilice alrededor del valor deseado. La proteína permanece restringida para evitar movimientos grandes, mientras el solvente y los iones se adaptan libremente a su entorno.
+
+Ejecuta la herramienta **GROMACS simulation** con los siguientes parámetros:
+
+ - 📄**GRO structure file**: `archivo GRO generado en el paso anterior`
+ - 📄**Topology (TOP) file**: `Topology`
+ - **Use a checkpoint (CPT) file**: `No CPT input`
+ - **Produce a checkpoint (CPT) file**: `Produce CPT output`
+ - **Apply position restraints**: `Apply position restraints`
+ - 📄**Position restraint file**: `Position restraint file produced by ‘Setup’ tool`
+ - **Ensemble**: `Isothermal-isochoric ensemble (NVT)`
+ - **Trajectory output**: `Return no trajectory output` (No nos interesa cómo evoluciona el sistema hasta alcanzar el estado de equilibrio, sino simplemente la estructura final)
+ - **Structure output**: `Return .gro file`
+ - **Parameter input**: `Use default (partially customisable) setting`
+ - **Choice of integrator**: `A leap-frog algorithm for integrating Newton’s equations of motion` (Un integrador básico de salto de rana)
+ - **Bond constraints**: `Bonds with H-atoms` (Los enlaces que involucran H están restringidos)
+ - **Neighbor searching**: `Generate a pair list with buffering` [el esquema de Verlet](https://en.wikipedia.org/wiki/Verlet_list)
+- **Electrostatics**: `Fast smooth Particle-Mesh Ewald (SPME) electrostatics`
+- **Temperature**: `300`
+- **Step length in ps**: `0.002`
+- **Number of steps that elapse between saving data points (velocities, forces, energies)**: `5000`
+- **Distance for the Coulomb cut-off**: `1.0`
+- **Cut-off distance for the short-range neighbor list**: `1.0` (pero irrelevante ya que estamos utilizando el esquema de Verlet)
+- **Short range van der Waals cutoff**: `1.0`
+- **Number of steps for the NVT simulation**: `50000`
+- **Generate detailed log**: `Yes`
+
+### Equilibrio NPT
+Una vez estabilizada la temperatura del sistema durante la fase NVT, el siguiente paso es equilibrar la presión. Para ello, se realiza una nueva simulación bajo el ensamble NPT (Número de partículas, Presión y Temperatura constantes).
+
+En esta etapa, el volumen del sistema puede variar hasta alcanzar la presión y densidad adecuadas, representando condiciones más realistas del entorno físico. Al mismo tiempo, la proteína y el solvente pueden moverse libremente, permitiendo que el sistema se adapte de forma completa y estable.
+
+💡Nota:
+Se puede continuar la simulación justo donde finalizó la fase NVT utilizando el archivo de punto de control (CPT) generado al final de esa ejecución. Este archivo guarda el estado del sistema (velocidades, posiciones y parámetros), lo que permite retomar el proceso sin reiniciar desde cero.
+
+Ejecuta la herramienta **GROMACS simulation** con los siguientes parámetros:
+
+ - 📄**GRO structure file**: `archivo GRO generado en el paso anterior`
+ - 📄**Topology (TOP) file**: `Topology`
+ - **Use a checkpoint (CPT) file**: `Continue simulation from a CPT file`
+ - 📄**Checkpoint (CPT) file**: `Checkpoint file produced by NVT equilibration`
+ - **Produce a checkpoint (CPT) file**: `Produce CPT output`
+ - **Apply position restraints**: `No position restraints`
+ - 📄**Position restraint file**: `None`
+ - **Ensemble**: `Isothermal-isobaric ensemble (NPT)`
+ - **Trajectory output**: `Return no trajectory output` 
+ - **Structure output**: `Return .gro file`
+ - **Parameter input**: `Use default (partially customisable) setting`
+ - **Choice of integrator**: `A leap-frog algorithm for integrating Newton’s equations of motion` (Un integrador básico de salto de rana)
+ - **Bond constraints**: `Bonds with H-atoms` (Los enlaces que involucran H están restringidos)
+ - **Neighbor searching**: `Generate a pair list with buffering` [el esquema de Verlet](https://en.wikipedia.org/wiki/Verlet_list)
+- **Electrostatics**: `Fast smooth Particle-Mesh Ewald (SPME) electrostatics`
+- **Temperature**: `300`
+- **Step length in ps**: `0.002`
+- **Number of steps that elapse between saving data points (velocities, forces, energies)**: `5000`
+- **Distance for the Coulomb cut-off**: `1.0`
+- **Cut-off distance for the short-range neighbor list**: `1.0` (pero irrelevante ya que estamos utilizando el esquema de Verlet)
+- **Short range van der Waals cutoff**: `1.0`
+- **Number of steps for the NVT simulation**: `50000`
+- **Generate detailed log**: `Yes`
+
+<pre><span style="background-color:yellow">¿Por qué es importante mantener la proteína restringida durante el equilibrio NVT?</span>
+Durante el equilibrio NVT, es importante mantener la proteína restringida para evitar movimientos o deformaciones bruscas mientras el solvente y los iones se ajustan a su entorno. En esta fase, el sistema aún no está completamente equilibrado, por lo que liberar la proteína podría provocar desplazamientos no naturales debido a fuerzas iniciales desequilibradas.
+Al aplicar restricciones de posición, la estructura principal de la proteína se mantiene estable mientras el agua y los iones alcanzan una distribución más realista y uniforme alrededor de ella.
+</pre>
+
+## ▶️ Simulación de producción
+La simulación de producción es la etapa principal de la dinámica molecular: una vez que el sistema está minimizado y equilibrado (NVT → NPT), se ejecuta una simulación prolongada para muestrear el comportamiento dinámico de la proteína bajo condiciones termodinámicas estables. El objetivo es obtener trayectorias físicas (posiciones y velocidades a lo largo del tiempo) que permitan analizar propiedades como fluctuaciones conformacionales, interacciones ligando-proteína, estabilidad estructural, y otras magnitudes termodinámicas y cinéticas.
+
+### 💻 Práctica
+Ejecuta la herramienta **GROMACS simulation** con los siguientes parámetros:
+ - 📄**GRO structure file**: `archivo GRO generado en el paso anterior`
+ - 📄**Topology (TOP) file**: `Topology`
+
+- **📄Inputs:**
+
+   - **Use a checkpoint (CPT) file**: `Checkpoint file produced by NPT equilibration`
+   - **Apply position restraints**: `No position restraints`
+
+- **📄Outputs:**
+
+   - **Trajectory output**: `Return .xtc file (reduced precision)` (esta vez, guardamos la trayectoria)
+   - **Structure output**: `Return .gro file`
+   - **Produce a checkpoint (CPT) file**: `No CPT output`   
+
+- **📄Settings**
+
+   - **Ensemble**: `Isothermal-isobaric ensemble (NPT)`
+
+- **📄Parameter input**: `Use default (partially customisable) setting`
+
+  - **Choice of integrator**: `A leap-frog algorithm for integrating Newton’s equations of motion` (Un integrador básico de salto de rana)
+  - **Bond constraints**: `Bonds with H-atoms` (Los enlaces que involucran H están restringidos)
+  - **Neighbor searching**: `Generate a pair list with buffering` [Esquema de Verlet](https://en.wikipedia.org/wiki/Verlet_list)
+  - **Electrostatics**: `Fast smooth Particle-Mesh Ewald (SPME) electrostatics`
+  - **Temperature**: `300`
+  - **Step length in ps**: `0.002`
+  - **Number of steps that elapse between saving data points (velocities, forces, energies)**: `5000`
+  - **Distance for the Coulomb cut-off**: `1.0`
+  - **Cut-off distance for the short-range neighbor list**: `1.0` (pero irrelevante ya que estamos utilizando el esquema de Verlet)
+  - **Short range van der Waals cutoff**: `1.0`
+  - **Number of steps for the NVT simulation**: `500000`
 
 
+- **Generate detailed log**: `Yes`
 
-Esta versión está basada en el tutorial original de [Galaxy Training!](https://training.galaxyproject.org/training-material/topics/computational-chemistry/tutorials/md-simulation-gromacs/tutorial.html). Además, el tutorial de Galaxy se basa en el tutorial de GROMACS proporcionado por Justin Lemkul [(aquí)](http://www.mdtutorials.com/gmx/lysozyme/index.html) consúltelo si está interesado en una guía técnica más detallada de GROMACS.
+### 🎉 ¡Lo lograste!
+Has completado con éxito una simulación de dinámica molecular completa con GROMACS en Galaxy, desde la preparación del sistema hasta la generación de la trayectoria final (archivo `.xtc`).
+
+A partir de aquí, puedes continuar con el análisis y la visualización de la trayectoria para explorar el movimiento de la proteína, su estabilidad estructural y las interacciones con el solvente. Te recomendamos seguir los tutoriales complementarios de Galaxy dedicados a visualización y análisis de trayectorias de GROMACS para profundizar en estos aspectos.
+
+## 🧭 Conclusión
+En este tutorial hemos recorrido paso a paso el flujo de trabajo completo para realizar una simulación de dinámica molecular con GROMACS en Galaxy.
+
+Comenzamos con la preparación de la proteína, eliminando átomos no proteicos y generando los archivos básicos del sistema (topología, estructura y restricciones). Posteriormente, realizamos la solvatación e introducción de iones para neutralizar la carga total. Posteriormente, se ejecutaron las etapas de minimización de energía y equilibración (NVT y NPT) para obtener un sistema estable. Finalmente, se llevó a cabo la simulación de producción, donde el sistema evoluciona en el tiempo bajo condiciones controladas.
+
+Este flujo permite observar el comportamiento dinámico de la proteína en un entorno simulado y constituye la base para análisis posteriores.
+
+En resumen, Galaxy ofrece una forma accesible, reproducible y transparente de realizar simulaciones de dinámica molecular sin necesidad de ejecutar comandos directamente, facilitando el aprendizaje y la exploración de biomoléculas complejas mediante GROMACS.
+
+## Referencias
+Este tutorial se basa en el material original del proyecto [Galaxy Training!](https://training.galaxyproject.org/training-material/topics/computational-chemistry/tutorials/md-simulation-gromacs/tutorial.html), adaptado para ofrecer una guía clara paso a paso. 
+
+Además, el tutorial de Galaxy se basa en el tutorial de GROMACS proporcionado por Justin Lemkul [(aquí)](http://www.mdtutorials.com/gmx/lysozyme/index.html) consúltelo si está interesado en una guía técnica más detallada de GROMACS.
 
