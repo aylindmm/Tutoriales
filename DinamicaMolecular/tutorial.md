@@ -76,13 +76,9 @@ Para cargar la estructura inicial:
    1. Busca la herramienta **Search in textfiles (grep)** en Galaxy.
    2. En el campo *Select lines from*, selecciona el archivo PDB que acabas de descargar (1AKI).
    3. Configura los siguientes parámetros:
-
-      -**that**: `Don´t Match`.
-
-      -**Regular Expressión**: `HETATM`.
-
+      - **that**: `Don´t Match`.
+      - **Regular Expressión**: `HETATM`.
     4. Ejecuta la herramienta y obtendrás un nuevo archivo PDB limpio para la simulación.
-![textfiles](/DinamicaMolecular/Imágenes/textfiles.png)
 
 🔍 Explicación:
 Las líneas de un archivo PDB que comienzan con *HETATM* describen átomos que no pertenecen a la cadena principal de la proteína (como iones, ligandos o moléculas de agua). Al usar la opción *Don’t Match* con la expresión regular *HETATM*, el resultado conservará únicamente las líneas correspondientes a los átomos de proteína (ATOM), eliminando las demás.
@@ -122,6 +118,7 @@ Primero, ejecuta la herramienta **GROMACS initial setup** con los siguientes par
 - **Water model**: `SPC/E`
 - **Force field**: `OPLS/AA`
 - **Ignore hydrogens**: `No`
+
 - **Generate detailed log**: `Yes`
 
 🚨 Es importante que el archivo PDB de entrada contenga solo la proteína, ya que los campos de fuerza están parametrizados para aminoácidos estándar; incluir ligandos u otras moléculas podría generar errores en la topología.
@@ -132,6 +129,7 @@ A continuación, ejecuta la herramienta **GROMACS structure configuration** para
  - **Configure box**: `Yes`
  - **Box dimensions (nm**): `1.0`
  - **Box type**: `Rectangular box with all sides equal`
+
  - **Generate detailed log**: `Yes`
 
 Esta configuración define una caja simétrica y con un espacio adecuado alrededor de la proteína, garantizando que el sistema esté listo para los siguientes pasos de la simulación.
@@ -152,9 +150,9 @@ Ejecuta la herramienta **GROMACS solvation and adding ions** con los siguientes 
  - **Water model for solvatation**: `SPC`
  - **Add ions to neutralise system**: `Yes, add ions`
  - **Specify salt concentration (sodium chloride) to add, in mol/liter**: `0`
+
  - **Generate detailed log**: `Yes`
- 
-![solvatacion](/DinamicaMolecular/Imágenes/solvatacion.png)
+
 
 El resultado es un archivo **GRO** que contiene la proteína completamente rodeada por moléculas de agua, listo para el siguiente paso.
 
@@ -170,7 +168,7 @@ Ejecuta la herramienta **GROMACS energy minimization** con los siguientes parám
 
  - **📄 GRO structure file**: `archivo GRO generado en el paso de solvatación`
  - **📄 Topology (TOP) file**: `Topology`
- - **Parameter inptu**: `Use default (partially customisable) setting`
+ - **Parameter input**: `Use default (partially customisable) setting`
  - **Choice of integrator**: `Generate a pair list with buffering` (most common choice for EM)
  - **Electrostatics**: `Fast smooth Particle-Mesh Ewald (SPME) electrostatics`
  - **Cut-off distance for the short-range neighbor list**: `1.0` (but irrelevant as we are using the Verlet scheme)
@@ -178,6 +176,7 @@ Ejecuta la herramienta **GROMACS energy minimization** con los siguientes parám
  - **Number of steps for the MD simulation**: `50000`
  - **EM tolerance**: `1000`
  - **Maximum step size**: `0.01`
+
  - **Generate detailed log**: `Yes`
 
 ## ⚖️ Equilibrio del sistema
@@ -200,25 +199,34 @@ Ejecuta la herramienta **GROMACS simulation** con los siguientes parámetros:
 
  - 📄**GRO structure file**: `archivo GRO generado en el paso anterior`
  - 📄**Topology (TOP) file**: `Topology`
- - **Use a checkpoint (CPT) file**: `No CPT input`
- - **Produce a checkpoint (CPT) file**: `Produce CPT output`
- - **Apply position restraints**: `Apply position restraints`
- - 📄**Position restraint file**: `Position restraint file produced by ‘Setup’ tool`
- - **Ensemble**: `Isothermal-isochoric ensemble (NVT)`
- - **Trajectory output**: `Return no trajectory output` (No nos interesa cómo evoluciona el sistema hasta alcanzar el estado de equilibrio, sino simplemente la estructura final)
- - **Structure output**: `Return .gro file`
- - **Parameter input**: `Use default (partially customisable) setting`
- - **Choice of integrator**: `A leap-frog algorithm for integrating Newton’s equations of motion` (Un integrador básico de salto de rana)
- - **Bond constraints**: `Bonds with H-atoms` (Los enlaces que involucran H están restringidos)
- - **Neighbor searching**: `Generate a pair list with buffering` [el esquema de Verlet](https://en.wikipedia.org/wiki/Verlet_list)
-- **Electrostatics**: `Fast smooth Particle-Mesh Ewald (SPME) electrostatics`
-- **Temperature**: `300`
-- **Step length in ps**: `0.002`
-- **Number of steps that elapse between saving data points (velocities, forces, energies)**: `5000`
-- **Distance for the Coulomb cut-off**: `1.0`
-- **Cut-off distance for the short-range neighbor list**: `1.0` (pero irrelevante ya que estamos utilizando el esquema de Verlet)
-- **Short range van der Waals cutoff**: `1.0`
-- **Number of steps for the NVT simulation**: `50000`
+
+- **📄Inputs:**
+
+   - **Use a checkpoint (CPT) file**: `No CPT input`
+   - 📄**Position restraint file**: `Position restraint file produced by ‘Setup’ tool`
+
+- **📄Outputs:**
+
+   - **Trajectory output**: `Return no trajectory output`
+   - **Structure output**: `Return .gro file`
+   - **Produce a checkpoint (CPT) file**: `Produce CPT output`
+
+- **📄Settings:**
+
+   - **Ensemble**: `Isothermal-isochoric ensemble (NVT)`
+   - **📄Parameter input:** `Use default (partially customisable) setting`
+   - **Choice of integrator**: `A leap-frog algorithm for integrating Newton’s equations of motion`
+   - **Bond constraints**: `Bonds with H-atoms`
+   - **Neighbor searching**: `Generate a pair list with buffering`
+   - **Electrostatics**: `Fast smooth Particle-Mesh Ewald (SPME) electrostatics`
+   - **Temperature**: `300`
+   - **Step length in ps**: `0.002`
+   - **Number of steps that elapse between saving data points (velocities, forces, energies)**: `5000`
+   - **Distance for the Coulomb cut-off**: `1.0`
+   - **Cut-off distance for the short-range neighbor list**: `1.0`
+   - **Short range van der Waals cutoff**: `1.0`
+   - **Number of steps for the NVT simulation**: `50000`
+
 - **Generate detailed log**: `Yes`
 
 ### Equilibrio NPT
@@ -233,26 +241,34 @@ Ejecuta la herramienta **GROMACS simulation** con los siguientes parámetros:
 
  - 📄**GRO structure file**: `archivo GRO generado en el paso anterior`
  - 📄**Topology (TOP) file**: `Topology`
- - **Use a checkpoint (CPT) file**: `Continue simulation from a CPT file`
- - 📄**Checkpoint (CPT) file**: `Checkpoint file produced by NVT equilibration`
- - **Produce a checkpoint (CPT) file**: `Produce CPT output`
- - **Apply position restraints**: `No position restraints`
- - 📄**Position restraint file**: `None`
- - **Ensemble**: `Isothermal-isobaric ensemble (NPT)`
- - **Trajectory output**: `Return no trajectory output` 
- - **Structure output**: `Return .gro file`
- - **Parameter input**: `Use default (partially customisable) setting`
- - **Choice of integrator**: `A leap-frog algorithm for integrating Newton’s equations of motion` (Un integrador básico de salto de rana)
- - **Bond constraints**: `Bonds with H-atoms` (Los enlaces que involucran H están restringidos)
- - **Neighbor searching**: `Generate a pair list with buffering` [el esquema de Verlet](https://en.wikipedia.org/wiki/Verlet_list)
-- **Electrostatics**: `Fast smooth Particle-Mesh Ewald (SPME) electrostatics`
-- **Temperature**: `300`
-- **Step length in ps**: `0.002`
-- **Number of steps that elapse between saving data points (velocities, forces, energies)**: `5000`
-- **Distance for the Coulomb cut-off**: `1.0`
-- **Cut-off distance for the short-range neighbor list**: `1.0` (pero irrelevante ya que estamos utilizando el esquema de Verlet)
-- **Short range van der Waals cutoff**: `1.0`
-- **Number of steps for the NVT simulation**: `50000`
+
+- **📄Inputs:**
+
+   - **Use a checkpoint (CPT) file**: `Continue simulation from a CPT file` Archivo generado por la equilibración NVT
+   - 📄**Position restraint file**: `No position restraints`
+
+- **📄Outputs:**
+
+   - **Trajectory output**: `Return no trajectory output`
+   - **Structure output**: `Return .gro file`
+   - **Produce a checkpoint (CPT) file**: `Produce CPT output`
+
+- **📄Settings:**
+
+   - **Ensemble**: `Isothermal-isobaric ensemble (NPT)`
+   - **📄Parameter input:** `Use default (partially customisable) setting`
+   - **Choice of integrator**: `A leap-frog algorithm for integrating Newton’s equations of motion`
+   - **Bond constraints**: `Bonds with H-atoms`
+   - **Neighbor searching**: `Generate a pair list with buffering`
+   - **Electrostatics**: `Fast smooth Particle-Mesh Ewald (SPME) electrostatics`
+   - **Temperature**: `300`
+   - **Step length in ps**: `0.002`
+   - **Number of steps that elapse between saving data points (velocities, forces, energies)**: `5000`
+   - **Distance for the Coulomb cut-off**: `1.0`
+   - **Cut-off distance for the short-range neighbor list**: `1.0`
+   - **Short range van der Waals cutoff**: `1.0`
+   - **Number of steps for the NVT simulation**: `50000`
+
 - **Generate detailed log**: `Yes`
 
 <pre><span style="background-color:yellow">¿Por qué es importante mantener la proteína restringida durante el equilibrio NVT?</span>
@@ -275,7 +291,7 @@ Ejecuta la herramienta **GROMACS simulation** con los siguientes parámetros:
 
 - **📄Outputs:**
 
-   - **Trajectory output**: `Return .xtc file (reduced precision)` (esta vez, guardamos la trayectoria)
+   - **Trajectory output**: `Return .xtc file (reduced precision)`
    - **Structure output**: `Return .gro file`
    - **Produce a checkpoint (CPT) file**: `No CPT output`   
 
@@ -285,18 +301,17 @@ Ejecuta la herramienta **GROMACS simulation** con los siguientes parámetros:
 
 - **📄Parameter input**: `Use default (partially customisable) setting`
 
-  - **Choice of integrator**: `A leap-frog algorithm for integrating Newton’s equations of motion` (Un integrador básico de salto de rana)
-  - **Bond constraints**: `Bonds with H-atoms` (Los enlaces que involucran H están restringidos)
-  - **Neighbor searching**: `Generate a pair list with buffering` [Esquema de Verlet](https://en.wikipedia.org/wiki/Verlet_list)
+  - **Choice of integrator**: `A leap-frog algorithm for integrating Newton’s equations of motion`
+  - **Bond constraints**: `Bonds with H-atoms` 
+  - **Neighbor searching**: `Generate a pair list with buffering`
   - **Electrostatics**: `Fast smooth Particle-Mesh Ewald (SPME) electrostatics`
   - **Temperature**: `300`
   - **Step length in ps**: `0.002`
   - **Number of steps that elapse between saving data points (velocities, forces, energies)**: `5000`
   - **Distance for the Coulomb cut-off**: `1.0`
-  - **Cut-off distance for the short-range neighbor list**: `1.0` (pero irrelevante ya que estamos utilizando el esquema de Verlet)
+  - **Cut-off distance for the short-range neighbor list**: `1.0` 
   - **Short range van der Waals cutoff**: `1.0`
   - **Number of steps for the NVT simulation**: `500000`
-
 
 - **Generate detailed log**: `Yes`
 
