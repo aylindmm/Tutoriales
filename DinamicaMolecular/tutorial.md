@@ -293,7 +293,10 @@ Ejecuta la herramienta **GROMACS simulation** con los siguientes parámetros:
 
    - **Trajectory output**: `Return .xtc file (reduced precision)`
    - **Structure output**: `Return .gro file`
-   - **Produce a checkpoint (CPT) file**: `No CPT output`   
+   - **Produce a checkpoint (CPT) file**: `Produce CPT output`
+   - **Produce an energy (EDR) file**: `No EDR output`
+   - **Produce XVG output**: `Produce XVG output`
+   - **Produce TPR output**: `Produce TPR output`   
 
 - **📄Settings**
 
