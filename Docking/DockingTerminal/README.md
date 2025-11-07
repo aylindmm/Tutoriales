@@ -189,7 +189,8 @@ Cuando la herramienta termine, puedes revisar los scores con el comando:
 cat log.txt
 ```
 Al final deberas ver un recuadro como el siguiente:
-IMAGEEEEEEEN
+<img width="397" height="237" alt="scores 1" src="https://github.com/user-attachments/assets/06f7d01d-4855-49af-8165-88c07ad41b2f" />
+
 Estos son las 9 poses 3D que Vina Calculó
 
 **Esto significa que el mejor "score" o afinidad de unión que Vina encontró para la Capsaicina en la proteína NorA es de -5.624 kcal/mol.**
