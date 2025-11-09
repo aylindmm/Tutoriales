@@ -1,4 +1,4 @@
-🧬 Aprende Dinámica Molecular con Gromacs
+# 🧬 Aprende Dinámica Molecular con Gromacs
 ## 📘 Introducción
 La **dinámica molecular (MD)** es una técnica computacional que permite simular el movimiento de átomos y moléculas a lo largo del tiempo, resolviendo las leyes de Newton para cada partícula del sistema.  
 
@@ -336,4 +336,3 @@ En resumen, Galaxy ofrece una forma accesible, reproducible y transparente de re
 Este tutorial se basa en el material original del proyecto [Galaxy Training!](https://training.galaxyproject.org/training-material/topics/computational-chemistry/tutorials/md-simulation-gromacs/tutorial.html), adaptado para ofrecer una guía clara paso a paso. 
 
 Además, el tutorial de Galaxy se basa en el tutorial de GROMACS proporcionado por Justin Lemkul [(aquí)](http://www.mdtutorials.com/gmx/lysozyme/index.html) consúltelo si está interesado en una guía técnica más detallada de GROMACS.
-
