@@ -79,7 +79,7 @@ Una vez que inicies sesión, verás tres zonas en la interfaz:
 Ahora crea una nueva historia en Galaxy
    1. En la esquina superior derecha de Galaxy, haz clic en **Histories**.
    2. Selecciona *Create New History* ✚ .
-![newhistory](/Calidad_FASTQC/Imágenes/History.png)
+![newhistory](/Datos_FASTQ/Imágenes/History.png)
    3. Ponle un nombre descriptivo, por ejemplo: FASTQC. 
    Esto te ayudará a mantener organizados todos los archivos dentro de la interfaz.
 
