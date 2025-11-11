@@ -7,7 +7,7 @@ Aprender a descargar archivos de datos de secuenciación a partir de estudios p�
 
 [**GEO (Gene Expression Omnibus)**](https://www.ncbi.nlm.nih.gov/geo/) es una base de datos pública del NCBI (National Center for Biotechnology Information) que almacena resultados de experimentos genómicos realizados por científicos de todo el mundo.
 
-![GEO](/Calidad_FASTQC/Imágenes/GEO.png)
+![GEO](/Datos_FASTQ/Imágenes/GEO.png)
 
 En GEO se pueden encontrar estudios que analizan:
 - Expresión génica (RNA-seq, microarreglos)
@@ -54,7 +54,7 @@ Ventajas:
 - Permite guardar tu trabajo y resultados
 - Ideal para principiantes
 
-![Galaxy](/Calidad_FASTQC/Imágenes/Galaxy.png)
+![Galaxy](/Datos_FASTQ/Imágenes/Galaxy.png)
 
 Puedes acceder a Galaxy en distintos servidores:
 - 🌎 [https://usegalaxy.org](https://usegalaxy.org) → Servidor de Estados Unidos (recomendado)
@@ -90,7 +90,7 @@ Ahora buscaremos el estudio cuyos datos descargaremos.
 1. Entra al sitio: [https://www.ncbi.nlm.nih.gov/geo/](https://www.ncbi.nlm.nih.gov/geo/)
 2. En la barra de búsqueda escribe el código del estudio: **GSE219205**
 3. Presiona **Search**.
-![busqueda](/Calidad_FASTQC/Imágenes/busqueda.png)
+![busqueda](/Datos_FASTQ/Imágenes/busqueda.png)
 
 Esto te llevará a la página del estudio.  
 
@@ -109,7 +109,7 @@ Repite lo mismo para el segundo estudio: **GSE230372**
 
 1. En la parte inferior de la página del estudio, busca el enlace **SRA Run Selector**.  
 
-![SRA](/Calidad_FASTQC/Imágenes/SRA.png)
+![SRA](/Datos_FASTQ/Imágenes/SRA.png)
 
 2. Al abrirlo, verás una tabla con todos los **SRR** del estudio, por ejemplo:
    - SRR22493369 (para GSE219205)
@@ -117,7 +117,7 @@ Repite lo mismo para el segundo estudio: **GSE230372**
 
 Cada SRR corresponde a una muestra individual.
 
-![SRR](/Calidad_FASTQC/Imágenes/SRR.png)
+![SRR](/Datos_FASTQ/Imágenes/SRR.png)
 
 ## 💾 7. Descargar las lecturas desde Galaxy
 
@@ -146,7 +146,7 @@ SRR24282451.
 
   - Haz clic en **Run** para comenzar.
 
-![SRRA](/Calidad_FASTQC/Imágenes/SRRA.png)
+![SRRA](/Datos_FASTQ/Imágenes/SRRA.png)
 
 ### 3. Revisar el progreso
 
