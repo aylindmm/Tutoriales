@@ -10,9 +10,10 @@ Funciona secuenciando los fragmentos de ARN mensajero (ARNm) convertidos a ADN c
 
 El objetivo principal es comparar la expresión génica entre diferentes condiciones biológicas, por ejemplo: Tratamiento vs. control.
 
-## 🧩 Etapas principales del flujo de trabajo RNA-seq
+## 🧩 Fases
 
-El análisis de RNA-seq consta de siete etapas principales, que se ejecutan una tras otra.  
+El análisis de RNA-seq consta de siete etapas principales, que se ejecutan una tras otra.
+
 A continuación se muestra el flujo completo con su propósito, herramientas comunes y salidas generadas.
 
 | **Etapa** | **Descripción** | **Herramientas comunes** | **Salida generada** |
@@ -30,6 +31,7 @@ Cada etapa depende de la anterior.
 
 Si los datos crudos son de mala calidad o tienen adaptadores, los errores se propagarán hacia los siguientes pasos.
 
+![workflow](/ARNseq/Imágenes/workflow2.png)
 
 ## ☁️ Galaxy: una plataforma para RNA-seq
 **Galaxy** es una plataforma web gratuita que permite realizar análisis bioinformáticos sin usar la línea de comandos.  
