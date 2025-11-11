@@ -1,7 +1,7 @@
 # 🧬 Flujo de trabajo general de un análisis RNA-seq
 
 ## 🎯 Objetivo
-Comprender las etapas principales de un análisis de RNA-seq, desde la obtención de los datos crudos hasta la interpretación de resultados biológicos, y conocer las herramientas que se utilizan en cada paso.
+Comprender las etapas principales de un análisis de RNA-seq, desde la obtención de los datos crudos hasta la interpretación de los resultados, y conocer las herramientas que se utilizan en cada paso.
 
 ## 🧠 ¿Qué es RNA-seq?
 El **RNA-seq (secuenciación del transcriptoma)** es una técnica que permite medir la expresión génica de un organismo.  
@@ -27,6 +27,7 @@ A continuación se muestra el flujo completo con su propósito, herramientas com
 
 
 Cada etapa depende de la anterior.  
+
 Si los datos crudos son de mala calidad o tienen adaptadores, los errores se propagarán hacia los siguientes pasos.
 
 
@@ -38,12 +39,6 @@ Ventajas:
 - Accesible desde cualquier navegador  
 - Guarda tu historial de análisis  
 - Incluye cientos de herramientas preinstaladas  
-
-Servidores principales:
-- [https://usegalaxy.org](https://usegalaxy.org) — Estados Unidos 
-- [https://usegalaxy.eu](https://usegalaxy.eu) — Europa 
-- [https://usegalaxy.org.au](https://usegalaxy.org.au) — Australia 
-
 
 ## 🧰 Herramientas principales utilizadas en Galaxy para RNA-seq
 
