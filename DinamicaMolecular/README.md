@@ -318,6 +318,19 @@ Ejecuta la herramienta **GROMACS simulation** con los siguientes parámetros:
 
 - **Generate detailed log**: `Yes`
 
+---
+
+### Visualización de la simulación en PyMOL
+Una vez completada la simulación y obtenidos los archivos de salida, podemos visualizar el movimiento atómico de la proteína utilizando [PyMOL](https://www.pymol.org/), un software de visualización molecular ampliamente usado en bioinformática.
+
+**Archivos necesarios**
+- Archivo de estructura: `.gro`
+- Archivo de trayectoria: `.xtc`
+Estos dos archivos permiten reproducir la dinámica del sistema.
+
+
+---
+
 ### 🎉 ¡Lo lograste!
 Has completado con éxito una simulación de dinámica molecular completa con GROMACS en Galaxy, desde la preparación del sistema hasta la generación de la trayectoria final (archivo `.xtc`).
 
