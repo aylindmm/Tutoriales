@@ -1,5 +1,31 @@
 # Bienvenido al Tutorial 
 # Acoplamiento molecular utilizando el software Autodck Vina
+AutoDock Vina es un motor de acoplamiento molecular (molecular docking) de código abierto, diseñado para predecir la conformación de unión de moléculas pequeñas con sus receptores proteicos apropiados. Es el sucesor de alto rendimiento de AutoDock 4, ofreciendo mejoras significativas en la velocidad media y la precisión de las predicciones de unión.
+
+
+
+### Introducción a AutoDock Vina
+AutoDock Vina implementa un algoritmo de optimización global híbrido conocido como Búsqueda Local Iterada (Iterated Local Search). Este enfoque combina una búsqueda estocástica global con un optimizador local basado en gradientes (método BFGS), lo que le permite explorar el paisaje energético de manera eficiente y escapar de mínimos locales para encontrar el mínimo global con mayor rapidez.
+
+
+El software utiliza una función de puntuación híbrida (inspirada en X-Score), que es empírica y basada en el conocimiento. Esta función evalúa la afinidad de unión aproximada en kcal/mol, considerando términos físicos cruciales como:
+
+- Interacciones estéricas (términos de Gauss).
+
+- Repulsión.
+
+- Enlaces de hidrógeno.
+
+- Interacciones hidrofóbicas.
+
+- Efectos de torsión rotacional.
+
+
+
+Una de las características distintivas de Vina es su capacidad para aprovechar el hardware moderno mediante el multiprocesamiento (multithreading). Esto permite calcular múltiples hilos de ejecución simultáneamente en arquitecturas de varios núcleos, reduciendo drásticamente los tiempos de cálculo en comparación con otros motores de docking.
+
+
+**Aplicaciones**: Debido a su velocidad y precisión, AutoDock Vina se ha convertido en un estándar de la industria para campañas de cribado virtual (virtual screening) de alto rendimiento, permitiendo filtrar bases de datos masivas de compuestos para identificar "hits" farmacológicos prometedores. Además, es ampliamente utilizado para estudios de reposicionamiento de fármacos y análisis mecanísticos de interacciones proteína-ligando.
 
 ## Requisitos
 ### Paqueteria necesaria para este flujo de trabajo:
