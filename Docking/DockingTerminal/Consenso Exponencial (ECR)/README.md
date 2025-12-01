@@ -176,3 +176,21 @@ Toma el ID del compuesto #1 en la tabla de consenso (ej. ID 24). Para saber su n
 # Usamos un script rápido o grep para ver la entrada 24 del SDF original
 grep -n "DB_" ../docking_capsaicin/drugbank_library.sdf | head -n 24 | tail -n 1
 ```
+
+``` bash
+--- Iniciando Análisis de Consenso (ECR) ---
+Cargando Vina desde: ../docking_capsaicin/screening_results.csv
+Cargando PLANTS desde: ../docking_capsaicin/results_screening_plants/ranking.csv
+Cargando DiffDock desde: ../DiffDock/ranking_sorted.csv
+Total compuestos en común: 29. Sigma: 2.9000000000000004
+--- ¡Hecho! Resultados guardados en consensus_results.csv ---
+
+=== TOP 5 CANDIDATOS DE CONSENSO ===
+    ECR_Score  Rank_Vina  Rank_Plants  Rank_Diff
+ID                                              
+24   0.488574       25.0          1.0        1.0
+27   0.246274        1.0         15.0       25.0
+3    0.234517       31.0          2.0        5.0
+9    0.180908        2.0         11.0       23.0
+23   0.177078        6.0         10.0        3.0
+```
