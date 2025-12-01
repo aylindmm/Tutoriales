@@ -1,6 +1,9 @@
+# Bienvenido al Tutorial 
+# Acoplamiento molecular utilizando el software Autodck Vina
+
 ## Requisitos
 ### Paqueteria necesaria para este flujo de trabajo:
-- **Vina** 
+- **Autodock Vina** 
 - **Open Babel**
 - **RDKit** 
 - **Python**
@@ -440,8 +443,7 @@ Abre PyMOL.
 3. Carga la pose de tu nuevo ganador: `lig27_out.pdbqt`(en mi caso fue este archivo).
 
 # Resultado
-<img width="1200" height="1000" alt="result" src="https://github.com/user-attachments/assets/67709b1e-43eb-4147-9640-972cb27ff9a8" />
+<img width="667" height="438" alt="resultcaputra" src="https://github.com/user-attachments/assets/e8367319-d606-41dd-8964-fb527393a1ff" />
 
-**Visualización del sitio de unión de la bomba de expulsión NorA de S. aureus (PDB: 7LO8)**
-
-Se muestra la superposición de los modos de unión predichos mediante AutoDock Vina para la **Capsaicina** (carbonos en cian) y el compuesto candidato `lig27` (carbonos en verde). La proteína se representa en formato de cintas (gris) y los residuos del sitio activo interactuante se muestran en líneas finas. Las líneas punteadas amarillas indican posibles interacciones de puentes de hidrógeno.
+### Comparación de los modos de unión predichos por AutoDock Vina 
+En el sitio activo de NorA (PDB: 7LO8). Se superponen la estructura de la molécula de referencia, Capsaicina (carbonos en cian, afinidad: -5.6 kcal/mol), y el mejor candidato identificado en el cribado virtual, Apocynin (carbonos en verde, afinidad: -8.1 kcal/mol). La proteína se muestra en cintas grises y se destacan las interacciones polares clave. La diferencia en afinidad (-2.5 kcal/mol) sugiere una mayor estabilidad teórica para el candidato propuesto.
