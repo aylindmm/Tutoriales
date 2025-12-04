@@ -31,7 +31,7 @@ Este repositorio está dividido en tres módulos independientes pero complementa
 * **Enfoque:** Validación mediante Deep Learning.
 * **Aprenderás:** Uso de modelos de difusión generativa para docking ciego (*blind docking*), interpretación de Scores de Confianza y validación cruzada de resultados.
 
-### 4. [Análisis de Consenso (ECR)]([Consenso Exponencial (ECR)/README.md)](https://github.com/aylindmm/Tutoriales/tree/main/Docking/DockingTerminal/Consenso%20Exponencial%20(ECR))
+### 4. [Análisis de Consenso (ECR)](https://github.com/aylindmm/Tutoriales/tree/main/Docking/DockingTerminal/Consenso%20Exponencial%20(ECR))
 * **Enfoque:** Estadística avanzada.
 * **Aprenderás:** Cómo integrar los resultados de las tres herramientas anteriores para calcular un "Ranking de Consenso Exponencial" y encontrar el candidato más robusto.
 
