@@ -19,7 +19,7 @@ Evaluar la capacidad de unión de la **Capsaicina** al sitio activo de la bomba 
 
 Este repositorio está dividido en tres módulos independientes pero complementarios. Te recomendamos seguirlos en orden para comprender la progresión desde el docking básico hasta la validación con IA.
 
-### 1. [Tutorial: AutoDock Vina](./docking_capsaicin/README.md)
+### 1. [Tutorial: AutoDock Vina](Docking_AutodockVina/README.md)
 * **Enfoque:** Docking clásico y Virtual Screening masivo.
 * **Aprenderás:** Preparación de archivos PDBQT, definición de cajas de búsqueda, scripting en Bash para automatizar el docking de cientos de ligandos y análisis de energías de afinidad (kcal/mol).
 
@@ -27,11 +27,11 @@ Este repositorio está dividido en tres módulos independientes pero complementa
 * **Enfoque:** Algoritmos estocásticos y consenso.
 * **Aprenderás:** Manejo de archivos MOL2, configuración de archivos `.conf` para screening nativo y uso de la función de puntuación ChemPLP.
 
-### 3. [Tutorial: DiffDock (IA)](./DiffDock/README_DiffDock.md)
+### 3. [Tutorial: DiffDock (IA)](Docking_DiffDock/README.md)
 * **Enfoque:** Validación mediante Deep Learning.
 * **Aprenderás:** Uso de modelos de difusión generativa para docking ciego (*blind docking*), interpretación de Scores de Confianza y validación cruzada de resultados.
 
-### 4. [Análisis de Consenso (ECR)](./consensus_analysis/README_Consensus.md)
+### 4. [Análisis de Consenso (ECR)](Consenso Exponencial (ECR)/README.md)
 * **Enfoque:** Estadística avanzada.
 * **Aprenderás:** Cómo integrar los resultados de las tres herramientas anteriores para calcular un "Ranking de Consenso Exponencial" y encontrar el candidato más robusto.
 
