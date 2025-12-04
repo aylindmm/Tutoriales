@@ -23,7 +23,7 @@ Este repositorio está dividido en tres módulos independientes pero complementa
 * **Enfoque:** Docking clásico y Virtual Screening masivo.
 * **Aprenderás:** Preparación de archivos PDBQT, definición de cajas de búsqueda, scripting en Bash para automatizar el docking de cientos de ligandos y análisis de energías de afinidad (kcal/mol).
 
-### 2. [Tutorial: PLANTS](./docking_capsaicin/README_PLANTS.md)
+### 2. [Tutorial: PLANTS](Docking_PLANTS/README.md)
 * **Enfoque:** Algoritmos estocásticos y consenso.
 * **Aprenderás:** Manejo de archivos MOL2, configuración de archivos `.conf` para screening nativo y uso de la función de puntuación ChemPLP.
 
