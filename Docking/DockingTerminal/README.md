@@ -70,4 +70,4 @@ Para realizar estos tutoriales, necesitarás acceso a un entorno tipo Unix (Linu
 * **Conda (Miniconda o Anaconda):** Para gestionar entornos virtuales y dependencias de Python/RDKit.
 * **Herramientas de sistema:** `wget`, `nano`, `awk`, `grep`, `scp`.
 
-¡Empecemos a dockear! Dirígete al [Primer Tutorial](./docking_capsaicin/README.md) para comenzar.
+¡Empecemos a dockear! Dirígete al [Primer Tutorial](https://github.com/aylindmm/Tutoriales/tree/main/Docking/DockingTerminal/Docking_AutodockVina) para comenzar.
