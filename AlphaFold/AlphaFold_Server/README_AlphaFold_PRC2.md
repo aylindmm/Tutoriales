@@ -48,12 +48,12 @@ Primero necesitamos la "receta" (secuencia de aminoácidos) de cada componente h
 
 1. Ve a [UniProt](https://www.uniprot.org/).
 2. Busca y copia la secuencia **FASTA** de las siguientes proteínas humanas (Verifica que el *Organism* sea *Homo sapiens*):
-    * **EZH2:** (Entry: Q15910)
-    * **EED:** (Entry: O75530)
-    * **SUZ12:** (Entry: Q15022)
-    * *(Opcional para ahorrar cómputo, podemos omitir RbAp48 en esta primera prueba, pero el complejo completo lo incluye).*
+    * **EZH2:**
+    * **EED:**
+    * **SUZ12:**
+    * **RbAp48:**
 
-> **Tip:** En UniProt, busca el botón "Format" o "Download" y selecciona "FASTA". Copia todo el texto, incluyendo la primera línea que empieza con `>`.
+>  En UniProt, busca el botón "Download" y selecciona "FASTA". Copia todo el texto, incluyendo la primera línea que empieza con `>`.
 
 ### Paso 2: Configuración en AlphaFold Server
 AlphaFold 3 permite predecir complejos macromoleculares con alta precisión.
