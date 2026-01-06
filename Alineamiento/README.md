@@ -1,16 +1,12 @@
 # 🧬 Alineamiento de lecturas al genoma de referencia
 
-El alineamiento de lecturas al genoma de referencia es uno de los primeros y más importantes pasos en el análisis de datos genómicos. Este proceso consiste en ubicar secuencias cortas de ADN o RNA, llamadas **lecturas**, dentro de un genoma de referencia previamente conocido.
+El alineamiento de lecturas al genoma de referencia es uno de los primeros y más importantes pasos en el análisis de datos genómicos. Este proceso consiste en ubicar secuencias cortas de ADN o RNA, llamadas lecturas, dentro de un genoma de referencia previamente conocido.
 
 A través del alineamiento es posible estudiar la expresión génica, identificar regiones de interés y sentar las bases para análisis bioinformáticos más avanzados.
 
----
-
 ## 🎯 Objetivo
 
-Generar y analizar un alineamiento entre lecturas de **RNA-seq** y un **genoma de referencia**, comprendiendo qué se hace en cada paso y por qué es importante.
-
----
+Generar y analizar un alineamiento entre lecturas de RNA-seq y un genoma de referencia.
 
 ## 🧰 ¿Qué necesitas antes de empezar?
 
@@ -23,11 +19,11 @@ Para realizar el alineamiento se requiere:
 
 En este tutorial se utilizará el alineador **RNA-STAR** dentro de la plataforma **Galaxy**.
 
----
+![STAR](https://github.com/user-attachments/assets/fab75cd4-0bec-45c2-9013-892f4cdd4221)
 
 ## 📂 Archivos necesarios
 
-Para este análisis se requieren **tres archivos**:
+Para este análisis se requieren tres archivos:
 
 1. **Lecturas de RNA-seq**  
    - Pueden ser *single-end* o *paired-end*
@@ -38,8 +34,6 @@ Para este análisis se requieren **tres archivos**:
 3. **Archivo de anotación génica**  
    - Formato **GTF**
    - Contiene la información sobre la posición de los genes en el genoma
-
----
 
 ## 🧪 Metodología
 
@@ -52,10 +46,12 @@ Primero, es importante saber qué tipo de datos se tienen:
 
 Esta información es necesaria para que el alineador procese correctamente los datos.
 
+
 > 📌 **Recuerda**  
 > Elegir mal el tipo de lectura puede afectar la calidad del alineamiento.
 
----
+
+<img width="1046" height="429" alt="image" src="https://github.com/user-attachments/assets/5eb6181d-307e-417c-93d1-84f29fa21ea3" />
 
 ### 2. Seleccionar las lecturas de entrada
 
@@ -63,14 +59,15 @@ Selecciona la carpeta o los archivos que contienen las lecturas de RNA-seq que s
 
 Asegúrate de que los archivos correspondan al mismo experimento.
 
----
-
 ### 3. Seleccionar el genoma de referencia
 
 A continuación, se selecciona el genoma de referencia.  
-En este ejercicio se utiliza el genoma humano **hg19**.
+En este caso se utilizará el genoma humano **hg19**.
 
-Se indica que se trabajará con un genoma **precargado**, el cual ya cuenta con un índice disponible.
+Se indica que se trabajará con un genoma precargado, el cual ya cuenta con un índice disponible.
+
+<img width="975" height="155" alt="image" src="https://github.com/user-attachments/assets/eb45ec5e-0dd6-4b18-a536-da9149a76d9f" />
+
 
 #### ¿Qué es un índice?
 
@@ -78,8 +75,6 @@ Un índice es una estructura de datos preprocesada que representa el genoma de r
 
 > 📝 **Nota**  
 > Sin un índice, el alineamiento sería mucho más lento y computacionalmente costoso.
-
----
 
 ### 4. Seleccionar el archivo de anotación génica
 
@@ -92,8 +87,6 @@ Una vez descargado, debe subirse al historial de Galaxy y seleccionarse para el 
 
 > 💡 **Tip**  
 > El archivo GTF ayuda al alineador a reconocer regiones génicas y sitios de empalme, lo cual es especialmente importante en datos de RNA-seq.
-
----
 
 ### 5. Revisar los parámetros
 
@@ -108,15 +101,11 @@ No es necesario modificar parámetros avanzados para este ejercicio.
 > 📌 **Recuerda**  
 > Los valores por defecto de RNA-STAR son adecuados para la mayoría de los análisis básicos.
 
----
-
 ### 6. Ejecutar el alineamiento
 
 Cuando todos los parámetros estén correctamente configurados, inicia el análisis haciendo clic en el botón **“Run tool”**.
 
 RNA-STAR comenzará a alinear las lecturas contra el genoma de referencia.
-
----
 
 ## 📊 Evaluación de la calidad del alineamiento
 
@@ -125,8 +114,6 @@ RNA-STAR comenzará a alinear las lecturas contra el genoma de referencia.
 Una vez finalizado el alineamiento, se utiliza la herramienta **MultiQC** para generar un reporte de calidad.
 
 MultiQC reúne y resume la información generada durante el alineamiento, facilitando la interpretación de los resultados.
-
----
 
 ### 8. Analizar los resultados
 
@@ -139,23 +126,17 @@ Al analizar los gráficos generados por MultiQC, se deben considerar aspectos co
 > 📝 **Nota**  
 > Un buen alineamiento suele mostrar un alto porcentaje de lecturas correctamente mapeadas.
 
----
-
 ## ✅ Conclusión
 
 El alineamiento de lecturas al genoma de referencia es un paso fundamental en el análisis de datos de RNA-seq. Utilizar herramientas como RNA-STAR permite realizar alineamientos eficientes, mientras que MultiQC facilita la evaluación de la calidad del proceso.
 
 Un alineamiento exitoso es la base para análisis posteriores, como la cuantificación de expresión génica y otros estudios bioinformáticos.
 
----
-
 ## 📌 Recuerda
 
 - Verificar siempre el tipo de lecturas
 - Usar el genoma de referencia correcto
 - Revisar la calidad del alineamiento antes de continuar con otros análisis
-
----
 
 ## 📚 Referencias
 
