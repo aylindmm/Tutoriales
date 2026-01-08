@@ -21,8 +21,6 @@ Antes de comenzar, asegúrate de contar con:
 - Herramienta de control de calidad: **MultiQC**
 - Plataforma de análisis: **Galaxy**
 
-![STAR](https://github.com/user-attachments/assets/fab75cd4-0bec-45c2-9013-892f4cdd4221)
-
 ## 🖥️ Metodología
 
 ### 1.  Identificar los datos de entrada
@@ -37,19 +35,21 @@ Es importante verificar si los datos corresponden a:
 
 Esta información es necesaria para configurar correctamente el alineador y asegurar un alineamiento adecuado.
 
-<img width="1046" height="429" alt="image" src="https://github.com/user-attachments/assets/5eb6181d-307e-417c-93d1-84f29fa21ea3" />
+<img width="1507" height="534" alt="Alineamiento1" src="https://github.com/user-attachments/assets/ba61b0ee-9e56-4a27-b8f9-c5c1bbb4bb9e" />
 
-### 2. Elegir del genoma de referencia
+
+### 2. Elegir el genoma de referencia
 
 A continuación, se selecciona el genoma de referencia.  
 En este caso se utilizará el genoma humano **hg19**.
 
 Se indica que se trabajará con un genoma precargado, el cual ya cuenta con un índice disponible.
 
-<img width="975" height="155" alt="image" src="https://github.com/user-attachments/assets/eb45ec5e-0dd6-4b18-a536-da9149a76d9f" />
-
 #### 📝 ¿Qué es un índice?
 Un índice es una estructura de datos preprocesada que representa el genoma de referencia. RNA-STAR utiliza este índice para acelerar el proceso de alineamiento, permitiendo encontrar rápidamente las posibles ubicaciones de cada lectura. 
+
+<img width="1258" height="184" alt="Alineamiento2" src="https://github.com/user-attachments/assets/e387fe12-628e-499e-8c89-8bdff0952240" />
+
 
 ### 3. Incorporar el archivo de anotación génica
 
@@ -60,7 +60,8 @@ https://usegalaxy.org/api/datasets/f9cad7b01a4721358306b8d463f168f9/display?to_e
 
 Una vez descargado, debe subirse al historial de Galaxy y seleccionarse para el análisis.
 
-<img width="975" height="675" alt="image" src="https://github.com/user-attachments/assets/9b22b6b6-d554-4656-a733-106be557dac5" />
+<img width="1354" height="657" alt="Alineamiento3" src="https://github.com/user-attachments/assets/a5e2216d-907e-402e-8a90-2b369a2fc6eb" />
+
 
 ### 4. Revisar los parámetros y efectuar el alineamiento
 
@@ -82,7 +83,7 @@ Una vez finalizado el alineamiento, se utiliza la herramienta **MultiQC** para g
 
 MultiQC reúne y resume la información generada durante el alineamiento, facilitando la interpretación de los resultados.
 
-<img width="550" height="713" alt="image" src="https://github.com/user-attachments/assets/63256493-27fb-42ce-9e9c-1862b4b5e694" />
+<img width="1526" height="819" alt="Alineamiento4" src="https://github.com/user-attachments/assets/a243ea38-ef17-4390-b66a-55671972c5e7" />
 
 ### 6. Analizar los resultados
 
