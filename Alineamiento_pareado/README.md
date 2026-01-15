@@ -1,32 +1,48 @@
 # 🔀 Alineamiento pareado de secuencias
 
 ## 📝 ¿Qué es?
-El alineamiento pareado de secuencias (*pairwise alignment*) es una técnica clave en bioinformática que se utiliza para comparar directamente dos secuencias biológicas (ADN, ARN o proteínas) para identificar similitudes, homologías (genes o proteínas que comparten un ancestro común) o diferencias (mutaciones, inserciones y deleciones). Este tipo de alineamiento puede clasificarse en:
+El alineamiento de secuencias por pares (*pairwise alignment*) es una técnica que se utiliza para identificar regiones de similitud que podrían indicar relaciones funcionales, estructurales o evolutivas entre dos secuencias biológicas (proteínas o ácidos nucleicos). Dos algoritmos de alineación de secuencias mayormente utilizados son:
 
-- **Alineamiento global**: Intenta alinear las secuencias completas de principio a fin.
+- **Alineación global**: Intenta alinear las secuencias completas de principio a fin. Este método se utiliza al comparar secuencias de la misma longitud. 
 
-  👉 Este método se utiliza para comparar secuencias de longitud similar y cuando se espera que estén relacionadas a lo largo de toda su extensión.
+- **Alineación local**: Alinea las regiones de mayor densidad de coincidencias dentro de las secuencias a alinear. Es muy útil para identificar motivos conservados.
 
-- **Alineamiento local**: Identifica regiones de alta similitud dentro de secuencias más largas.
+<img width="921" height="408" alt="image" src="https://github.com/user-attachments/assets/af60323d-9aa1-405d-9c13-d3d9575cdeae" />
 
-  👉 Es ideal cuando las secuencias presentan similitud solo en regiones específicas como dominios conservados.
+**Figura 1.** Alineamiento global y local de dos secuencias (Mount, 2001).
 
-## ⚙️ Algoritmo de Needleman-Wunsch
+El objetivo principal es encontrar la mejor coincidencia entre los residuos, ya sean nucleótidos o aminoácidos, de ambas secuencias. Para lograr esto, se emplean tres elementos fundamentales:
+- **Coincidencias (Matches)**: Caracteres idénticos en la misma posición.
+- **Sustituciones (Mismatches)**: Caracteres diferentes que ocupan la misma posición.
+- **Huecos (*Gaps*)**: Espacios introducidos en una secuencia para compensar inserciones o deleciones (indels) en la otra.
+
+Para encontrar el alineamiento más adecuado, se emplean sistemas de puntuación (*Scoring*):
+
+- **Matrices de Sustitución**: Asignan valores numéricos a los intercambios de residuos.
+  - En el caso del material genético, se asigna un valor positivo para una coincidencia y un valor negativo para una sustitución.
+  - En el de las proteínas, se recurren a matrices de puntuación más complejas como PAM o BLOSUM, que reflejan la probabilidad de que un aminoácido sea sustituido por otro sin comprometer la función de la proteína.
+- **Penalización por *gaps***: Abrir un hueco "cuesta" más puntos lo que ayuda a evitar que el algoritmo llene las secuencias con espacios.
+
+## ⚙️ Tipos de alineamiento pareado
+
+### 💡 Algoritmo de Needleman-Wunsch
 
 ### 📝 ¿Qué es?
-El algoritmo de **Needleman-Wunsch** fue propuesto por Saul B. Needleman y Christian D. Wunschen en 1970. Es un método de alineamiento **global** cuyo objetivo es encontrar el mejor emparejamiento posible considerando la longitud completa de ambas secuencias.
+El algoritmo de Needleman-Wunsch fue propuesto por Saul B. Needleman y Christian D. Wunschen en 1970. Es un método de alineamiento **global** cuyo objetivo es encontrar el mejor emparejamiento posible considerando la longitud completa de ambas secuencias.
 
 Este algoritmo se basa en programación dinámica y sigue tres pasos principales:
 
-1. **Inicialización de la matriz**: se construye una matriz donde las filas y columnas representan las secuencias a comparar. La primera fila y columna se inicializan con penalizaciones por espacios (*gaps*).
-2. **Relleno de la matriz**: cada celda se calcula evaluando tres posibles movimientos (diagonal, arriba o izquierda), considerando coincidencias, sustituciones y penalizaciones por *gaps*.
-3. **Trazado (*traceback*)**: se reconstruye el alineamiento óptimo siguiendo el camino de mayor puntuación desde la última celda de la matriz.
+1. **Inicialización de la matriz de puntuación**: Se construye una matriz donde las filas y columnas representan las secuencias a comparar. La primera fila y columna se inicializan con penalizaciones por *gaps*.
+2. **Relleno de la matriz**: Cada celda se calcula evaluando tres posibles movimientos (diagonal, arriba o izquierda), considerando coincidencias, sustituciones y penalizaciones por *gaps*.
+3. **Trazado para identificar la alineación óptima**: Una vez llena la matriz, se comienza desde la esquina inferior derecha y se sigue el camino de regreso hasta la esquina superior izquierda para reconstruir el alineamiento final.
 
-<img width="480" height="480" alt="image" src="https://github.com/user-attachments/assets/f3a4ceed-313b-4fd6-9ac4-30ab777009f4" />
+<img width="921" height="620" alt="image" src="https://github.com/user-attachments/assets/03f5eee2-14c8-419d-be2c-06f4ab7684a0" />
 
-## 🛠️ ¿Cómo se realiza un alineamiento global?
+**Figura 2.** Representación del algoritmo de Needleman-Wunsch (Gauthier *et al*., 2018).
 
-**EMBOSS Needle** es una herramienta web que implementa el algoritmo de **Needleman-Wunsch**, el cual realiza un alineamiento global entre dos secuencias biológicas. Este tipo de alineamiento compara las secuencias completas de principio a fin, introduciendo espacios (*gaps*) cuando es necesario para maximizar la similitud total.
+### 🛠️ ¿Cómo se realiza un alineamiento global?
+
+**EMBOSS Needle** es una herramienta web que implementa el algoritmo de Needleman-Wunsch. A continuación, se presenta un ejemplo de cómo se puede llevar a cabo un alineamiento empleando este método.
 
 ### 🧩 Secuencias de ejemplo
 
@@ -55,7 +71,7 @@ https://www.ebi.ac.uk/jdispatcher/psa/emboss_needle
 <img width="1443" height="231" alt="image" src="https://github.com/user-attachments/assets/ad1a1ce0-e119-4360-825f-dc78ce418778" />
 
 5. En la sección **`Parameters`**, seleccionar el formato de salida del alineamiento.  
-   Para este ejemplo, elegir el formato *Pair*, ya que facilita la visualización del alineamiento y la identificación de regiones conservadas.
+   Para este ejemplo, elegir el formato *Pair*...
 <img width="515" height="126" alt="image" src="https://github.com/user-attachments/assets/a10cbfb4-51ec-4002-a5c1-efb6b12a350d" />
 
 6. En el campo **`Title`**, asignar un nombre descriptivo al ejercicio (por ejemplo: *Alineamiento global Protein_1 vs Protein_2*). Este título aparecerá en los resultados y ayuda a identificar el análisis realizado.
@@ -65,7 +81,7 @@ https://www.ebi.ac.uk/jdispatcher/psa/emboss_needle
 
 ### 👀 Interpretación de los resultados
 
-Una vez ejecutado el alineamiento, EMBOSS Needle genera un reporte estructurado que permite evaluar la calidad y las características del alineamiento global. A continuación, se describen los principales elementos que aparecen en la salida y cómo deben interpretarse.
+Una vez ejecutado el alineamiento, se genera un reporte estructurado que permite evaluar la calidad y las características del alineamiento global. A continuación, se describen los principales elementos que aparecen en la salida y cómo deben interpretarse.
 
 #### <mark>Información general</mark>
 En la parte superior del reporte se indica el programa utilizado (**needle**), la matriz de sustitución empleada (**EBLOSUM62**) y las penalizaciones por apertura y extensión de espacios (*gap penalty* y *extend penalty*). Estos parámetros determinan cómo se puntúan las coincidencias, sustituciones y la introducción de *gaps* durante el alineamiento.
@@ -78,15 +94,13 @@ Este bloque resume cuantitativamente el resultado del alineamiento:
 - **Length**: indica la longitud total del alineamiento. En un alineamiento global, este valor suele coincidir con la longitud completa de las secuencias comparadas.
   - Length = 142. El alineamiento cubre toda la longitud de ambas secuencias.
 - **Identity**: representa el porcentaje de posiciones con aminoácidos idénticos entre ambas secuencias.
-  - 122/142 (85.9%). Indica que el 85.9% de los aminoácidos son idénticos en ambas secuencias. Este es un valor muy alto, lo que sugiere que las proteínas están estrechamente relacionadas.
-- **Similarity**: incluye tanto identidades como sustituciones conservadas, de acuerdo con la matriz de sustitución utilizada.
-  - 131/142 (92.3%). Incluye aminoácidos idénticos y sustituciones conservadas. 
-- **Gaps**: muestra el número y porcentaje de espacios introducidos para optimizar el alineamiento.
+  - 122/142 (85.9%). Indica que el 85.9% de los aminoácidos son idénticos en ambas secuencias. Este es un valor muy alto, lo que sugiere que las proteínas están muy relacionadas.
+- **Similarity**: incluye tanto coincidencias como sustituciones conservadas, de acuerdo con la matriz utilizada.
+  - 131/142 (92.3%).
+- ***Gaps***: muestra el número y porcentaje de espacios introducidos para optimizar el alineamiento.
   - 0/142 (0.0%) No fue necesario introducir espacios para alinear las secuencias. Esto indica que ambas proteínas tienen la misma longitud y una estructura muy similar.
 - **Score**: es el puntaje total del alineamiento; valores más altos indican una mejor correspondencia global entre las secuencias.
-  - 648.0. Un puntaje alto refleja un alineamiento de muy buena calidad, coherente con los altos porcentajes de identidad y similitud.  
-
-<img width="406" height="163" alt="image" src="https://github.com/user-attachments/assets/70e43482-90e7-40a7-910c-8a4c027d984a" />
+  - 648.0. Un puntaje alto refleja un alineamiento de muy buena calidad, acorde con los altos porcentajes de identidad y similitud.  
 
 #### <mark>Representación visual</mark>
 El alineamiento se presenta de forma textual, línea por línea. Entre las dos secuencias aparece una línea de símbolos que facilita la interpretación:
@@ -94,18 +108,16 @@ El alineamiento se presenta de forma textual, línea por línea. Entre las dos s
 - `|` indica coincidencias exactas entre aminoácidos.
 - `:` representa sustituciones conservadas.
 - `.` señala sustituciones menos conservadas.
-- `-` corresponde a espacios (*gaps*) introducidos por el algoritmo.
+- `-` corresponde a los *gaps* introducidos por el algoritmo.
 
 Esta representación visual permite identificar rápidamente regiones altamente conservadas y posibles diferencias entre las secuencias.
 
 <img width="921" height="354" alt="image" src="https://github.com/user-attachments/assets/d8cdaa20-d25e-40eb-98de-e4d1103f55fd" />
 
-👉 La abundancia de | y : confirma una alta conservación entre ambas secuencias.
-
-## ⚙️ Algoritmo de Smith-Waterman
+### 💡 Algoritmo de Smith-Waterman
 
 ### 📝 ¿Qué es?
-El algoritmo de **Smith-Waterman** fue introducido por Temple Smith y Michael Waterman en 1981. Es un método de alineamiento **local** diseñado para identificar regiones de alta similitud entre dos secuencias, sin forzar el alineamiento completo.
+El algoritmo de Smith-Waterman fue introducido por Temple Smith y Michael Waterman en 1981. Es un método de alineamiento **local** modificado del anterior diseñado para identificar regiones de alta similitud entre dos secuencias, sin forzar el alineamiento completo.
 
 Al igual que Needleman-Wunsch, utiliza programación dinámica, pero con diferencias clave:
 
@@ -113,11 +125,13 @@ Al igual que Needleman-Wunsch, utiliza programación dinámica, pero con diferen
 - No se permiten valores negativos; cualquier puntuación negativa se reemplaza por cero.
 - El alineamiento comienza en la celda con la puntuación máxima y finaliza cuando se alcanza un valor cero.
 
-<img width="765" height="370" alt="image" src="https://github.com/user-attachments/assets/7bb9bea1-7545-4925-a075-8586e3acbd27" />
+<img width="608" height="378" alt="image" src="https://github.com/user-attachments/assets/a786f7b3-3ab6-4c73-bc83-ddf3af450f13" />
+
+**Figura 3.** Representación del algoritmo de Needleman-Wunsch (Liao, 2018).
 
 ## 🛠️ ¿Cómo se realiza un alineamiento local?
 
-**EMBOSS Water** es una herramienta web que implementa el algoritmo de **Smith-Waterman**, un método de alineamiento local ampliamente utilizado para detectar regiones conservadas dentro de dos secuencias, incluso cuando estas difieren en longitud o presentan regiones no relacionadas.
+**EMBOSS Water** es una herramienta web que implementa el algoritmo de Smith-Waterman. A continuación también se presenta un ejemplo de cómo se puede llevar a cabo un alineamiento empleando este método.
 
 ### 🧩 Secuencias de ejemplo
 
@@ -145,7 +159,7 @@ https://www.ebi.ac.uk/jdispatcher/psa/emboss_water
 <img width="921" height="147" alt="image" src="https://github.com/user-attachments/assets/0cc2f78a-5cf2-4372-8d49-2f3454539916" />
 
 5. En la sección **`Parameters`**, seleccionar el formato de salida del alineamiento.  
-   Para este ejemplo, elegir el formato *Pair*, ya que facilita la visualización de las regiones alineadas.
+   Para este ejemplo, elegir el formato *Pair* ...
 <img width="515" height="126" alt="image" src="https://github.com/user-attachments/assets/065a3b40-5edd-4756-a964-9aae904a3423" />
 
 6. En el campo **`Title`**, asignar un nombre descriptivo al ejercicio (por ejemplo: *Alineamiento local Protein_1 vs Protein_2*).
@@ -154,13 +168,13 @@ https://www.ebi.ac.uk/jdispatcher/psa/emboss_water
 7. Ejecutar el alineamiento haciendo clic en el botón **`Submit`**.
 
 ### 👀 Interpretación de los resultados
-Una vez que se completa el alineamiento, EMBOSS Water produce un informe que se asemeja al de EMBOSS Needle; sin embargo, hay diferencias clave que se deben tener en cuenta debido a la naturaleza local del algoritmo.
+Una vez que se completa el alineamiento, igual se produce un informe que se asemeja al de EMBOSS Needle; sin embargo, hay diferencias clave que se deben tener en cuenta debido a la naturaleza local del algoritmo.
 
 #### <mark>Información general</mark>
 En la parte superior del reporte se indica que el programa ejecutado es **water**, confirmando el uso del algoritmo de Smith-Waterman. Asimismo, se reportan los parámetros empleados durante el alineamiento, entre los que destacan:
 
 - **Matriz de sustitución (EBLOSUM62)**: utilizada para asignar puntajes a coincidencias y sustituciones conservadas entre aminoácidos.
-- **Gap penalty (10.0)** y **extend penalty (0.5)**: penalizaciones aplicadas a la apertura y extensión de espacios (*gaps*).
+- **Gap penalty (10.0)** y **extend penalty (0.5)**: penalizaciones aplicadas a la apertura y extensión de *gaps*.
 
 <img width="587" height="507" alt="Alineamiento pareado2" src="https://github.com/user-attachments/assets/a01dbd7a-9aee-4601-82c6-f0cd14d434b4" />
 
@@ -176,7 +190,6 @@ El bloque de estadísticas resume cuantitativamente el alineamiento identificado
 
 <img width="398" height="167" alt="image" src="https://github.com/user-attachments/assets/becdc0fa-c906-4c10-a905-5892787b6049" />
 
-
 #### <mark>Representación visual</mark>
 El alineamiento textual muestra únicamente la región con mayor similitud entre las secuencias. Al igual que en EMBOSS Needle:
 
@@ -189,14 +202,20 @@ El alineamiento textual muestra únicamente la región con mayor similitud entre
 
 👉 Cuando dos secuencias son altamente similares y de la misma longitud, tanto el alineamiento global como el local pueden producir resultados equivalentes.
 
-### Tabla comparativa entre ambos métodos de alineamiento
+>También se puede llevar a cabo una **alineación de secuencias múltiples**, que implica alinear tres o más secuencias biológicas que tienen longitudes similares. A partir de los resultados obtenidos, se puede deducir la homología y explorar la relación evolutiva entre las secuencias.
+
+### ¿Cuál elegir?
+
+- **Needleman-Wunsch:** Escógelo si estás comparando dos variantes del mismo gen o dos proteínas de la misma familia que sospechas que son casi idénticas de inicio a fin.
+- **Smith-Waterman:** Elígelo si tienes una secuencia larga y quieres ver si contiene un fragmento (como un sitio de unión a un ligando o un dominio funcional) que ya conoces.
+
+### Resumen de ambos métodos de alineamiento
 | Característica | Needleman-Wunsch | Smith-Waterman |
 |---------------|--------------|--------------|
-| Tipo de alineamiento | Global | Local |
+| Tipo de alineamiento | Global| Local|
 | Región alineada | Alinea la secuencia completa, de extremo a extremo | Alinea únicamente la región con mayor similitud |
-| Tratamiento de regiones no conservadas | Se incluyen en el alineamiento, aun si presentan baja similitud | Se excluyen del alineamiento |
-| Uso de *gaps* | Introduce *gaps* para forzar el alineamiento completo | Introduce *gaps* solo dentro de la región local alineada |
 | Aplicación principal | Comparación global de secuencias de longitud similar | Detección de regiones conservadas o dominios funcionales |
+| Ventaja| Garantiza el mejor alineamiento total posible | Sensible para encontrar similitudes pequeñas en secuencias muy largas |
 
 
 ## 🔎BLAST 
@@ -224,11 +243,16 @@ Para este propósito se utiliza **BLAST (Basic Local Alignment Search Tool)**, u
 ### ¿Qué son?
 
 
-## Literatura complementaria
+## Bibliografía
 
 Needleman, S. B., & Wunsch, C. D. (1970). A general method applicable to the search for similarities in the amino acid sequence of two proteins. *Journal of Molecular Biology, 48*(3), 443–453. https://doi.org/10.1016/0022-2836(70)90057-4
 
 Smith, T. F., & Waterman, M. S. (1981). Identification of common molecular subsequences. *Journal of Molecular Biology, 147*(1), 195–197. https://doi.org/10.1016/0022-2836(81)90087-5
 
+Embl-Ebi. (s. f.). Job Dispatcher homepage | EMBL-EBI. https://www.ebi.ac.uk/jdispatcher/psa
 
+Mount, D. W. (2001) Bioinformatics: sequence and genome analysis. Cold Spring Harbor Laboratory Press.
 
+Gauthier, J., Vincent, A. T., Charette, S. J., & Derome, N. (2018). A brief history of bioinformatics. Briefings In Bioinformatics, 20(6), 1981-1996. https://doi.org/10.1093/bib/bby063
+
+Liao, Y., Li, Y., Chen, N., & Lu, Y. (2018). Adaptively Banded Smith-Waterman Algorithm for Long Reads and Its Hardware Accelerator. 2018 IEEE 29th International Conference on Application-specific Systems, Architectures and Processors (ASAP), 1-9.
