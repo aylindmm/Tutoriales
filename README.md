@@ -1,10 +1,10 @@
 #  SysBioFold
-## Laboratorio de Biología de Sistemas y Estructural.
+## Laboratorio de Biología Estructural y de Sistemas.
 ---
 
 # 🚀 Colección de Tutoriales de Bioinformática
 
-Bienvenido/a a *SysBioFold Tutoriales*, un repositorio dedicado a la enseñanza y práctica de **bioinformática y biología de sistemas**.  
+Bienvenido/a a *SysBioFold Tutoriales*, un repositorio dedicado a la enseñanza y práctica de **bioinformática.**.  
 
 Este proyecto reúne una colección de tutoriales, ejemplos prácticos y **guías paso a paso** sobre temas clave en análisis de datos biológicos, transcriptómica, genómica, análisis de redes y más. Está diseñado tanto para estudiantes que quieran aprender o reforzar conceptos de bioinformática con ejemplos reproducibles en R, la línea de comandos, Galaxy y otras herramientas en línea.  
 <p align="center">
