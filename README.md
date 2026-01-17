@@ -34,5 +34,3 @@ Cada tutorial incluye **código comentado, instrucciones paso a paso y referenci
 ---
 
 ## Nuestro equipo:
-
-
