@@ -8,7 +8,7 @@ En muchos análisis bioinformáticos es común enfrentarse a secuencias cuya ide
 
 <img width="1205" height="631" alt="image" src="https://github.com/user-attachments/assets/45b24b38-b4cf-436a-b5c1-962c98916121" />
 
-**Figura 4.** BLAST (Basic Local Alignment Search Tool) (NCBI).
+**Figura 1.** BLAST (Basic Local Alignment Search Tool) (NCBI).
 
 ## 📌 ¿Cómo funciona BLAST? 
 
@@ -22,7 +22,7 @@ El procedimiento consiste en:
 <img width="1158" height="443" alt="image" src="https://github.com/user-attachments/assets/5aebebe5-79ac-46e5-be2c-b4ef81fa7b26" />
 <img width="1058" height="207" alt="image" src="https://github.com/user-attachments/assets/b366f343-e903-4187-8ca5-aed66f33f1c0" />
 
-**Figura 5**. ¿Cómo funciona BLAST? (NLM, 2022).
+**Figura 2**. ¿Cómo funciona BLAST? (NLM, 2022).
 
 ## 🗂️ Tipos principales
 
@@ -171,6 +171,14 @@ En este ejemplo, la pestaña **Taxonomy** muestra una predominancia de secuencia
 
 <img width="1574" height="901" alt="image" src="https://github.com/user-attachments/assets/baf89f77-654f-4b1e-931f-17ff2c92808c" />
 
-## Bibliografía
+## ✅ Conclusión
+
+La herramienta BLAST es muy  útil para identificar secuencias similares en grandes bases de datos biológicas y para evaluar su relación a través de alineamientos locales. En este tutorial, se explicó cómo navegar por su interfaz web y cómo interpretar los resultados principales. Esto hace que BLAST sea una herramienta fundamental para la búsqueda de homologías y la caracterización inicial de secuencias.
+
+## 📚 Bibliografía
 
 National Library of Medicine. (2021). How BLAST works. https://www.nlm.nih.gov/ncbi/workshops/2022-10_Basic-Web-BLAST/how-blast-works.html
+
+Tamang, S. (2024). BLAST in Bioinformatics: Types, Steps & Applications. Microbe Notes. https://microbenotes.com/blast-bioinformatics/
+
+UC Berkeley Library. (2024) .Library Guides: NCBI Bioinformatics Resources: An Introduction: BLAST: Compare & identify sequences. . https://guides.lib.berkeley.edu/ncbi/blast
