@@ -217,7 +217,11 @@ El alineamiento textual muestra únicamente la región con mayor similitud entre
 | Aplicación principal | Comparación global de secuencias de longitud similar | Detección de regiones conservadas o dominios funcionales |
 | Ventaja| Garantiza el mejor alineamiento total posible | Sensible para encontrar similitudes pequeñas en secuencias muy largas |
 
-## Bibliografía
+## ✅ Conclusión
+
+El alineamiento pareado es una técnica que permite comparar dos secuencias biológicas de manera directa y evaluar cuán similares son entre sí. En este tutorial, exploramos cómo utilizar herramientas de alineamientos globales y locales, y cómo interpretar los resultados que obtenemos. Conocer estos métodos es esencial para llevar a cabo un análisis comparativo de secuencias y para entender mejor las relaciones tanto estructurales como funcionales.
+
+## 📚 Bibliografía
 
 Embl-Ebi. (s. f.). Job Dispatcher homepage | EMBL-EBI. https://www.ebi.ac.uk/jdispatcher/psa
 
