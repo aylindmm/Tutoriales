@@ -4,7 +4,7 @@
 ### Introducción
 La predicción de estructuras de proteínas ha experimentado una revolución gracias a la Inteligencia Artificial. En este tutorial, aprenderemos a utilizar **AlphaFold Server** para modelar un complejo multiproteico esencial para la regulación epigenética: **PRC2**.
 
-A diferencia de los tutoriales anteriores donde usamos la terminal, aquí utilizaremos herramientas basadas en la nube, lo que democratiza el acceso a modelos de alta precisión sin necesitar una supercomputadora local.
+A diferencia de los tutoriales anteriores donde usamos la terminal, aquí utilizaremos herramientas basadas en la nube, lo que facilita el acceso a modelos de alta precisión sin necesitar una supercomputadora propia.
 
 ---
 
@@ -44,7 +44,7 @@ Es común confundir estas dos herramientas, pero sirven para propósitos muy dif
 ## Procedimiento
 
 ### Paso 1: Obtención de Secuencias (UniProt)
-Primero necesitamos la "receta" (secuencia de aminoácidos) de cada componente humano de PRC2.
+Primero necesitamos la secuencia de aminoácidos de cada componente humano de PRC2.
 
 1. Ve a [UniProt](https://www.uniprot.org/).
 2. Busca y copia la secuencia **FASTA** de las siguientes proteínas humanas (Verifica que el *Organism* sea *Homo sapiens*):
@@ -97,7 +97,7 @@ AlphaFold Server tiene un visor integrado, pero para imágenes más detalladas p
 2. Descomprime el archivo y busca el modelo con el mejor ranking (generalmente `seed_000` o `rank_0`).
 3. Abre el archivo `.cif` (o `.pdb`) en **PyMOL**.
 
-**Reto de Visualización:**
+**Visualización:**
 Intenta colorear cada cadena de un color distinto en PyMOL para identificar cómo EED "abraza" a EZH2, regulando su actividad metiltransferasa.
 
 ```python
