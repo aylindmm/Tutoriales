@@ -53,19 +53,23 @@ Primero necesitamos la secuencia de aminoácidos de cada componente humano de PR
     * **SUZ12:**
     * **RbAp48:**
 
->  En UniProt, busca el botón "Download" y selecciona "FASTA". Copia todo el texto, incluyendo la primera línea que empieza con `>`.
+>  En UniProt, selecciona el botón ``Download``, luego en ``Format`` selecciona "FASTA". Copia todo el texto, incluyendo la primera línea que empieza con `>`.
+<img width="1142" height="344" alt="Captura de pantalla 2026-01-27 a la(s) 10 29 20 p m" src="https://github.com/user-attachments/assets/90166054-fba5-4451-a6ba-dae3ce9c9d09" />
+<img width="859" height="605" alt="Captura de pantalla 2026-01-28 a la(s) 1 13 27 a m" src="https://github.com/user-attachments/assets/548a6ff8-51b0-4508-8854-4b3c67f1b620" />
+
+---
 
 ### Paso 2: Configuración en AlphaFold Server
 AlphaFold 3 permite predecir complejos macromoleculares con alta precisión.
 
 1. Accede a [AlphaFold Server](https://alphafoldserver.com/) e inicia sesión con tu cuenta de Google.
-2. Haz clic en **"Create new job"**.
+2. Haz clic en ``Create new job``.
 3. En la sección de entrada ("Input"), verás opciones para añadir entidades. Vamos a añadir nuestras proteínas:
-    * **Molecule 1:** Selecciona "Protein". Pega la secuencia FASTA de **EZH2**. Nómbrala `EZH2`.
+    * **Molecula 1:** Selecciona ``Protein``. Pega la secuencia FASTA de **EZH2**.
+
     * Haz clic en **"Add entity"**.
-    * **Molecule 2:** Selecciona "Protein". Pega la secuencia FASTA de **EED**. Nómbrala `EED`.
-    * Haz clic en **"Add entity"**.
-    * **Molecule 3:** Selecciona "Protein". Pega la secuencia FASTA de **SUZ12**. Nómbrala `SUZ12`.
+    * **Molecula 2:** Selecciona ``Protein``. Pega la secuencia FASTA de **EED**.
+    * > Y asi con las 2 moleculas restantes...
 4. Asigna un nombre al trabajo, por ejemplo: `PRC2_Core_Complex`.
 5. Haz clic en **"Continue"** y luego en **"Confirm and submit"**.
 
