@@ -58,6 +58,7 @@ Al finalizar la ejecución, ColabFold te entregará varios resultados.
 #### 1. Los Gráficos de Diagnóstico.
 - **MSA Coverage**: muestra cuántas secuencias evolutivas homólogas encontro el algoritmo MMseqs2.
 <img width="681" height="470" alt="image" src="https://github.com/user-attachments/assets/223b7024-f45f-48ce-a304-7bf5187c7338" />
+
 ---
 
 - **Predicciones**: se generaran 5 predicciones alternativos de la misma estructura, ordenadas automáticamente del mejor al peor según su puntuación de confianza (pLDDT y PAE). 
