@@ -1,29 +1,6 @@
 # Modelado de Complejos Proteicos con AlphaFold Server
-## Caso de Estudio: El Complejo Represivo Polycomb 2 (PRC2)
 
-### Introducción
-La predicción de estructuras de proteínas ha experimentado una revolución gracias a la Inteligencia Artificial. En este tutorial, aprenderemos a utilizar **AlphaFold Server** para modelar un complejo multiproteico esencial para la regulación epigenética: **PRC2**.
-
-A diferencia de los tutoriales anteriores donde usamos la terminal, aquí utilizaremos herramientas basadas en la nube, lo que facilita el acceso a modelos de alta precisión sin necesitar una supercomputadora propia.
-
----
-
-## Contexto Biológico: ¿Qué es PRC2?
-El **Polycomb Repressive Complex 2 (PRC2)** es una maquinaria molecular crucial para el desarrollo embrionario y la identidad celular. Su función principal es catalizar la metilación de la histona H3 en la lisina 27 (**H3K27me3**), una marca asociada con el silenciamiento génico (represión de la transcripción).
-
-Aunque PRC2 puede tener varios componentes accesorios (como JARID2 o AEBP2), existe un **núcleo catalítico conservado** desde *Drosophila* hasta los mamíferos, compuesto por cuatro subunidades:
-
-1.  **EZH2 (Enhancer of Zeste Homolog 2):** La subunidad catalítica que contiene el dominio SET.
-2.  **EED (Embryonic Ectoderm Development):** Se une a la marca H3K27me3 y estimula la actividad de EZH2.
-3.  **SUZ12 (Suppressor of Zeste 12):** Esencial para la integridad del complejo.
-4.  **RbAp48 (RBBP4):** Una chaperona de histonas.
-
-<img width="481" height="302" alt="Foto1" src="https://github.com/user-attachments/assets/d66d4598-e48a-4110-a317-ffbb3f9c71aa" />
-
-
-En este tutorial, modelaremos la interacción de este núcleo central.
-
----
+AlphaFold Server es la plataforma gratuita de Google DeepMind que permite utilizar AlphaFold 3, la versión más avanzada de su modelo de Inteligencia Artificial. A diferencia de las versiones anteriores que se centraban casi exclusivamente en proteínas, este servidor permite modelar una amplia gama de biomoléculas con una gran precisión. 
 
 ## ⚠️ Concepto Clave: AlphaFold Database vs. AlphaFold Server
 
@@ -116,8 +93,3 @@ color red, chain B   # EED
 color green, chain C # SUZ12
 show surface         # Para ver el complejo como un volumen
 ```
-*Referencias* 
-
-- *Margueron, R., & Reinberg, D. (2011). The Polycomb complex PRC2 and its mark in life. Nature, 469(7330), 343-349.*
-
-- *Jumper, J., et al. (2021). Highly accurate protein structure prediction with AlphaFold. Nature.*
