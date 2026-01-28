@@ -20,12 +20,14 @@ Ve a [UniProt](https://www.uniprot.org/) y obtén las secuencias de:
 1. Verifica que el organismos sea "Homo sapiens (Human)"
 2. Ve a ``Dowload``
 <img width="1142" height="344" alt="Captura de pantalla 2026-01-27 a la(s) 10 29 20 p m" src="https://github.com/user-attachments/assets/268677e7-02da-4250-a9ae-27b0f0bebbe0" />
+
 ---
 
 3. En ``Format`` selecciona "FASTA (canonical)"
 4. Puedes seleccionar la opción ``Preview`` o ``Download`` para poder visualizar la secuencia.
 5. Para ColabFold copía la secuencia a partir de donde esta la flecha roja en la imagen.
 <img width="869" height="600" alt="Captura de pantalla 2026-01-27 a la(s) 10 44 45 p m" src="https://github.com/user-attachments/assets/db468119-cf11-4423-82ec-fd9c1088864b" />
+
 ---
 
 Para indicar que es un **complejo**, unimos las secuencias usando dos puntos (`:`) como separador.
