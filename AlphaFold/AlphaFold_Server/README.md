@@ -65,13 +65,18 @@ AlphaFold 3 permite predecir complejos macromoleculares con alta precisión.
 1. Accede a [AlphaFold Server](https://alphafoldserver.com/) e inicia sesión con tu cuenta de Google.
 2. Haz clic en ``Create new job``.
 3. En la sección de entrada ("Input"), verás opciones para añadir entidades. Vamos a añadir nuestras proteínas:
-    * **Molecula 1:** Selecciona ``Protein``. Pega la secuencia FASTA de **EZH2**.
+    - **Molecula 1:** Selecciona ``Protein``. Pega la secuencia FASTA de **EZH2**.
+<img width="700" height="300" alt="Captura de pantalla 2026-01-28 a la(s) 1 22 55 a m" src="https://github.com/user-attachments/assets/b2c177c4-67a3-4321-867b-462c676a4f6b" />
 
-    * Haz clic en **"Add entity"**.
-    * **Molecula 2:** Selecciona ``Protein``. Pega la secuencia FASTA de **EED**.
-    * > Y asi con las 2 moleculas restantes...
-4. Asigna un nombre al trabajo, por ejemplo: `PRC2_Core_Complex`.
-5. Haz clic en **"Continue"** y luego en **"Confirm and submit"**.
+   - Haz clic en **``Add entity``**.
+   - **Molecula 2:** Selecciona ``Protein``. Pega la secuencia FASTA de **EED**.
+   -  > Y asi con las 2 moleculas restantes...
+      
+4. Haz clic en **``Continue and preview job``**
+
+   4.1. Asigna un nombre al trabajo, por ejemplo: `PRC2_Core_Complex`.
+
+      4.2. Luego selecciona **``Confirm and submit job``**.
 
 *El proceso puede tardar desde unos minutos hasta una hora, dependiendo de la carga del servidor en ese momento.*
 
