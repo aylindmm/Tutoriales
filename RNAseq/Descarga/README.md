@@ -186,6 +186,7 @@ Y dentro de cada colección, los archivos .fastq listos para analizar con **Fast
 - 💾 [NCBI SRA — Sequence Read Archive](https://www.ncbi.nlm.nih.gov/sra)  
 - 📘 [Tutorial oficial de introducción a Galaxy](https://training.galaxyproject.org/training-material/topics/introduction/)
 
+---
 
 > ## 🧭 **Siguiente paso:** continúa con el tutorial [Control de calidad de lecturas](/RNAseq/Control_calidad/README.md)
 
