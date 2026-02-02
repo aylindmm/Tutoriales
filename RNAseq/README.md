@@ -71,5 +71,5 @@ Ventajas:
 
 ----
 
-> 🧭 **Siguiente paso:** continúa con el tutorial [Descarga de datos de secuenciación usando Galaxy](../tutorial-descarga-galaxy/README.md)
+> 🧭 **Siguiente paso:** continúa con el tutorial [Descarga de datos de secuenciación usando Galaxy](/RNAseq/Descarga/README.md)
 
