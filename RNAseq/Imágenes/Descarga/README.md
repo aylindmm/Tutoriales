@@ -88,7 +88,7 @@ Ahora crea una nueva historia en Galaxy
 Ahora buscaremos el estudio cuyos datos descargaremos.
 
 1. Entra al sitio: [https://www.ncbi.nlm.nih.gov/geo/](https://www.ncbi.nlm.nih.gov/geo/)
-2. En la barra de búsqueda escribe el código del estudio: **GSE219205**
+2. En la barra de búsqueda escribe el código del estudio: **GSE230372**
 3. Presiona **Search**.
 ![busqueda](/Datos_FASTQ/Imágenes/busqueda.png)
 
@@ -101,7 +101,6 @@ En ella verás información como:
 - Tipo de tecnología utilizada (por ejemplo, *RNA-seq*)  
 - Descripción de las muestras  
 
-Repite lo mismo para el segundo estudio: **GSE230372**
 
 > 💡 Cada estudio GSE contiene varias muestras, y cada muestra tiene un identificador *SRR* asociado al repositorio SRA.
 
@@ -112,7 +111,6 @@ Repite lo mismo para el segundo estudio: **GSE230372**
 ![SRA](/Datos_FASTQ/Imágenes/SRA.png)
 
 2. Al abrirlo, verás una tabla con todos los **SRR** del estudio, por ejemplo:
-   - SRR22493369 (para GSE219205)
    - SRR24282443 a SRR24282451 (para GSE230372)
 
 Cada SRR corresponde a una muestra individual.
@@ -131,11 +129,8 @@ Ahora vamos a usar Galaxy para obtener los archivos *FASTQ* de esos SRR.
 
   - En el campo **Accession(s)** escribe los identificadores **SRR**, uno por línea:
 
-#### Estudio 1 — GSE219205
 
-SRR22493369
-
-#### Estudio 2 — GSE230372
+#### Estudio — GSE230372
 
 SRR24282443,
 SRR24282444,
@@ -179,8 +174,8 @@ Al finalizar, deberías ver hasta tres colecciones diferentes:
 ## ✅ 8. Resultado final esperado
 Después de correr la herramienta correctamente, deberás tener en tu historial:
 - 1 colección con las lecturas paired-end
-- 1 colección con lecturas single-end (si aplica)
-- 1 colección con other data (posiblemente vacía)
+- 1 colección con lecturas single-end
+
 
 Y dentro de cada colección, los archivos .fastq listos para analizar con **FastQC**.
 
