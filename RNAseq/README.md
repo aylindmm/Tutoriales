@@ -31,7 +31,7 @@ Cada etapa depende de la anterior.
 
 Si los datos crudos son de mala calidad o tienen adaptadores, los errores se propagarán hacia los siguientes pasos.
 
-![workflow](/RNAseq/Imágenes/workflow2.png)
+![workflow](/RNAseq/Imagenes/workflow2.png)
 
 ## ☁️ Galaxy: una plataforma para RNA-seq
 **Galaxy** es una plataforma web gratuita que permite realizar análisis bioinformáticos sin usar la línea de comandos.  
