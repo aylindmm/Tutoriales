@@ -7,7 +7,7 @@ Aprender a descargar archivos de datos de secuenciación a partir de estudios p�
 
 [**GEO (Gene Expression Omnibus)**](https://www.ncbi.nlm.nih.gov/geo/) es una base de datos pública del NCBI (National Center for Biotechnology Information) que almacena resultados de experimentos genómicos realizados por científicos de todo el mundo.
 
-![GEO](/Datos_FASTQ/Imágenes/GEO.png)
+![GEO](/RNAseq/Descarga/Imágenes/GEO.png)
 
 En GEO se pueden encontrar estudios que analizan:
 - Expresión génica (RNA-seq, microarreglos)
@@ -54,7 +54,7 @@ Ventajas:
 - Permite guardar tu trabajo y resultados
 - Ideal para principiantes
 
-![Galaxy](/Datos_FASTQ/Imágenes/Galaxy.png)
+![Galaxy](/RNAseq/Descarga/Imágenes/Galaxy.png)
 
 Puedes acceder a Galaxy en distintos servidores:
 - 🌎 [https://usegalaxy.org](https://usegalaxy.org) → Servidor de Estados Unidos (recomendado)
@@ -79,7 +79,7 @@ Una vez que inicies sesión, verás tres zonas en la interfaz:
 Ahora crea una nueva historia en Galaxy
    1. En la esquina superior derecha de Galaxy, haz clic en **Histories**.
    2. Selecciona *Create New History* ✚ .
-![newhistory](/Descarga/Imágenes/History.png)
+![newhistory](/RNAseq/Descarga/Imágenes/History.png)
    3. Ponle un nombre descriptivo, por ejemplo: FASTQC. 
    Esto te ayudará a mantener organizados todos los archivos dentro de la interfaz.
 
@@ -90,7 +90,7 @@ Ahora buscaremos el estudio cuyos datos descargaremos.
 1. Entra al sitio: [https://www.ncbi.nlm.nih.gov/geo/](https://www.ncbi.nlm.nih.gov/geo/)
 2. En la barra de búsqueda escribe el código del estudio: **GSE230372**
 3. Presiona **Search**.
-![busqueda](/Datos_FASTQ/Imágenes/busqueda.png)
+![busqueda](/RNAseq/Descarga/Imágenes/busqueda.png)
 
 Esto te llevará a la página del estudio.  
 
@@ -108,14 +108,14 @@ En ella verás información como:
 
 1. En la parte inferior de la página del estudio, busca el enlace **SRA Run Selector**.  
 
-![SRA](/Datos_FASTQ/Imágenes/SRA.png)
+![SRA](/RNAseq/Descarga/Imágenes/SRA.png)
 
 2. Al abrirlo, verás una tabla con todos los **SRR** del estudio, por ejemplo:
    - SRR24282443 a SRR24282451 (para GSE230372)
 
 Cada SRR corresponde a una muestra individual.
 
-![SRR](/Datos_FASTQ/Imágenes/SRR.png)
+![SRR](/RNAseq/Descarga/Imágenes/SRR.png)
 
 ## 💾 7. Descargar las lecturas desde Galaxy
 
@@ -141,7 +141,7 @@ SRR24282451.
 
   - Haz clic en **Run** para comenzar.
 
-![SRRA](/Datos_FASTQ/Imágenes/SRRA.png)
+![SRRA](/RNAseq/Descarga/Imágenes/SRRA.png)
 
 ### 3. Revisar el progreso
 
