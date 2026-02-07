@@ -1,6 +1,6 @@
 # 👨🏻‍💻 Análisis de datos de secuenciación de ARN unicelular (scRNA-seq)
 
-## 🎯 1. Introducción a scRNA-seq
+## 🧪 1. ¿Qué es scRNA-seq?
 
 La secuenciación de ARN de célula única (**scRNA-seq**) es una tecnología reciente que permite medir la expresión génica a nivel de cada célula individual. A diferencia del RNA-seq masivo (*bulk*), que mide el promedio de expresión génica en una población de células, el scRNA-seq permite capturar la heterogeneidad biológica, analizando la diversidad de tipos celulares en un tejido complejo e identificando estados celulares raros.
 
@@ -8,9 +8,9 @@ La secuenciación de ARN de célula única (**scRNA-seq**) es una tecnología re
 
 La metodología de scRNA-seq puede dividirse en dos etapas principales complementarias e interdependientes:
 
-**1. Fase experimental**: incluye todos los procedimientos que se llevan a cabo desde la obtención del material biológico hasta la generación de los datos de secuenciación. 
-  
-**1.1 Obtención y preparación de la muestra**: consiste en obtener una suspensión de células individuales viables a partir de un tejido o población celular. Para lograrlo, los tejidos suelen someterse a procesos de disociación mecánica y/o enzimática. Posteriormente, de forma opcional, se pueden seleccionar células (por ejemplo, basándose en ...)
+1. <mark>**Fase experimental**</mark>: incluye todos los procedimientos que se llevan a cabo desde la obtención del material biológico hasta la generación de los datos de secuenciación. 
+
+   1.1 **Obtención y preparación de la muestra**: consiste en obtener una suspensión de células individuales viables a partir de un tejido o población celular. Para lograrlo, los tejidos suelen someterse a procesos de disociación mecánica y/o enzimática. Posteriormente, de forma opcional, se pueden seleccionar células (por ejemplo, basándose en ...)
 
    1.2 **Aislamiento de células individuales**: involucra asegurar que cada célula sea procesada de forma independiente. Este aislamiento puede realizarse mediante diversas tecnologías, como sistemas de nanopocillos, microgotas o microplacas, cada una con sus ventajas y limitaciones en cuanto al número de células que se pueden analizar, la profundidad de secuenciación y la resolución transcriptómica.
 
@@ -20,7 +20,7 @@ La metodología de scRNA-seq puede dividirse en dos etapas principales complemen
 
    1.5 **Construcción de librerías y secuenciación**: el ADNc amplificado se utiliza para construir librerías de secuenciación que son procesadas mediante plataformas de secuenciación masiva.
 
-2. **Fase computacional**: comienza una vez que se han generado los datos de secuenciación, se busca transformar los datos crudos en información biólogica que se pueda analizar.
+2. <mark>**Fase computacional**</mark>: comienza una vez que se han generado los datos de secuenciación, se busca transformar los datos crudos en información biólogica que se pueda analizar.
 
    2.1 **Preprocesamiento**: las lecturas pasan por un procesamiento primario que incluye asignar cada lectura a su célula de origen usando los bardcodes, el alineamiento o pseudoalineamiento a un genoma o transcriptoma de referencia, y el conteo de las moléculas con los UMIs. Al final de este proceso, se genera una matriz de expresión génica, donde las filas representan genes y las columnas representan células individuales.
 
@@ -40,14 +40,22 @@ En resumen, la fase experimental establece la calidad y el tipo de información 
 
 ## 🔎 3. Aplicaciones, ventajas y desventajas
 
-La scRNA-seq permite abordar preguntas biológicas que requieren resolución celular fina, pero también implica retos técnicos y analíticos. En la siguiente tabla se sintetizan sus principales aplicaciones, ventajas y limitaciones.
+La scRNA-seq permite abordar preguntas biológicas que requieren una resolución muy detallada, aunque también implica desafíos tanto técnicos como analíticos. En la tabla siguiente, se resumen sus principales aplicaciones, ventajas y limitaciones.
 
 | Característica | Descripción |
 | :--- | :--- |
-| **Aplicaciones** |  Se utiliza para estudiar la heterogeneidad celular en tejidos complejos, permitiendo analizar procesos del desarrollo embrionario, respuestas inmunes, cáncer y organización del sistema nervioso.|
+| **Aplicaciones** |  Se utiliza para estudiar la heterogeneidad celular en tejidos complejos, permitiendo analizar procesos del desarrollo embrionario, respuesta inmune, cáncer y del sistema nervioso.|
 | **Ventajas** | Alta resolución, identificación de poblaciones celulares no descubiertas, estudio de trayectorias. |
 | **Desventajas** | Alto costo, mayor "ruido" estadístico (*dropout events*), requiere procesamiento bioinformático complejo. |
 
-## 4. Ejercicio práctico en R
+## 💻 4. Ejercicio práctico en R
 
-A continuación, realizaremos un análisis básico utilizando el paquete `Seurat` y el dataset de 2,700 células mononucleares de sangre periférica (PBMC).
+A continuación vamos a aprender a analizar datos de scRNA-seq utilizando **R** y **Bioconductor**. Este tutorial está directamente basado en el material original:
+
+*Lun ATL et al. [*Single Cell RNA-seq Analysis with Bioconductor*](https://www.singlecellcourse.org/introduction-to-rbioconductor.html)*
+
+### ¿Qué datos vamos a analizar?
+Utilizaremos un conjunto de datos de células madre pluripotentes inducidas (iPSC) generado por [Tung et al. (2017)](https://www.nature.com/articles/srep39921) en la Universidad de Chicago.
+
+
+
