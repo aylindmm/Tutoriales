@@ -60,7 +60,7 @@ Para realizar un análisis de scRNA-seq en R la elección de las librerías es f
 
 A continuación, se llevará a cabo un ejercicio práctico para aprender a realizar un análisis de un conjunto de datos reales de células individuales usando el paquete **Seurat** en RStudio.
 
-Esta guía es una adaptación educativa del tutorial oficial de [Seurat “Guided Clustering Tutorial – PBMC 3K Dataset”](https://satijalab.org/seurat/articles/pbmc3k_tutorial), desarrollado por el Satija Lab. El contenido ha sido simplificado con fines didácticos para facilitar la comprensión de este tipo de análisis bioinformático.
+Esta guía es una adaptación educativa del tutorial oficial de [Seurat “Guided Clustering Tutorial – PBMC 3K Dataset”](https://satijalab.org/seurat/articles/pbmc3k_tutorial), desarrollado por el Satija Lab. El contenido ha sido simplifaco con fines didácticos para facilitar la comprensión de este tipo de análisis bioinformático para estudiantes principiantes.
 
 ####  ¿De dónde provienen los datos?
 
@@ -99,7 +99,7 @@ Esto carga la **matriz de conteos**, en donde:
 
 **Resultado esperado:**
 - ✅ No muestra ningún resultado en consola
-- ❌ El objeto resultante `pbmc.data` se guarda en el entorno de trabajo
+- ✅ El objeto resultante `pbmc.data` se guarda en el entorno de trabajo
 
 Una vez que hayas cargado los datos, puedes echar un vistazo a sus dimensiones para ver cuántos genes y cuántas células hay en el conjunto. Al usar la función `dim`, R te devuelve dos valores: el número de filas, que corresponde a los genes detectados, y el número de columnas, que representa el total de células analizadas. Esta información es útil para asegurarte de que los datos se hayan cargado correctamente antes de seguir con el análisis.
 
@@ -149,7 +149,7 @@ VlnPlot(pbmc, features = c("nFeature_RNA","nCount_RNA","percent.mt"))
 
 Una vez evaluadas las métricas de calidad y visualizadas sus distribuciones, el siguiente paso es eliminar aquellas células que no cumplen con los criterios mínimos para un análisis confiable. Este proceso, conocido como **filtrado**, tiene como objetivo conservar solo las células que presentan perfiles de expresión representativos. Se lleva a cabo utilizando la función `subset` seleccionando únicamente las células que cumplen con los criterios establecidos.
 
-❌ En este ejercicio se eliminan células:
+En este ejercicio se eliminan células:
 - Que expresan menos de 200 genes, ya que suelen ser células muertas, fragmentos celulares o resultado de errores técnicos.
 - Que expresan más de 2,500 genes, ya que podrían ser dobletes (dos células que se capturaron como una sola durante la secuenciación).
 - Cuyo porcentaje de genes mitocondriales supera el 5%, ya que un valor alto suele estar asociado con estrés celular o degradación del ARN.
@@ -159,13 +159,56 @@ pbmc <- subset(pbmc, subset = nFeature_RNA > 200 & nFeature_RNA < 2500 & percent
 ```
 
 **Resultado esperado:**
-- El objeto `Seurat` se actualiza de forma automática, eliminando las células que no cumplen con los filtros establecidos. 
-- RStudio no muestra un mensaje específico, el número total de células que se almacenan en el objeto disminuye. 
+- ✅ El objeto `Seurat` se actualiza de forma automática, eliminando las células que no cumplen con los filtros establecidos. 
+- ✅ No se muestra ninguna salida en la consola, el número total de células que se almacenan en el objeto disminuye. 
 
 ### 3. Normalización de los datos
 
+Después de filtrar los datos, el siguiente paso es normalizarlos. En el caso del scRNA-seq, diferentes células pueden tener distintas profundidades de secuenciación; es decir, algunas pueden tener más lecturas que otras, y esto puede deberse a razones técnicas. La normalización ayuda a ajustar estas diferencias, asegurando que las comparaciones entre células sean válidas.
+
+Seurat realiza este proceso mediante la función `NormalizeData`, utiliando el método *LogNormalize* que:
+1. Divide los conteos por el total de cada célula
+2. Multiplica el resultado por 10,00
+3. Aplica logaritmo para que sea más comparable entre células
+
+**Resultado esperado:**
+- ✅ No se muestra ninguna salida en la consola, sin embargo, los datos normalizados se guardan internamente.
+
+Es importante mencionar que los datos crudos no se eliminan, sino que se conservan dentro del objeto `Seurat` por si se requieren después.
+
+### 4. Detección de genes altamente variables
+
+En un experimento de scRNA-seq, no todos los genes son igualmente útiles para diferenciar entre los distintos tipos de células. Muchos de ellos tienen niveles de expresión que son bastante similares en todas las células, lo que los hace poco útiles para analizar la variación celular. Por eso, Seurat se encarga de identificar un aquellos genes cuya expresión varía significativamente entre las células.
+
+Este proceso se lleva a cabo mediante la función `FindVariableFeatures`, que examina la relación entre la media y la varianza de la expresión de cada gen, seleccionando aquellos que muestran una variabilidad mayor de lo que se esperaría.
+
+En este caso, se seleccionan los 2,000 genes más variables del conjunto de datos.
+
+```r
+pbmc <- FindVariableFeatures(pbmc, selection.method = "vst", nfeatures = 2000)
+
+# Identificar los 10 genes más variables
+top10 <- head(VariableFeatures(pbmc), 10)
+
+# Trazar características variables con y sin etiquetas
+plot1 <- VariableFeaturePlot(pbmc)
+plot2 <- LabelPoints(plot = plot1, points = top10, repel = TRUE)
+plot1 + plot2
+```
+
+**Resultado esperado:**
+- ✅ No imprime resultados directamente, sin embargo, se guarda internamente la lista de genes variables. 
+
+### 5. Escalado y reducción de dimensionalidad (PCA)
 
 
+### 6. Clustering de las células
+
+### 7. Visualización con UMAP / t-SNE
+
+### 8. Identificación de marcadores de cada cluster
+
+### 9. Anotación biológica
 
 
 ## 💻 4. Análisis de scRNA-seq con Bioconductor en R
