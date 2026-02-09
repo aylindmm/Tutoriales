@@ -23,6 +23,8 @@ Antes de comenzar, asegúrate de contar con:
 
 ## 🖥️ Metodología
 
+<img width="690" height="317" alt="image" src="https://github.com/user-attachments/assets/1ca29c24-a0dd-485b-80d6-a2859951e169" />
+
 ### 1.  Identificar los datos de entrada
 
 Se elige la herramienta **RNA-STAR**, la cual está diseñada para llevar a cabo el alineamiento rápido y eficiente de lecturas de RNA-seq. Este alineador es especialmente útil para manejar grandes volúmenes de datos y para determinar correctamente los sitios de empalme característicos de este tipo de secuencias.
