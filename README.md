@@ -36,5 +36,7 @@ Cada tutorial incluye **código comentado, instrucciones paso a paso y referenci
 ## Nuestro equipo:
 
 Aylin del Moral -- Tutora
+
 Melanie Tapia -- Servicio Social
+
 Luis Castillo -- Servicio Social
