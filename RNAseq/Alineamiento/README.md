@@ -112,7 +112,7 @@ Un alineamiento exitoso es la base para análisis posteriores, como la cuantific
 
 ---
 
-> ## 🧭 **Siguiente paso:** continúa con el tutorial [Alineamiento](/RNAseq/Conteo/README.md)
+> ## 🧭 **Siguiente paso:** continúa con el tutorial [Conteo](/RNAseq/Conteo/README.md)
 
 
 
