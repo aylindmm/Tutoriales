@@ -199,16 +199,89 @@ plot1 + plot2
 **Resultado esperado:**
 - ✅ No imprime resultados directamente, sin embargo, se guarda internamente la lista de genes variables. 
 
-### 5. Escalado y reducción de dimensionalidad (PCA)
+### 5. Escalado de los datos
+El escalado implica centrar y estandarizar los valores de expresión génica, asegurando que cada gen tenga una media igual a cero y una varianza igual a 1. Este proceso es fundamental para evitar que los genes con valores de expresión muy altos dominen el análisis. Se realiza mediante la función `ScaleData`, la cual trabaja sobre los genes previamente identificados como altamente variables.
+
+```r
+all.genes <- rownames(pbmc)
+pbmc <- ScaleData(pbmc, features = all.genes)
+```
+**Resultado esperado:**
+- ✅ No se genera una salida visible en la consola, sin embargo, los resultados se almacenan en `pbmc[["RNA"]]$scale.data`.
+
+### 6. Análisis de componentes principales (PCA)
+El análisis de componentes principales (PCA, por sus siglas en inglés) es una técnica estadística que ayuda a simplificar la complejidad de los datos puesto que convierte la expresión de muchos genes en un conjunto más pequeño de componentes que logran capturar la mayor parte de la variación entre las células.
+
+Para llevar a cabo el PCA, se utiliza la función `RunPCA`, que requiere como entrada los datos escalados.
+
+```r
+pbmc <- RunPCA(pbmc, features = VariableFeatures(object = pbmc))
+```
+Existen diversas funciones para analizar y visualizar tanto las células como las características que conforman el PCA, como: `VizDimReduction()`, `DimPlot()` o `DimHeatmap()`.
+
+```r
+VizDimLoadings(pbmc, dims = 1:2, reduction = "pca")
+```
+
+```r
+VizDimLoadings(pbmc, dims = 1:2, reduction = "pca")
+```
+
+```r
+DimPlot(pbmc, reduction = "pca") + NoLegend()
+```
+
+```r
+DimHeatmap(pbmc, dims = 1, cells = 500, balanced = TRUE)
+```
+
+```r
+DimHeatmap(pbmc, dims = 1:15, cells = 500, balanced = TRUE)
+```
+
+Para decidir cuántos componentes principales incluir, a menudo se recurre a un gráfico conocido como `Elbow Plot`. Este gráfico ilustra la cantidad de varianza que cada componente principal explica. El punto en el que la curva comienza a aplanarse, conocido como “codo”, señala un número razonable de componentes a considerar, ya que a partir de ahí, la ganancia de información se vuelve mínima.
+
+```r
+ElbowPlot(pbmc)
+```
+
+En este ejemplo, se observa una inclinación o "codo" alrededor de los componentes principales 9 a 10, lo que indica que la mayor parte de la varianza se encuentra en los primeros 10. 
+
+### 7. Agrupar las células (clustering)
+Antes de agrupar las células, es necesario identificar qué células son similares entre sí. Esta similitud se determina por la distancia entre las células en el espacio de los componentes principales, ya que estos componentes capturan la información más relevante sobre la expresión génica. Para lograr esto, Seurat crea un grafo de vecinos más cercanos, donde cada célula se conecta con aquellas que tienen perfiles de expresión similares. Este grafo sirve es la base para el posterior agrupamiento de las células en clústeres. 
+
+La función `FindNeighbors` se encarga de calcular estas relaciones utilizando los componentes principales seleccionados previamente (10 PC).
+
+```r
+pbmc <- FindNeighbors(pbmc, dims = 1:10)
+```
+En este comando, el argumento `dims = 1:10` indica que se utilizarán los primeros diez componentes principales para calcular la similitud entre células.
+
+**Resultado esperado:**
+- En la consola se muestran mensajes que indican que el grafo está siendo construido correctamente.
+
+Ahora sí, sigue el **clustering* que es una técnica que ayuda a identificar grupos de células que tienen perfiles de expresión similares, lo que generalmente se relaciona con diferentes tipos o estados celulares. En Seurat, este proceso se lleva a cabo a través de algoritmos de detección de comunidades, como el método de Louvain.
+
+Para realizar el agrupamiento de células, se utiliza la función `FindClusters`, que asigna a cada célula una etiqueta de clúster. Un aspecto clave de esta función es el parámetro `resolution`, que determina el nivel de detalle en el agrupamiento. Si se utilizan valores bajos, se obtienen pocos clústeres grandes, mientras que valores más altos generan un mayor número de clústeres más pequeños. Los clústeres se pueden encontrar utilizando la funcipon `Idents()`.
+
+```r
+pbmc <- FindClusters(pbmc, resolution = 0.5)
+```
+Seurat agrega esta información al objeto, asignando a cada célula un identificador (numérico) de clúster. Para mirar los identificadores de los grupos de las primeras 5 celdas:
+
+```r
+head(Idents(pbmc), 5)
+```
+
+**Resultado esperado:**
+- ✅ RStudio imprime información indicando el número de clústeres identificados
+
+### 8. Reducción dimensional no visual (UMAP/t-SNE)
 
 
-### 6. Clustering de las células
+### 9. Identificación de marcadores de cada cluster
 
-### 7. Visualización con UMAP / t-SNE
-
-### 8. Identificación de marcadores de cada cluster
-
-### 9. Anotación biológica
+### 10. Anotación biológica
 
 
 ## 💻 4. Análisis de scRNA-seq con Bioconductor en R
