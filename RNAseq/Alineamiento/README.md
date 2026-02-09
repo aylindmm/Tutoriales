@@ -110,3 +110,9 @@ El alineamiento de lecturas al genoma de referencia es un paso fundamental en el
 Un alineamiento exitoso es la base para análisis posteriores, como la cuantificación de expresión génica y otros estudios bioinformáticos.
 
 
+---
+
+> ## 🧭 **Siguiente paso:** continúa con el tutorial [Alineamiento](/RNAseq/Conteo/README.md)
+
+
+
