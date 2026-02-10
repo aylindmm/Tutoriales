@@ -58,7 +58,9 @@ Para realizar un análisis de scRNA-seq en R la elección de las librerías es f
 
 ## 💻 4. Análisis de scRNA-seq con Seurat en R
 
-A continuación, se llevará a cabo un ejercicio práctico para aprender a realizar un análisis de un conjunto de datos reales de células individuales usando el paquete **Seurat** en RStudio.
+A continuación, se llevará a cabo un ejercicio práctico para aprender a realizar un análisis de un conjunto de datos reales de células individuales usando el paquete **Seurat** en RStudio. 
+
+Más allá de simplemente aprender a ejecutar comandos en R, el objetivo principal es que comprendan la lógica biológica y computacional que hay detrás de cada paso, y que sean capaces de interpretar de manera crítica los resultados que obtienen.
 
 Esta guía es una adaptación educativa del tutorial oficial de [Seurat “Guided Clustering Tutorial – PBMC 3K Dataset”](https://satijalab.org/seurat/articles/pbmc3k_tutorial), desarrollado por el Satija Lab. El contenido ha sido simplifaco con fines didácticos para facilitar la comprensión de este tipo de análisis bioinformático para estudiantes principiantes.
 
@@ -276,20 +278,122 @@ head(Idents(pbmc), 5)
 **Resultado esperado:**
 - ✅ RStudio imprime información indicando el número de clústeres identificados
 
-### 8. Reducción dimensional no visual (UMAP/t-SNE)
+### 8. Reducción dimensional no lineal (UMAP/t-SNE)
+Existen métodos adicionales de reducción de dimensionalidad no lineal que son algoritmos diseñados específicamente para mostrar las relaciones complejas entre las células en un mapa visual de dos dimensiones. Uno de los métodos más populares es UMAP (*Uniform Manifold Approximation and Projection*), que basa en la topología (el estudio de las formas geométricas) para crear un mapa que logra mantener tanto la estructura local como la global de los datos y, otro es tSNE (*t-Distributed Stochastic Neighbor Embedding*) que se basa en probabilidades y estadística, centrándose exclusivamente en mantener juntos a los puntos que son casi idénticos.
+
+Para ejecutar UMAP se utiliza la función `RunUMAP`, la cual emplea los mismos componentes principales usados para el clustering.
+
+```r
+pbmc <- RunUMAP(pbmc, dims = 1:10)
+```
+
+Una vez calculadas las coordenadas UMAP, es posible visualizar los resultados mediante la función `DimPlot`.
+
+```r
+DimPlot(pbmc, reduction = "umap"`)
+```
+
+> Si añades el argumento `label = TRUE`, se muestran los números de clúster sobre cada grupo.
+> La distancia entre los puntos refleja similitudes transcriptómicas, no distancias físicas entre células.
+
+**Resultado esperado:**
+- La gráfica resultante presenta cada célula como un punto en un espacio 2D.
+- Los puntos se colorean según el clúster al que pertenecen.
+
+### 9. Identificación de genes marcadores de cada cluster
+Una vez que tenemos los clústeres, el siguiente paso es entender qué genes definen a cada grupo. Para ello, es necesario identificar aquellos genes que se expresen de manera preferencial en cada grupo. Estos genes, conocidos como **genes marcadores**, permiten distinguir entre distintos tipos celulares. 
+
+Seurat identifica estos genes comparando la expresión génica de un clúster contra todos los demás,  pero también puede comparar grupos de clústeres entre sí. Este análisis se realiza mediante la función `FindMarkers`.
+
+Para encontrar todos los marcadores del grupo 2:
+```r
+cluster2.markers <- FindMarkers(pbmc, ident.1 = 2)
+head(cluster2.markers, n = 5)
+```
+
+Para hallar todos los marcadores que distinguen el grupo 5 de los grupos 0 y 3:
+```r
+# find all markers distinguishing cluster 5 from clusters 0 and 3
+cluster5.markers <- FindMarkers(pbmc, ident.1 = 5, ident.2 = c(0, 3))
+head(cluster5.markers, n = 5)
+```
+
+**Resultado esperado:**
+- Una tabla que contiene, para cada gen, información sobre el nivel de expresión diferencial (DE), el cambio de expresión entre grupos y la significancia estadística.
+- Al visualizar esta tabla se puede ver qué genes están enriquecidos en el clúster seleccionado, lo que ofrece pistas sobre su identidad celular.
+
+En grandes conjuntos de datos, calcular genes marcadores puede resultar bastante costoso en términos computacionales. Para hacer este proceso más eficiente, se puede integrar con el paquete **Presto**, que ofrece versiones muy optimizadas de pruebas estadísticas. Una vez que el paquete Presto está instalado y cargado en el entorno de R, Seurat lo utiliza automáticamente para acelerar los cálculos de expresión diferencial.
+
+```r
+install.packages(presto)
+library(presto)
+```
+
+Seurat ofrece varias pruebas de DE, las cuales se aplican mediante el parámetro `test.use` dentro de la función `FindMarkers`. Este parámetro define el método estadístico que se utilizará para evaluar la expresión diferencial. Entre las opciones más comunes se encuentran la prueba de Wilcoxon y la curva ROC, entre otros. Cada uno de estos métodos tiene supuestos y aplicaciones distintas, por lo que es importante comprender que la elección del test puede influir en los resultados obtenidos.
+
+```r
+cluster0.markers <- FindMarkers(pbmc, ident.1 = 0, logfc.threshold = 0.25, test.use = "roc", only.pos = TRUE)
+```
+
+Después de haber identificado los genes marcadores, es importante visualizar su expresión para confirmar que efectivamente distinguen a los clústeres.
+
+Algunas de las funciones más comúnes son:
+- `VlnPlot`: genera gráficos de violín que muestran la distribución de la expresión de un gen en cada clúster. Este tipo de gráfica permite observar tanto el nivel promedio de expresión como la variabilidad dentro de cada grupo celular.
+
+```r
+VlnPlot(pbmc, features = c("MS4A1", "CD79A"))
+```
+**Resultado esperado:**
+- Un gráfico en el que cada violín representa un clúster, y la forma del violín muestra cómo se distribuyen los niveles de expresión del gen.
+- Un gen marcador tendrá una expresión alta en uno o en unos pocos clústeres, mientras que en el resto mostrará niveles bajos.
+  
+- `FeaturePlot`: proyecta la expresión de un gen directamente sobre la representación UMAP/tSNE o PCA. Las células se colorean de acuerdo con su nivel de expresión, lo que permite identificar visualmente en qué regiones del mapa se expresa un gen específico. 
+
+```r
+FeaturePlot(pbmc, features = c("MS4A1", "GNLY", "CD3E", "CD14", "FCER1A", "FCGR3A", "LYZ", "PPBP",
+    "CD8A"))
+```
+**Resultado esperado:**
+- Un mapa UMAP en el que uno o más clústeres muestran una coloración intensa, indicando alta expresión del gen, mientras que el resto de las células aparecen con colores más tenues.
+
+Otras herramientas adicionales que permiten explorar la expresión génica desde diferentes perspectivas son: `RidgePlot` (muestra la distribución de la expresión de un gen en forma de curvas de densidad para cada clúster), `CellScatter()` (compara la expresión de dos genes entre células individuales), `DotPlot()` (resume la expresión de múltiples genes en múltiples clústeres).
+
+Para tener una visión completa de los genes más relevantes en cada clúster, Seurat ofrece la opción de crear mapas de calor a través de la función `DoHeatmap`. Esta herramienta ilustra la expresión relativa de un grupo seleccionado de genes en todas las células, organizadas por clúster.
+
+```r
+pbmc.markers %>%
+    group_by(cluster) %>%
+    dplyr::filter(avg_log2FC > 1) %>%
+    slice_head(n = 10) %>%
+    ungroup() -> top10
+DoHeatmap(pbmc, features = top10$gene) + NoLegend()
+```
+
+**Resultado esperado:**
+- Un mapa de calor donde cada fila representa un gen específico y cada columna se refiere a una célula. Los colores muestran los niveles relativos de expresión, y los clústeres suelen estar claramente separados, lo que refuerza la validez del agrupamiento que se ha realizado.
+
+### 10. Anotación de los clústeres con identidades celulares
+Ahora sí, es posible asignar un significado biológico a cada clúster. Este proceso, conocido como **anotación**, se basa en el conocimiento previo de genes marcadores característicos de distintos tipos celulares. Por ejemplo, la expresión de genes como *GNLY* y *NKG7* suele relacionarse con células Natural Killer, mientras que el gen *MS4A1* es un marcador representativo de las células B.
+
+Al definir la identidad de cada clúster, se puede renombrarlos con la función `RenameIdents`.
+
+```r
+new.cluster.ids <- c("Naive CD4 T", "CD14+ Mono", "Memory CD4 T", "B", "CD8 T", "FCGR3A+ Mono",
+    "NK", "DC", "Platelet")
+names(new.cluster.ids) <- levels(pbmc)
+pbmc <- RenameIdents(pbmc, new.cluster.ids)
+DimPlot(pbmc, reduction = "umap", label = TRUE, pt.size = 0.5) + NoLegend()
+```
+
+**Resultado esperado:**
+- Al volver a generar el gráfico UMAP, los clústeres aparecen ahora etiquetados con los nombres biológicos.
+
+Esto representa uno de los principales objetivos del análisis de scRNA-seq que es identificar y caracterizar poblaciones celulares a partir de datos de expresión génica.
+
+### 📝 Para cerrar
+Al finalizar este ejercicio, habrás pasado por todas las etapas del flujo general de un análisis de scRNA-seq utilizando Seurat, desde la carga de datos crudos hasta la identificación y anotación de tipos celulares. Este enfoque paso a paso establece una base sólida para realizar análisis más complejos y promueve una comprensión profunda del potencial del scRNA-seq en el estudio de la heterogeneidad celular.
 
 
-### 9. Identificación de marcadores de cada cluster
-
-### 10. Anotación biológica
 
 
-## 💻 4. Análisis de scRNA-seq con Bioconductor en R
-
-A continuación vamos a aprender a analizar datos de scRNA-seq utilizando **R** y **Bioconductor**. Este tutorial está directamente basado en el material original:
-
-*Lun ATL et al. [*Single Cell RNA-seq Analysis with Bioconductor*](https://www.singlecellcourse.org/introduction-to-rbioconductor.html)*
-
-### ¿Qué datos vamos a analizar?
-Utilizaremos un conjunto de datos de células madre pluripotentes inducidas (iPSC) generado por [Tung et al. (2017)](https://www.nature.com/articles/srep39921) en la Universidad de Chicago.
 
