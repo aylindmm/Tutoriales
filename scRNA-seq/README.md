@@ -1,16 +1,16 @@
 # 👨🏻‍💻 Análisis de datos de secuenciación de ARN unicelular (scRNA-seq)
 
-## 🧪 1. ¿Qué es scRNA-seq?
+## 🔬 1. ¿Qué es scRNA-seq?
 
 La secuenciación de ARN de célula única (**scRNA-seq**) es una tecnología reciente que permite medir la expresión génica a nivel de cada célula individual. A diferencia del RNA-seq masivo (*bulk*), que mide el promedio de expresión génica en una población de células, el scRNA-seq permite capturar la heterogeneidad biológica, analizando la diversidad de tipos celulares en un tejido complejo e identificando estados celulares nuevos.
 
-## 🕵 2. Flujo de trabajo general
+## 📍 2. Flujo de trabajo general
 
 La metodología de scRNA-seq puede dividirse en dos etapas principales complementarias e interdependientes:
 
 1. <mark>**Fase experimental**</mark>: incluye todos los procedimientos que se llevan a cabo desde la obtención del material biológico hasta la generación de los datos de secuenciación. 
 
-   1.1 **Obtención y preparación de la muestra**: consiste en obtener una suspensión de células individuales viables a partir de un tejido o población celular. Para lograrlo, los tejidos suelen someterse a procesos de disociación mecánica y/o enzimática. Posteriormente, de forma opcional, se pueden seleccionar células (por ejemplo, basándose en ...)
+   1.1 **Obtención y preparación de la muestra**: consiste en obtener una suspensión de células individuales viables a partir de un tejido o población celular. Para lograrlo, los tejidos suelen someterse a procesos de disociación mecánica y/o enzimática. 
 
    1.2 **Aislamiento de células individuales**: involucra asegurar que cada célula sea procesada de forma independiente. Este aislamiento puede realizarse mediante diversas tecnologías, como sistemas de nanopocillos, microgotas o microplacas, cada una con sus ventajas y limitaciones en cuanto al número de células que se pueden analizar, la profundidad de secuenciación y la resolución transcriptómica.
 
@@ -22,15 +22,15 @@ La metodología de scRNA-seq puede dividirse en dos etapas principales complemen
 
 2. <mark>**Fase computacional**</mark>: comienza una vez que se han generado los datos de secuenciación, se busca transformar los datos crudos en información biólogica que se pueda analizar.
 
-   2.1 **Preprocesamiento**: las lecturas pasan por un procesamiento primario que incluye asignar cada lectura a su célula de origen usando los bardcodes, el alineamiento o pseudoalineamiento a un genoma o transcriptoma de referencia, y el conteo de las moléculas con los UMIs. Al final de este proceso, se genera una matriz de expresión génica, donde las filas representan genes y las columnas representan células individuales.
+   2.1 **Preprocesamiento**: las lecturas pasan por un procesamiento primario que incluye asignar cada lectura a su célula de origen usando los *bardcodes*, el alineamiento o pseudoalineamiento a un genoma o transcriptoma de referencia, y el conteo de las moléculas con los UMIs. Al final de este proceso, se genera una matriz de expresión génica, donde las filas representan genes y las columnas representan células individuales.
 
    2.2 **Control de calidad**: tiene la finalidad de identificar y eliminar células dañadas, dobletes o multipletes, así como restos celulares. Se basa en métricas como el número de genes detectados por célula, el número total de transcritos y la proporción de ARN mitocondrial.
 
    2.3 **Normalización**: su propósito es hacer comparables las células entre sí, corrigiendo diferencias debidas a la profundidad de secuenciación u otras fuentes de variación técnica. También, puede incluir la corrección de efectos de lote (*batch effects*) cuando los datos provienen de múltiples experimentos o condiciones.
 
-   2.4 **Selección de genes variables**: se identifican aquellos genes que presentan una variabilidad significativa entre células y que son más útiles para distinguir diferentes tipos o estados celulares.
+   2.4 **Selección de genes marcadores**: se identifican aquellos genes que presentan una variabilidad significativa entre células y que son más útiles para distinguir diferentes tipos o estados celulares.
 
-   2.5 **Reducción de dimensionalidad**: dado que la matriz de expresión génica tiene una alta dimensionalidad, se aplican técnicas de reducción para representar los datos en un espacio más simple. Técnicas como el análisis de componentes principales (PCA, *Principal Component Analyisis*), UMAP ayudan a capturar las principales fuentes de variación, lo que a su vez facilita la exploración visual de los datos.
+   2.5 **Reducción de dimensionalidad**: dado que la matriz de expresión génica tiene una alta dimensionalidad, se aplican técnicas de reducción para representar los datos en un espacio más simple. Técnicas como el análisis de componentes principales (PCA, *Principal Component Analyisis*), UMAP (*Uniform Manifold Approximation and Projection*) o t-SNE (*t-Distributed Stochastic Neighbor Embedding*) ayudan a capturar las principales fuentes de variación, lo que a su vez facilita la exploración visual de los datos.
 
    2.6 **Agrupamiento**: su objetivo es identificar conjuntos de células con perfiles transcriptómicos similares.
 
@@ -48,7 +48,7 @@ La scRNA-seq permite abordar preguntas biológicas que requieren una resolución
 | **Ventajas** | Alta resolución, identificación de poblaciones celulares nuevas, estudio de trayectorias. |
 | **Desventajas** | Alto costo, mayor "ruido" estadístico, requiere procesamiento bioinformático complejo. |
 
-## 📦 4. Paqueterías para análisis de scRNA-seq 
+## 📦 4. Paqueterías para análisis de scRNA-seq en R
 
 Para realizar un análisis de scRNA-seq en R la elección de las librerías es fundamental. Existen varias herramientas, sin embargo en este tutorial abordaremos las siguientes dos debido a que ambas permiten hacer todo el flujo, desde el control de calidad hasta la identificación de tipos celulares.
 
@@ -58,19 +58,21 @@ Para realizar un análisis de scRNA-seq en R la elección de las librerías es f
 
 ## 💻 4. Análisis de scRNA-seq con Seurat en R
 
-A continuación, se llevará a cabo un ejercicio práctico para aprender a realizar un análisis de un conjunto de datos reales de células individuales usando el paquete **Seurat** en RStudio. 
+A continuación, se llevará a cabo un ejercicio práctico para aprender a realizar un análisis de un conjunto de datos reales de células individuales usando el paquete **Seurat** en **RStudio**. 
 
 Más allá de simplemente aprender a ejecutar comandos en R, el objetivo principal es que comprendan la lógica biológica y computacional que hay detrás de cada paso, y que sean capaces de interpretar de manera crítica los resultados que obtienen.
 
-Esta guía es una adaptación educativa del tutorial oficial de [Seurat “Guided Clustering Tutorial – PBMC 3K Dataset”](https://satijalab.org/seurat/articles/pbmc3k_tutorial), desarrollado por el Satija Lab. El contenido ha sido simplifaco con fines didácticos para facilitar la comprensión de este tipo de análisis bioinformático para estudiantes principiantes.
+Esta guía es una adaptación educativa del tutorial oficial de [*Seurat Guided Clustering Tutorial*](https://satijalab.org/seurat/articles/pbmc3k_tutorial), desarrollado por Rahul Satija y colaboradores. El contenido ha sido ajustado con fines didácticos para facilitar la comprensión de este tipo de análisis bioinformático para estudiantes principiantes.
 
-####  ¿De dónde provienen los datos?
+####  ¿Qué datos se van a estudiar?
 
-Los datos que se utilizarán este tutorial provienen del conjunto PBMC3K, que incluye 2,700 células mononucleares de sangre periférica humana, secuenciadas utilizando la tecnología de 10x Genomics. 
+Los datos que se utilizarán este tutorial provienen del conjunto [PBMC](https://cf.10xgenomics.com/samples/cell/pbmc3k/pbmc3k_filtered_gene_bc_matrices.tar.gz) que incluye 2,700 células mononucleares de sangre periférica humana secuenciadas utilizando la tecnología de 10x Genomics. 
 
 ### 1. Preparación del entorno y carga del conjunto de datos PBMC
 
 #### 1.1 Antes de empezar
+
+Se requiere descargar el archivo del *dataset* y descomprimirlo.
 
 Es necesario instalar las siguientes librerías:
 
@@ -80,37 +82,37 @@ library(dplyr)
 library(patchwork)
 ```
 **¿Qué hace cada librería?**
-- `Seurat`: análisis de scRNA-seq
-- `dplyr`: manipulación de datos
-- `patchwork`: combinar gráficas
-
+- `Seurat`: librería principal que procesa los datos biológicos.
+- `dplyr`: organiza la información textual de las células.
+- `patchwork`: combina múltiples gráficas en una sola imagen de forma sencilla.
+  
 **Resultado esperado:**
-- ✅ No aparece nada significa que todo está correcto
-- ❌ Si hay error significa la librería no está instalada
+- No aparece nada significa que todo está correcto.
+- Si hay error significa la librería no se instaló adecuadamente.
 
 #### 1.2 Leer los datos desde 10x Genomics
 
-Para trabajar con los datos en R, primero necesitas leer los archivos que genera 10x Genomics. Seurat tiene una función llamada `Read10X` que se encarga de leer automáticamente los archivos que contienen la matriz de conteos, los nombres de los genes y los identificadores de las células, y los combina en una sola matriz que puedes manipular en R.
+Para trabajar con los datos en R, primero necesitas leer los archivos que genera 10x Genomics. Seurat tiene una función llamada `Read10X` que se encarga de leer automáticamente los archivos que contienen la matriz de conteos, los nombres de los genes y los identificadores de las células, y los combina en una sola matriz manipulable en R.
 
 ```r
 pbmc.data <- Read10X(data.dir = "ruta/a/tus/datos/")
 ```
 Esto carga la **matriz de conteos**, en donde:
-- Filas = genes
-- Columnas = células
+- Filas = genes.
+- Columnas = células.
 
 **Resultado esperado:**
-- ✅ No muestra ningún resultado en consola
-- ✅ El objeto resultante `pbmc.data` se guarda en el entorno de trabajo
+- No muestra ningún resultado en consola.
+- El objeto resultante `pbmc.data` se guarda en el entorno de trabajo.
 
-Una vez que hayas cargado los datos, puedes echar un vistazo a sus dimensiones para ver cuántos genes y cuántas células hay en el conjunto. Al usar la función `dim`, R te devuelve dos valores: el número de filas, que corresponde a los genes detectados, y el número de columnas, que representa el total de células analizadas. Esta información es útil para asegurarte de que los datos se hayan cargado correctamente antes de seguir con el análisis.
+Una vez que hayas cargado los datos, se pueden examinar a sus dimensiones para ver cuántos genes y cuántas células hay en el conjunto. Al usar la función `dim`, R devuelve dos valores: el número de filas, que corresponde a los genes detectados, y el número de columnas, que representa el total de células analizadas. Esta información es útil para asegurarse de que los datos se hayan cargado correctamente antes de seguir con el análisis.
 
 ```r
 dim(pbmc.data)
 ```
 #### 1.3 Crear el objetivo `Seurat`
 
-El siguiente paso es crear un objeto de tipo `Seurat`, que es una estructura especializada diseñada para almacenar tanto los datos de expresión génica como la información adicional necesaria para el análisis.
+El siguiente paso es crear un objeto `Seurat` que es una estructura especializada diseñada para almacenar tanto los datos de expresión génica como la información adicional necesaria para el análisis.
 
 Para crear un objeto Seurat se utiliza la función `CreateSeuratObject`. El parámetro `projet` menciona el nombre del proyecto y `min.cells` asegura que solo se mantendrán aquellos genes que estén presentes en al menos tres células, lo que ayuda a eliminar genes que probablemente sean ruido técnico. Por otro lado, el parámetro `min.features` determina que solo se incluirán células que tengan al menos 200 genes detectados, descartando aquellas con muy poca información transcriptómica.
 
@@ -119,16 +121,16 @@ pbmc <- CreateSeuratObject(counts = pbmc.data, project = "pbmc3k", min.cells = 3
 ```
 
 **Resultado esperado:**
-- ✅ RStudio muestra un mensaje indicando que se ha creado un objeto `Seurat`, junto con el número total de genes y células que cumplen con los criterios establecidos. Esto confirma que el objeto fue creado correctamente.
+- Se muestra un mensaje indicando que se ha creado un objeto `Seurat`, junto con el número total de genes y células que cumplen con los criterios establecidos. Esto confirma que el objeto fue creado correctamente.
 
 ### 2. Control de calidad
 
-Antes de analizar, debemos evaluar la calidad de las células incluidas en el conjunto de datos, ya que es común encontrar células dañadas o muertas, dobletes o multipletes, o tienen ARN degradado, las cuales pueden afectar la interpretación de los resultados si no se eliminan adecuadamente.
+Primero debemos evaluar la calidad de las células incluidas en el conjunto de datos, ya que es común encontrar células dañadas o muertas, dobletes o multipletes, o que tienen ARN degradado, las cuales pueden afectar la interpretación de los resultados si no se eliminan adecuadamente.
 
 **Métricas más usadas**
-- `nFeature_RNA`: Número total de genes detectados por célula
-- `nCount_RNA`: Numero total de moléculas (UMIs) por célula
-- `percent.mt`: Porcentaje de genes mitocondriales (genes MT-) por célula
+- `nFeature_RNA`: Número total de genes detectados por célula.
+- `nCount_RNA`: Numero total de moléculas (UMIs) por célula.
+- `percent.mt`: Porcentaje de genes mitocondriales (genes MT-) por célula.
 
 Un alto porcentaje de ARN mitocondrial suele ser un signo de células que están bajo estrés o en proceso de morir. Para calcular esta métrica, Seurat utiliza la función `PercentageFeatureSet()` e identifica los genes mitocondriales buscando un patrón en sus nombres, que en humanos generalmente comienza con “MT-”, y luego calcula qué porcentaje representan en relación al total de genes expresados por célula.
 
@@ -161,8 +163,8 @@ pbmc <- subset(pbmc, subset = nFeature_RNA > 200 & nFeature_RNA < 2500 & percent
 ```
 
 **Resultado esperado:**
-- ✅ El objeto `Seurat` se actualiza de forma automática, eliminando las células que no cumplen con los filtros establecidos. 
-- ✅ No se muestra ninguna salida en la consola, el número total de células que se almacenan en el objeto disminuye. 
+- El objeto `Seurat` se actualiza de forma automática, eliminando las células que no cumplen con los filtros establecidos. 
+- No se muestra ninguna salida en la consola, el número total de células que se almacenan en el objeto disminuye. 
 
 ### 3. Normalización de los datos
 
@@ -174,7 +176,7 @@ Seurat realiza este proceso mediante la función `NormalizeData`, utiliando el m
 3. Aplica logaritmo para que sea más comparable entre células
 
 **Resultado esperado:**
-- ✅ No se muestra ninguna salida en la consola, sin embargo, los datos normalizados se guardan internamente.
+-  No se muestra ninguna salida en la consola, sin embargo, los datos normalizados se guardan internamente.
 
 Es importante mencionar que los datos crudos no se eliminan, sino que se conservan dentro del objeto `Seurat` por si se requieren después.
 
@@ -199,7 +201,7 @@ plot1 + plot2
 ```
 
 **Resultado esperado:**
-- ✅ No imprime resultados directamente, sin embargo, se guarda internamente la lista de genes variables. 
+- No imprime resultados directamente, sin embargo, se guarda internamente la lista de genes variables. 
 
 ### 5. Escalado de los datos
 El escalado implica centrar y estandarizar los valores de expresión génica, asegurando que cada gen tenga una media igual a cero y una varianza igual a 1. Este proceso es fundamental para evitar que los genes con valores de expresión muy altos dominen el análisis. Se realiza mediante la función `ScaleData`, la cual trabaja sobre los genes previamente identificados como altamente variables.
@@ -209,7 +211,7 @@ all.genes <- rownames(pbmc)
 pbmc <- ScaleData(pbmc, features = all.genes)
 ```
 **Resultado esperado:**
-- ✅ No se genera una salida visible en la consola, sin embargo, los resultados se almacenan en `pbmc[["RNA"]]$scale.data`.
+- No se genera una salida visible en la consola, sin embargo, los resultados se almacenan en `pbmc[["RNA"]]$scale.data`.
 
 ### 6. Análisis de componentes principales (PCA)
 El análisis de componentes principales (PCA, por sus siglas en inglés) es una técnica estadística que ayuda a simplificar la complejidad de los datos puesto que convierte la expresión de muchos genes en un conjunto más pequeño de componentes que logran capturar la mayor parte de la variación entre las células.
@@ -276,7 +278,7 @@ head(Idents(pbmc), 5)
 ```
 
 **Resultado esperado:**
-- ✅ RStudio imprime información indicando el número de clústeres identificados
+- Se imprime información indicando el número de clústeres identificados.
 
 ### 8. Reducción dimensional no lineal (UMAP/t-SNE)
 Existen métodos adicionales de reducción de dimensionalidad no lineal que son algoritmos diseñados específicamente para mostrar las relaciones complejas entre las células en un mapa visual de dos dimensiones. Uno de los métodos más populares es UMAP (*Uniform Manifold Approximation and Projection*), que basa en la topología (el estudio de las formas geométricas) para crear un mapa que logra mantener tanto la estructura local como la global de los datos y, otro es tSNE (*t-Distributed Stochastic Neighbor Embedding*) que se basa en probabilidades y estadística, centrándose exclusivamente en mantener juntos a los puntos que son casi idénticos.
