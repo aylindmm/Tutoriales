@@ -77,7 +77,8 @@ Es la columna del archivo GTF que se usará para asignar nombre a los genes. En 
 
 - gene_name <-- debe estar escrito tal cual aparece aquí
 
-<img width="685" height="198" alt="image" src="https://github.com/user-attachments/assets/f1242282-3fff-4900-a838-d956eba09221" />
+<img width="638" height="163" alt="image" src="https://github.com/user-attachments/assets/55000304-8633-4cb7-b997-d4503c053f43" />
+
 
 ---
 
