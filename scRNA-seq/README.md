@@ -52,9 +52,9 @@ La scRNA-seq permite abordar preguntas biológicas que requieren una resolución
 
 Para realizar un análisis de scRNA-seq en R la elección de las librerías es fundamental. Existen varias herramientas, sin embargo en este tutorial abordaremos las siguientes dos debido a que ambas permiten hacer todo el flujo, desde el control de calidad hasta la identificación de tipos celulares.
 
-- **Seurat**: Es la más utilizada ya que agrupa todas las herramientas necesarias para procesar y visualizar los datos en un solo lugar. Utiliza un objeto `Seurat` que organiza los datos de conteo, los metadatos y el análisis dimensional. Es excelente gracias a su amplia documentación y versatilidad.
+- [**Seurat**](https://satijalab.org/seurat/): Es la más utilizada ya que agrupa todas las herramientas necesarias para procesar y visualizar los datos en un solo lugar. Utiliza un objeto `Seurat` que organiza los datos de conteo, los metadatos y el análisis dimensional. Es excelente gracias a su amplia documentación y versatilidad.
 
-- **SingleCellExperiment (Bioconductor)**: Es un conjunto de librerías especializadas y rigurosas que se pueden combinar libremente para realizar análisis estadísticos más personalizados y profundos. Utiliza una estructura común llamada `SingleCellExperiment` (SCE).
+- [**SingleCellExperiment (Bioconductor)**](https://www.bioconductor.org/about/): Es un conjunto de librerías especializadas y rigurosas que se pueden combinar libremente para realizar análisis estadísticos más personalizados y profundos. Utiliza una estructura común llamada `SingleCellExperiment` (SCE).
 
 ## 💻 4. Análisis de scRNA-seq con Seurat en R
 
@@ -66,7 +66,7 @@ Esta guía es una adaptación educativa del tutorial oficial de [*Seurat Guided 
 
 ####  ¿Qué datos se van a estudiar?
 
-Los datos que se utilizarán este tutorial provienen del conjunto [PBMC](https://cf.10xgenomics.com/samples/cell/pbmc3k/pbmc3k_filtered_gene_bc_matrices.tar.gz) que incluye 2,700 células mononucleares de sangre periférica humana secuenciadas utilizando la tecnología de 10x Genomics. 
+Los datos que se utilizarán este tutorial provienen del conjunto [PBMCs](https://cf.10xgenomics.com/samples/cell/pbmc3k/pbmc3k_filtered_gene_bc_matrices.tar.gz) que incluye 2 700 células mononucleares de sangre periférica humana secuenciadas utilizando la tecnología de 10x Genomics. 
 
 ### 1. Preparación del entorno y carga del conjunto de datos PBMC
 
@@ -74,21 +74,25 @@ Los datos que se utilizarán este tutorial provienen del conjunto [PBMC](https:/
 
 Se requiere descargar el archivo del *dataset* y descomprimirlo.
 
-Es necesario instalar las siguientes librerías:
+Es necesario instalar y cargar las siguientes librerías:
 
 ```r
+install.packages(Seurat)
+install.packages(dplyr)
+install.packages(patchwork)
+
 library(Seurat)
 library(dplyr)
 library(patchwork)
 ```
-**¿Qué hace cada librería?**
+**¿Para qué sirve cada librería?**
 - `Seurat`: librería principal que procesa los datos biológicos.
 - `dplyr`: organiza la información textual de las células.
 - `patchwork`: combina múltiples gráficas en una sola imagen de forma sencilla.
   
 **Resultado esperado:**
-- No aparece nada significa que todo está correcto.
-- Si hay error significa la librería no se instaló adecuadamente.
+- Si aparece el nombre de las librerías en la consola quiere decir que todo está correcto.
+- Si hay error significa que las librerías no se instalaron adecuadamente.
 
 #### 1.2 Leer los datos desde 10x Genomics
 
@@ -97,40 +101,54 @@ Para trabajar con los datos en R, primero necesitas leer los archivos que genera
 ```r
 pbmc.data <- Read10X(data.dir = "ruta/a/tus/datos/")
 ```
-Esto carga la **matriz de conteos**, en donde:
-- Filas = genes.
-- Columnas = células.
 
 **Resultado esperado:**
-- No muestra ningún resultado en consola.
-- El objeto resultante `pbmc.data` se guarda en el entorno de trabajo.
 
-Una vez que hayas cargado los datos, se pueden examinar a sus dimensiones para ver cuántos genes y cuántas células hay en el conjunto. Al usar la función `dim`, R devuelve dos valores: el número de filas, que corresponde a los genes detectados, y el número de columnas, que representa el total de células analizadas. Esta información es útil para asegurarse de que los datos se hayan cargado correctamente antes de seguir con el análisis.
+El objeto resultante `pbmc.data` se guarda en el *Environment*.
 
-```r
-dim(pbmc.data)
-```
+Se carga la **matriz de conteos cruda**, en donde:
+- Filas = genes (32 738).
+- Columnas = células (2 700).
+
+<img width="921" height="325" alt="image" src="https://github.com/user-attachments/assets/4493eae4-2bae-43eb-9ffb-5b908056d939" />
+
 #### 1.3 Crear el objetivo `Seurat`
 
-El siguiente paso es crear un objeto `Seurat` que es una estructura especializada diseñada para almacenar tanto los datos de expresión génica como la información adicional necesaria para el análisis.
+El siguiente paso es crear un objeto `Seurat` que es una estructura especializada diseñada para almacenar tanto los datos de expresión génica como la información adicional necesaria para el análisis. Es un contenedor que guarda todo el análisis en un solo objeto.
 
-Para crear un objeto Seurat se utiliza la función `CreateSeuratObject`. El parámetro `projet` menciona el nombre del proyecto y `min.cells` asegura que solo se mantendrán aquellos genes que estén presentes en al menos tres células, lo que ayuda a eliminar genes que probablemente sean ruido técnico. Por otro lado, el parámetro `min.features` determina que solo se incluirán células que tengan al menos 200 genes detectados, descartando aquellas con muy poca información transcriptómica.
+Para crear un objeto Seurat se utiliza la función `CreateSeuratObject`. El parámetro `projet` menciona el nombre del proyecto y `min.cells` asegura que solo se mantendrán aquellos genes que estén presentes en al menos tres células, lo que ayuda a eliminar genes que probablemente sean ruido. Por otro lado, el parámetro `min.features` determina que solo se incluirán células que tengan al menos 200 genes detectados, descartando aquellas con muy poca información transcriptómica.
 
 ```r
 pbmc <- CreateSeuratObject(counts = pbmc.data, project = "pbmc3k", min.cells = 3, min.features = 200)
 ```
 
 **Resultado esperado:**
-- Se muestra un mensaje indicando que se ha creado un objeto `Seurat`, junto con el número total de genes y células que cumplen con los criterios establecidos. Esto confirma que el objeto fue creado correctamente.
+
+El objeto Seurat resultante `pbmc` se almacena en el *Environment*. 
+
+Se filtra la **matriz de conteos cruda**, y ahora se cuenta con 13 714 genes y 2 700 células.
+
+<img width="921" height="547" alt="image" src="https://github.com/user-attachments/assets/87fab070-524c-4c31-9913-fb814c0f1e40" />
+
+
+#### Para explorar la estructura de la matriz de expresión, puedes utilizar las siguientes funciones:
+
+```r
+dim(pbmc)          # Permite saber cuántos genes (filas) y cuántas células (columnas) contiene el experimento
+rownames(pbmc)[1:5] # Ver los primeros 5 nombres de genes
+colnames(pbmc)[1:5] # Ver los primeros 5 nombres de células 
+pbmc[1:5, 1:5]     # Visualizar un subconjunto pequeño de la matriz
+pbmc["MS4A1", ]    # Consultar la expresión de un gen específico en todas las células
+```
 
 ### 2. Control de calidad
 
-Primero debemos evaluar la calidad de las células incluidas en el conjunto de datos, ya que es común encontrar células dañadas o muertas, dobletes o multipletes, o que tienen ARN degradado, las cuales pueden afectar la interpretación de los resultados si no se eliminan adecuadamente.
+Primero se debe evaluar la calidad de las células incluidas en el conjunto de datos, ya que es común encontrar células dañadas o muertas, dobletes o multipletes, o que tienen ARN degradado, lo cual pueden afectar la interpretación de los resultados si no se eliminan adecuadamente.
 
 **Métricas más usadas**
-- `nFeature_RNA`: Número total de genes detectados por célula.
-- `nCount_RNA`: Numero total de moléculas (UMIs) por célula.
-- `percent.mt`: Porcentaje de genes mitocondriales (genes MT-) por célula.
+- `nFeature_RNA`: número total de genes detectados por célula.
+- `nCount_RNA`: número total de moléculas (UMIs) por célula.
+- `percent.mt`: porcentaje de genes mitocondriales (genes MT-) por célula.
 
 Un alto porcentaje de ARN mitocondrial suele ser un signo de células que están bajo estrés o en proceso de morir. Para calcular esta métrica, Seurat utiliza la función `PercentageFeatureSet()` e identifica los genes mitocondriales buscando un patrón en sus nombres, que en humanos generalmente comienza con “MT-”, y luego calcula qué porcentaje representan en relación al total de genes expresados por célula.
 
@@ -145,11 +163,15 @@ Puedes visualizar estas métricas mediante gráficos de violín:
 ```r
 VlnPlot(pbmc, features = c("nFeature_RNA","nCount_RNA","percent.mt"))
 ```
+**Resultado esperado:**
 
-📊 Cómo interpretar las gráficas:
-- Valores muy bajos quiere decir que son células de baja calidad
-- Valores muy altos significa posibles dobletes
-- Un % mitocondrial alto pueden ser células dañadas
+Cómo interpretar las gráficas:
+- Valores muy bajos quiere decir que son células de baja calidad.
+- Valores muy altos significa posibles dobletes.
+- Un porcentaje mitocondrial alto pueden ser células dañadas.
+
+<img width="1178" height="683" alt="Control_calidad" src="https://github.com/user-attachments/assets/39bb3c20-2c59-45c8-93f5-98c068fca85d" />
+
 
 Una vez evaluadas las métricas de calidad y visualizadas sus distribuciones, el siguiente paso es eliminar aquellas células que no cumplen con los criterios mínimos para un análisis confiable. Este proceso, conocido como **filtrado**, tiene como objetivo conservar solo las células que presentan perfiles de expresión representativos. Se lleva a cabo utilizando la función `subset` seleccionando únicamente las células que cumplen con los criterios establecidos.
 
@@ -163,22 +185,33 @@ pbmc <- subset(pbmc, subset = nFeature_RNA > 200 & nFeature_RNA < 2500 & percent
 ```
 
 **Resultado esperado:**
-- El objeto `Seurat` se actualiza de forma automática, eliminando las células que no cumplen con los filtros establecidos. 
-- No se muestra ninguna salida en la consola, el número total de células que se almacenan en el objeto disminuye. 
+
+El objeto `Seurat` se actualiza de forma automática, eliminando las células que no cumplen con los filtros establecidos. 
+
+El número total de células que se almacenan en el objeto disminuyó. Ahora se cuenta con 2 638 células.
+
+<img width="221" height="57" alt="image" src="https://github.com/user-attachments/assets/48cf5eaa-0a15-41b5-8fd2-c0a8f969cc08" />
+
 
 ### 3. Normalización de los datos
 
 Después de filtrar los datos, el siguiente paso es normalizarlos. En el caso del scRNA-seq, diferentes células pueden tener distintas profundidades de secuenciación; es decir, algunas pueden tener más lecturas que otras, y esto puede deberse a razones técnicas. La normalización ayuda a ajustar estas diferencias, asegurando que las comparaciones entre células sean válidas.
 
 Seurat realiza este proceso mediante la función `NormalizeData`, utiliando el método *LogNormalize* que:
-1. Divide los conteos por el total de cada célula
-2. Multiplica el resultado por 10,00
-3. Aplica logaritmo para que sea más comparable entre células
+1. Divide los conteos por el total de cada célula.
+2. Multiplica el resultado por 10 000.
+3. Aplica logaritmo para que sea más comparable entre células.
+
+```r
+pbmc <- NormalizeData(pbmc, normalization.method = "LogNormalize", scale.factor = 10000)
+```
 
 **Resultado esperado:**
--  No se muestra ninguna salida en la consola, sin embargo, los datos normalizados se guardan internamente.
 
-Es importante mencionar que los datos crudos no se eliminan, sino que se conservan dentro del objeto `Seurat` por si se requieren después.
+Los datos normalizados se guardan internamente. Los datos crudos no se eliminan, sino que se conservan dentro del objeto `Seurat` por si se requieren después.
+
+<img width="921" height="211" alt="image" src="https://github.com/user-attachments/assets/793bd134-b1c2-47d3-bdee-29a54ed2a619" />
+
 
 ### 4. Detección de genes altamente variables
 
@@ -190,28 +223,28 @@ En este caso, se seleccionan los 2,000 genes más variables del conjunto de dato
 
 ```r
 pbmc <- FindVariableFeatures(pbmc, selection.method = "vst", nfeatures = 2000)
-
-# Identificar los 10 genes más variables
-top10 <- head(VariableFeatures(pbmc), 10)
-
-# Trazar características variables con y sin etiquetas
-plot1 <- VariableFeaturePlot(pbmc)
-plot2 <- LabelPoints(plot = plot1, points = top10, repel = TRUE)
-plot1 + plot2
 ```
 
 **Resultado esperado:**
-- No imprime resultados directamente, sin embargo, se guarda internamente la lista de genes variables. 
+
+Se guarda internamente la lista de genes variables. 
+
+<img width="921" height="282" alt="image" src="https://github.com/user-attachments/assets/beb6e431-b74c-4c9b-ae4d-3cc72132b976" />
+
 
 ### 5. Escalado de los datos
-El escalado implica centrar y estandarizar los valores de expresión génica, asegurando que cada gen tenga una media igual a cero y una varianza igual a 1. Este proceso es fundamental para evitar que los genes con valores de expresión muy altos dominen el análisis. Se realiza mediante la función `ScaleData`, la cual trabaja sobre los genes previamente identificados como altamente variables.
+El escalado implica centrar y estandarizar los valores de expresión génica, asegurando que cada gen tenga una media igual a cero y una varianza igual a 1. Este proceso evita que los genes con valores de expresión muy altos dominen el análisis. Se realiza mediante la función `ScaleData`, la cual trabaja sobre los genes previamente identificados como altamente variables.
 
 ```r
 all.genes <- rownames(pbmc)
 pbmc <- ScaleData(pbmc, features = all.genes)
 ```
 **Resultado esperado:**
-- No se genera una salida visible en la consola, sin embargo, los resultados se almacenan en `pbmc[["RNA"]]$scale.data`.
+
+Los resultados se almacenan en `all.genes` en el *Environment*.
+
+<img width="921" height="77" alt="image" src="https://github.com/user-attachments/assets/668a89ba-e3a0-4c69-9376-db76e074a703" />
+
 
 ### 6. Análisis de componentes principales (PCA)
 El análisis de componentes principales (PCA, por sus siglas en inglés) es una técnica estadística que ayuda a simplificar la complejidad de los datos puesto que convierte la expresión de muchos genes en un conjunto más pequeño de componentes que logran capturar la mayor parte de la variación entre las células.
