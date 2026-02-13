@@ -1,4 +1,4 @@
-<img width="921" height="318" alt="image" src="https://github.com/user-attachments/assets/d61921a6-fc7b-43bd-8179-7c02a51eb2d5" /># 👨🏻‍💻 Análisis de datos de secuenciación de ARN unicelular (scRNA-seq)
+# 👨🏻‍💻 Análisis de datos de secuenciación de ARN unicelular (scRNA-seq)
 
 ## 🔬 1. ¿Qué es scRNA-seq?
 
