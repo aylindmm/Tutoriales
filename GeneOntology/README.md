@@ -1,6 +1,4 @@
 #  Análisis de Enriquecimiento con Gene Ontology (GO)
-
-Aylin del Moral
 ---
 
 Este tutorial describe cómo realizar un análisis de enriquecimiento funcional utilizando resultados del análisis diferencial de expresión de **DESeq2**, junto con la herramienta en línea **g:Profiler**.  
