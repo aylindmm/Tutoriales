@@ -1,4 +1,4 @@
-# 👨🏻‍💻 Análisis de datos de secuenciación de ARN unicelular (scRNA-seq)
+<img width="921" height="318" alt="image" src="https://github.com/user-attachments/assets/d61921a6-fc7b-43bd-8179-7c02a51eb2d5" /># 👨🏻‍💻 Análisis de datos de secuenciación de ARN unicelular (scRNA-seq)
 
 ## 🔬 1. ¿Qué es scRNA-seq?
 
@@ -247,34 +247,73 @@ Los resultados se almacenan en `all.genes` en el *Environment*.
 
 
 ### 6. Análisis de componentes principales (PCA)
-El análisis de componentes principales (PCA, por sus siglas en inglés) es una técnica estadística que ayuda a simplificar la complejidad de los datos puesto que convierte la expresión de muchos genes en un conjunto más pequeño de componentes que logran capturar la mayor parte de la variación entre las células.
+El análisis de componentes principales (*PCA*, por sus siglas en inglés) es una técnica estadística que ayuda a simplificar la complejidad de los datos puesto que convierte la expresión de muchos genes en un conjunto más pequeño de componentes que logran capturar la mayor parte de la variación entre las células.
 
-Para llevar a cabo el PCA, se utiliza la función `RunPCA`, que requiere como entrada los datos escalados.
+Para realizar el PCA, se utiliza la función `RunPCA`, que requiere como entrada los datos escalados. 
 
 ```r
 pbmc <- RunPCA(pbmc, features = VariableFeatures(object = pbmc))
 ```
-Existen diversas funciones para analizar y visualizar tanto las células como las características que conforman el PCA, como: `VizDimReduction()`, `DimPlot()` o `DimHeatmap()`.
+**Resultado esperado:**
+
+Los resultados se almacenan dentro del objeto `Seurat`.
+
+En la consola se muestran los primeros componentes y los genes que más contribuyen positiva y negativamente a cada componente principal.
+
+<img width="921" height="339" alt="image" src="https://github.com/user-attachments/assets/fed91dce-7e39-43b9-816b-56a30a0a54c1" />
+
+Existen diversas funciones para interpretar tanto las células como las características que conforman el PCA, como:
+
+1. `VizDimReduction()`: se utiliza para identificar y visualizar los genes que más contribuyen a cada componente principal, lo que permite interpretar qué procesos biológicos están representados en cada eje de variación.
 
 ```r
 VizDimLoadings(pbmc, dims = 1:2, reduction = "pca")
 ```
+Se observa:
 
-```r
-VizDimLoadings(pbmc, dims = 1:2, reduction = "pca")
-```
+- Un gráfico de barras con los genes que más contribuyen a PC1 y PC2.
+- Se separan en contribuciones positivas y negativas.
+- Son los genes que más explican la variación capturada por esos componentes.
+
+<img width="1043" height="708" alt="PCA1" src="https://github.com/user-attachments/assets/900d51dd-106a-4d2b-a4fd-082b547f6f9e" />
+
+2. `DimPlot()`: se emplea para visualizar cómo se distribuyen las células en el espacio de los componentes principales y evaluar si existe separación o agrupamiento entre ellas.
 
 ```r
 DimPlot(pbmc, reduction = "pca") + NoLegend()
 ```
+Se observa:
+
+- Cada punto representa una célula.
+- Los ejes son los PC1 y PC2.
+- Si hay separación visible, significa que hay variación biológica importante. 
+
+<img width="1043" height="708" alt="PCA2" src="https://github.com/user-attachments/assets/636715d6-2369-487f-b3c1-e75fac2158a8" />
+
+3. `DimHeatmap()`: se usa para observar los patrones de expresión de los genes más influyentes en cada componente principal a través de un mapa de calor (*heatmap*), facilitando la interpretación biológica de los PCs y ayudando a decidir cuántos componentes son relevantes para análisis posteriores.
 
 ```r
 DimHeatmap(pbmc, dims = 1, cells = 500, balanced = TRUE)
 ```
+Se observa:
+
+- Las filas son genes con mayor relevancia en PC1.
+- Las columnas son las 500 células seleccionadas.
+- Las células están ordenadas según su valor en PC1.
+
+<img width="1043" height="708" alt="PCA3" src="https://github.com/user-attachments/assets/d8bd23da-e2fa-40fb-bf46-d095012e8433" />
 
 ```r
 DimHeatmap(pbmc, dims = 1:15, cells = 500, balanced = TRUE)
 ```
+
+<img width="1043" height="708" alt="PCA4" src="https://github.com/user-attachments/assets/3e98d50f-21aa-4204-8117-d7cab14a6fc8" />
+
+Se observa:
+
+- Un *heatmap* por cada PC.
+- Permite evaluar qué tan estructurado está cada componente.
+- Si un PC no muestra patrón claro, probablemente no aporte información biológica importante.
 
 Para decidir cuántos componentes principales incluir, a menudo se recurre a un gráfico conocido como `Elbow Plot`. Este gráfico ilustra la cantidad de varianza que cada componente principal explica. El punto en el que la curva comienza a aplanarse, conocido como “codo”, señala un número razonable de componentes a considerar, ya que a partir de ahí, la ganancia de información se vuelve mínima.
 
@@ -282,12 +321,14 @@ Para decidir cuántos componentes principales incluir, a menudo se recurre a un 
 ElbowPlot(pbmc)
 ```
 
-En este ejemplo, se observa una inclinación o "codo" alrededor de los componentes principales 9 a 10, lo que indica que la mayor parte de la varianza se encuentra en los primeros 10. 
+En este ejemplo, se observa una inclinación o "codo" alrededor de los componentes principales 9 a 10, lo que indica que la mayor parte de la varianza se encuentra en los primeros 10 PC. 
+
+<img width="1043" height="708" alt="Elbowplot" src="https://github.com/user-attachments/assets/27b4c056-7fdf-4a18-a3bd-e5ecefe3e2aa" />
 
 ### 7. Agrupar las células (clustering)
-Antes de agrupar las células, es necesario identificar qué células son similares entre sí. Esta similitud se determina por la distancia entre las células en el espacio de los componentes principales, ya que estos componentes capturan la información más relevante sobre la expresión génica. Para lograr esto, Seurat crea un grafo de vecinos más cercanos, donde cada célula se conecta con aquellas que tienen perfiles de expresión similares. Este grafo sirve es la base para el posterior agrupamiento de las células en clústeres. 
+Antes de agrupar las células, es necesario identificar qué células son similares entre sí. Esta similitud se determina por la distancia entre las células en el espacio de los componentes principales, ya que estos componentes capturan la información más relevante sobre la expresión génica. Para lograr esto, Seurat crea un grafo de vecinos más cercanos, donde cada célula se conecta con aquellas que tienen perfiles de expresión similares. Este grafo es la base para el posterior agrupamiento de las células en clústeres. 
 
-La función `FindNeighbors` se encarga de calcular estas relaciones utilizando los componentes principales seleccionados previamente (10 PC).
+La función `FindNeighbors` se encarga de calcular estas relaciones utilizando los componentes principales seleccionados previamente.
 
 ```r
 pbmc <- FindNeighbors(pbmc, dims = 1:10)
@@ -295,32 +336,47 @@ pbmc <- FindNeighbors(pbmc, dims = 1:10)
 En este comando, el argumento `dims = 1:10` indica que se utilizarán los primeros diez componentes principales para calcular la similitud entre células.
 
 **Resultado esperado:**
-- En la consola se muestran mensajes que indican que el grafo está siendo construido correctamente.
 
-Ahora sí, sigue el **clustering* que es una técnica que ayuda a identificar grupos de células que tienen perfiles de expresión similares, lo que generalmente se relaciona con diferentes tipos o estados celulares. En Seurat, este proceso se lleva a cabo a través de algoritmos de detección de comunidades, como el método de Louvain.
+<img width="691" height="106" alt="image" src="https://github.com/user-attachments/assets/bf6136e4-004f-4074-a5cc-01270af2ee0d" />
 
-Para realizar el agrupamiento de células, se utiliza la función `FindClusters`, que asigna a cada célula una etiqueta de clúster. Un aspecto clave de esta función es el parámetro `resolution`, que determina el nivel de detalle en el agrupamiento. Si se utilizan valores bajos, se obtienen pocos clústeres grandes, mientras que valores más altos generan un mayor número de clústeres más pequeños. Los clústeres se pueden encontrar utilizando la funcipon `Idents()`.
+En la consola se muestran mensajes que indican que el grafo está siendo construido correctamente.
+
+Ahora sí, sigue el **clustering* que es una técnica que ayuda a identificar grupos de células que tienen perfiles de expresión similares, lo que generalmente se relaciona con diferentes tipos o estados celulares. En Seurat, este proceso se lleva a cabo a través de algoritmos de detección de comunidades, como el método de Louvain cuyo objetivo es agrupar nodos de tal manera que los miembros de un mismo grupo estén fuertemente conectados entre sí, mientras que las conexiones entre diferentes grupos sean mínimas. 
+
+Para realizar el agrupamiento de células, se utiliza la función `FindClusters`, que asigna a cada célula una etiqueta de clúster. Un aspecto clave de esta función es el parámetro `resolution`, que determina el nivel de detalle en el agrupamiento. Si se utilizan valores bajos, se obtienen pocos clústeres grandes, mientras que valores más altos generan un mayor número de clústeres más pequeños. Los clústeres se pueden encontrar utilizando la función `Idents()`.
 
 ```r
 pbmc <- FindClusters(pbmc, resolution = 0.5)
 ```
-Seurat agrega esta información al objeto, asignando a cada célula un identificador (numérico) de clúster. Para mirar los identificadores de los grupos de las primeras 5 celdas:
+
+**Resultado esperado:**
+
+Se muestra información en la consola que detalla el análisis de 2638 nodos (células) conectados por 95,927 aristas (relaciones de vecindad). Después de ejecutar el algoritmo, se logró una modularidad máxima de 0.8723, lo que indica una separación clara y bien definida entre los grupos. El algoritmo identificó 9 comunidades, es decir, 9 clústeres celulares que comparten perfiles de expresión génica similares.
+
+<img width="921" height="318" alt="image" src="https://github.com/user-attachments/assets/874b950d-f278-4edc-b83b-aa4df5878301" />
+
+Seurat agrega esta información al objeto, asignando a cada célula un identificador (numérico) de clúster. Para mirar los identificadores de los grupos de las primeras 5 células:
 
 ```r
 head(Idents(pbmc), 5)
 ```
-
 **Resultado esperado:**
-- Se imprime información indicando el número de clústeres identificados.
+
+Cada nombre largo (por ejemplo, AAACATACAACCAC-1) es el *barcode* de una célula individual, y el número debajo (por ejemplo, 2, 3, 1, 6) indica el clúster al que fue asignada esa célula. La línea *levels* indica que existen 9 clústeres en total, numerados del 0 al 8.
+
+<img width="921" height="139" alt="image" src="https://github.com/user-attachments/assets/f10c3018-c11b-483e-ab88-875e55089b34" />
 
 ### 8. Reducción dimensional no lineal (UMAP/t-SNE)
-Existen métodos adicionales de reducción de dimensionalidad no lineal que son algoritmos diseñados específicamente para mostrar las relaciones complejas entre las células en un mapa visual de dos dimensiones. Uno de los métodos más populares es UMAP (*Uniform Manifold Approximation and Projection*), que basa en la topología (el estudio de las formas geométricas) para crear un mapa que logra mantener tanto la estructura local como la global de los datos y, otro es tSNE (*t-Distributed Stochastic Neighbor Embedding*) que se basa en probabilidades y estadística, centrándose exclusivamente en mantener juntos a los puntos que son casi idénticos.
+Existen métodos adicionales de reducción de dimensionalidad que son algoritmos diseñados específicamente para mostrar las relaciones complejas entre las células en un mapa visual de dos dimensiones. Uno de los métodos más populares es UMAP (*Uniform Manifold Approximation and Projection*), que se basa en la topología (el estudio de las formas geométricas) para crear un mapa que logra mantener tanto la estructura local como la global de los datos y, otro es tSNE (*t-Distributed Stochastic Neighbor Embedding*) que se basa en probabilidades y estadística, centrándose exclusivamente en mantener juntos a los puntos que son casi idénticos.
 
-Para ejecutar UMAP se utiliza la función `RunUMAP`, la cual emplea los mismos componentes principales usados para el clustering.
+Para ejecutar UMAP se utiliza la función `RunUMAP`, la cual emplea los mismos componentes principales usados para el *clustering*.
 
 ```r
 pbmc <- RunUMAP(pbmc, dims = 1:10)
 ```
+
+<img width="706" height="124" alt="image" src="https://github.com/user-attachments/assets/e1363deb-acd6-4ee1-b3cc-b36c07d104a0" />
+
 
 Una vez calculadas las coordenadas UMAP, es posible visualizar los resultados mediante la función `DimPlot`.
 
@@ -332,8 +388,12 @@ DimPlot(pbmc, reduction = "umap"`)
 > La distancia entre los puntos refleja similitudes transcriptómicas, no distancias físicas entre células.
 
 **Resultado esperado:**
-- La gráfica resultante presenta cada célula como un punto en un espacio 2D.
-- Los puntos se colorean según el clúster al que pertenecen.
+
+La gráfica resultante presenta cada célula como un punto en un espacio 2D. 
+Los puntos se colorean según el clúster al que pertenecen.
+
+<img width="1047" height="708" alt="umap" src="https://github.com/user-attachments/assets/164d9ff6-5cb3-47e8-8c2b-84d7d280146e" />
+
 
 ### 9. Identificación de genes marcadores de cada cluster
 Una vez que tenemos los clústeres, el siguiente paso es entender qué genes definen a cada grupo. Para ello, es necesario identificar aquellos genes que se expresen de manera preferencial en cada grupo. Estos genes, conocidos como **genes marcadores**, permiten distinguir entre distintos tipos celulares. 
