@@ -477,9 +477,9 @@ DoHeatmap(pbmc, features = top10$gene) + NoLegend()
 
 **Resultado esperado:**
 
-<img width="1079" height="683" alt="heatmap" src="https://github.com/user-attachments/assets/322f48dc-7080-4dc0-99bf-a1406378349e" />
-
 Un mapa de calor donde cada fila representa un gen específico y cada columna se refiere a un clúster. Los colores muestran los niveles relativos de expresión. Este tipo de visualización permite observar claramente qué genes distinguen a cada grupo celular, facilitando la interpretación biológica de las identidades celulares detectadas.
+
+<img width="1079" height="683" alt="heatmap" src="https://github.com/user-attachments/assets/322f48dc-7080-4dc0-99bf-a1406378349e" />
 
 ### 10. Anotación de los clústeres con identidades celulares
 Finalmente, es posible asignar un significado biológico a cada clúster. Este proceso, conocido como **anotación**, se basa en el conocimiento previo de genes marcadores característicos de distintos tipos celulares. Por ejemplo, la expresión de genes como *GNLY* y *NKG7* suele relacionarse con células *Natural Killer*, mientras que el gen *MS4A1* es un marcador representativo de los linfocitos B.
