@@ -519,8 +519,8 @@ Es necesario importar los datos, para ello:
 
 1. Abre este enlace del curso:
 2. Busca la carpeta Tung, ahí encontrarás dos archivos:
-- `counts/molecules.txt`: la matriz de conteos.
-- `annotation.txt`: las anotaciones de las células.
+- `counts/molecules.txt`: la matriz de recuentos (genes × células).
+- `annotation.txt`: información sobre las células.
 3. Descargar ambos archivos.
 >Guárdalos en una carpeta específica (scRNAseq_course/data/tung/) para que puedas encontrarlo todo fácilmente.
 4. Descomprimir los archivos.
@@ -570,8 +570,8 @@ library(igraph)
 
 Para leer los dos archivos descargados anteriormente, se utiliza la función `read.table()` que se encarga de leer archivos de texto. 
 
-`sep = "\t"` indica que los valores están separados por tabuladores.
-`header = TRUE` apunta que la primera fila contiene nombres de columnas.
+- `sep = "\t"` indica que los valores están separados por tabuladores.
+- `header = TRUE` indica que la primera fila contiene los nombres de las columnas.
 
 ```r
 tung_counts <- read.table("data/tung/molecules.txt", sep = "\t")
@@ -583,8 +583,18 @@ tung_annotation <- read.table("data/tung/annotation.txt", sep = "\t", header = T
 Se crean dos tablas en el *Environment*: 
 - `tung_counts`, que contiene los conteos de expresión.
 
-- `tung_annotation`, que contiene información sobre cada célula (por ejemplo, individuo donante, lote, id de la muestra, etc.).
+- `tung_annotation`, que contiene la información sobre cada célula (por ejemplo, individuo, lote, id de la muestra, etc.).
 
+<img width="755" height="597" alt="image" src="https://github.com/user-attachments/assets/95596572-dc24-46f4-b3c3-2423d6996800" />
+
+#### 1.3 Crear el objetivo `SingleCellExperiment`
+
+El siguiente paso es crear el objeto estándar de *Bioconductor* `SingleCellExperiment` para almacenar los datos de scRNA-seq. Guarda: 
+- Matrices de expresión (genes vs. células).
+- Metadatos sobre genes.
+- Metadatos sobre células.
+
+Para crear un objeto Seurat se utiliza la función `CreateSeuratObject`. El parámetro `projet` menciona el nombre del proyecto y `min.cells` asegura que solo se mantendrán aquellos genes que estén presentes en al menos tres células, lo que ayuda a eliminar genes que probablemente sean ruido. Por otro lado, el parámetro `min.features` determina que solo se incluirán células que tengan al menos 200 genes detectados, descartando aquellas con muy poca información transcriptómica.
 
 
 
