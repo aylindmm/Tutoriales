@@ -48,7 +48,7 @@ La scRNA-seq permite abordar preguntas biológicas que requieren una resolución
 | **Ventajas** | Alta resolución, identificación de poblaciones celulares nuevas, estudio de trayectorias. |
 | **Desventajas** | Alto costo, mayor "ruido" estadístico, requiere procesamiento bioinformático complejo. |
 
-## 📦 4. Paqueterías para análisis de scRNA-seq en R
+## 📦 4. Paquetes para análisis de scRNA-seq en R
 
 Para realizar un análisis de scRNA-seq en R la elección de las librerías es fundamental. Existen varias herramientas, sin embargo en este tutorial abordaremos las siguientes dos debido a que ambas permiten hacer todo el flujo, desde el control de calidad hasta la identificación de tipos celulares.
 
@@ -56,7 +56,7 @@ Para realizar un análisis de scRNA-seq en R la elección de las librerías es f
 
 - [**SingleCellExperiment (Bioconductor)**](https://www.bioconductor.org/about/): Es un conjunto de librerías especializadas y rigurosas que se pueden combinar libremente para realizar análisis estadísticos más personalizados y profundos. Utiliza una estructura común llamada `SingleCellExperiment` (SCE).
 
-## 💻 4. Análisis de scRNA-seq con Seurat en R
+## 💻 4. Análisis de datos de scRNA-seq con Seurat en RStudio
 
 A continuación, se llevará a cabo un ejercicio práctico para aprender a realizar un análisis de un conjunto de datos reales de células individuales usando el paquete **Seurat** en **RStudio**. 
 
@@ -66,7 +66,7 @@ Esta guía es una adaptación educativa del tutorial oficial de [*Seurat Guided 
 
 ####  ¿Qué datos se van a estudiar?
 
-Los datos que se utilizarán este tutorial provienen del conjunto [PBMCs](https://cf.10xgenomics.com/samples/cell/pbmc3k/pbmc3k_filtered_gene_bc_matrices.tar.gz) que incluye 2 700 células mononucleares de sangre periférica humana secuenciadas utilizando la tecnología de 10x Genomics. 
+Los datos que se utilizarán provienen del conjunto [PBMCs](https://cf.10xgenomics.com/samples/cell/pbmc3k/pbmc3k_filtered_gene_bc_matrices.tar.gz) que incluye 2 700 células mononucleares de sangre periférica humana secuenciadas utilizando la tecnología de 10x Genomics. 
 
 ### 1. Preparación del entorno y carga del conjunto de datos PBMC
 
@@ -502,6 +502,91 @@ Al volver a generar el gráfico UMAP, los clústeres aparecen ahora etiquetados 
 
 ### 📝 Para cerrar
 Al finalizar este ejercicio, habrás pasado por todas las etapas del flujo general de un análisis de scRNA-seq utilizando Seurat, desde la carga de datos crudos hasta la identificación y anotación de tipos celulares. Este enfoque paso a paso establece una base sólida para realizar análisis más complejos y promueve una comprensión profunda del potencial del scRNA-seq en el estudio de la heterogeneidad celular.
+
+## 💻 5. Análisis de datos de scRNA-seq con Bioconductor en RStudio
+
+Ahora, se llevará a cabo otro ejercicio práctico para analizar datos de scRNA-seq, pero utilizando la paquetería **Bioconductor** en **R**. Al igual que el ejercicio anterior, esta guía es una adaptación educativa del material original [*Single Cell RNA-seq Analysis with Bioconductor*](https://www.singlecellcourse.org/introduction-to-rbioconductor.html)*, realizado por Alexander Predeus, Hugo Tavares, Vladimir Kiselev, y colaboradores asociados con el Instituto Sanger y la Universidad de Cambridge. El contenido ha sido ajustado con fines didácticos para facilitar la comprensión de este tipo de análisis bioinformático para estudiantes principiantes.
+
+####  ¿Qué datos se van a estudiar?
+
+El conjunto de datos que se utilizarán son de células madre pluripotentes inducidas (iPSC) generado por [Tung et al. (2017)](https://www.nature.com/articles/srep39921) en la Universidad de Chicago.
+
+### 1. Preparación del entorno y carga del conjunto de datos Tung
+
+#### 1.1 Antes de empezar
+
+Es necesario importar los datos, para ello:
+
+1. Abre este enlace del curso:
+2. Busca la carpeta Tung, ahí encontrarás dos archivos:
+- `counts/molecules.txt`: la matriz de conteos.
+- `annotation.txt`: las anotaciones de las células.
+3. Descargar ambos archivos.
+>Guárdalos en una carpeta específica (scRNAseq_course/data/tung/) para que puedas encontrarlo todo fácilmente.
+4. Descomprimir los archivos.
+5. En RStudio, ejecuta:
+```r
+ list.files("data/tung")
+```
+Si ves:
+```r
+[1] "annotation.txt" "molecules.txt"
+```
+Los datos ya están descargados.
+
+
+Lo siguiente es instalar y cargar las librerías necesarias:
+
+```r
+install.packages("BiocManager")
+
+BiocManager::install(c(
+  "SingleCellExperiment",
+  "scater",
+  "scran",
+  "DropletUtils",
+  "igraph"
+))
+
+library(SingleCellExperiment)
+library(scater)
+library(scran)
+library(DropletUtils)
+library(igraph)
+```
+
+**¿Para qué sirve cada librería?**
+- `SingleCellExperiment`: contenedor de los datos.
+- `scater`: control de calidad y la visualización..
+- `scran`: es la biblioteca para el análisis estadístico.
+- `DropletUtils`: importación y filtrado de células.
+- `igraph`: librería general de teoría de redes y grafos.
+  
+**Resultado esperado:**
+- Si aparece el nombre de las librerías en la consola quiere decir que todo está correcto.
+- Si hay error significa que las librerías no se instalaron adecuadamente.
+
+#### 1.2 Leer los datos en R
+
+Para leer los dos archivos descargados anteriormente, se utiliza la función `read.table()` que se encarga de leer archivos de texto. 
+
+`sep = "\t"` indica que los valores están separados por tabuladores.
+`header = TRUE` apunta que la primera fila contiene nombres de columnas.
+
+```r
+tung_counts <- read.table("data/tung/molecules.txt", sep = "\t")
+tung_annotation <- read.table("data/tung/annotation.txt", sep = "\t", header = TRUE)
+```
+
+**Resultado esperado:**
+
+Se crean dos tablas en el *Environment*: 
+- `tung_counts`, que contiene los conteos de expresión.
+
+- `tung_annotation`, que contiene información sobre cada célula (por ejemplo, individuo donante, lote, id de la muestra, etc.).
+
+
+
 
 
 
