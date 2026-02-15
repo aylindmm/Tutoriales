@@ -77,13 +77,15 @@ Comienza una vez que se han generado los datos de secuenciación, se busca trans
 
 ## 🔎 3. Aplicaciones, ventajas y desventajas
 
-La scRNA-seq permite abordar preguntas biológicas que requieren una resolución detallada, aunque también implica desafíos tanto técnicos como analíticos. En la tabla siguiente, se resumen sus principales aplicaciones, ventajas y limitaciones.
+La scRNA-seq permite abordar preguntas biológicas que requieren una resolución detallada, aunque también implica desafíos tanto técnicos como analíticos. En la tabla siguiente se resumen sus principales aplicaciones, ventajas y limitaciones.
 
-| Característica | Descripción |
-| :--- | :--- |
-| **Aplicaciones** |  Se utiliza para estudiar la heterogeneidad celular en tejidos complejos, permitiendo analizar procesos del desarrollo embrionario, respuesta inmune, cáncer y del sistema nervioso.|
-| **Ventajas** | Alta resolución, identificación de poblaciones celulares nuevas, estudio de trayectorias. |
-| **Desventajas** | Alto costo, mayor "ruido" estadístico, requiere procesamiento bioinformático complejo. |
+| Aplicaciones | Ventajas | Desventajas |
+|--------------|----------|-------------|
+| Identificación de tipos celulares | Resolución a nivel de celular| Costo elevado |
+| Estudio de heterogeneidad tumoral | Detección de poblaciones raras | Complejidad técnica y computacional |
+| Análisis de diferenciación y desarrollo | Análisis de procesos dinámicos | Alta proporción de ceros (*dropouts*) |
+| Análisis de interacción célula–célula | Estudio de heterogeneidad biológica | Posibles sesgos técnicos y efectos de lote |
+| Estudio de estados funcionales | Alto rendimiento | Pérdida de información espacial |
 
 ## 📦 4. Paquetes para análisis de scRNA-seq en R
 
@@ -548,9 +550,7 @@ Al igual que el ejercicio anterior, esta guía es una adaptación educativa del 
 
 ####  ¿Qué datos se van a estudiar?
 
-El conjunto de datos que se utilizarán son de células madre pluripotentes inducidas (iPSC) generadas a partir de tres individuos diferentes realizado por [Tung et al. (2017)](https://www.nature.com/articles/srep39921) en la Universidad de Chicago. 
-
-En general, los datos de scRNA-seq pueden obtenerse de repositorios públicos como GEO o ArrayExpress, o bien pueden generarse en el propio laboratorio mediante plataformas como 10x Genomics. En este caso, los datos ya se encuentran procesados y consisten en dos archivos principales que se explicarán más adelante.
+El conjunto de datos que se utilizarán son de células madre pluripotentes inducidas (iPSC) generadas a partir de tres individuos diferentes realizado por [Tung et al. (2017)](https://www.nature.com/articles/srep39921) en la Universidad de Chicago. En este caso, los datos ya se encuentran procesados y consisten en dos archivos principales que se explicarán más adelante.
 
 ### 1. Preparación del entorno y carga del conjunto de datos Tung
 
@@ -558,13 +558,12 @@ En general, los datos de scRNA-seq pueden obtenerse de repositorios públicos co
 
 Es necesario importar los datos, para ello:
 
-1. Abre este enlace del curso:
-2. Busca la carpeta Tung, ahí encontrarás dos archivos:
-- `counts/molecules.txt`: la matriz de recuentos (genes × células).
+1. Abre este enlace del curso: [scRNA.seq.course](https://github.com/flying-sheep/scRNA.seq.course/tree/master/tung)
+2. Busca la carpeta **tung**, ahí encontrarás dos archivos:
+- `molecules.txt`: la matriz de recuentos (genes × células).
 - `annotation.txt`: información sobre las células.
 3. Descargar ambos archivos.
 >Guárdalos en una carpeta específica (scRNAseq_course/data/tung/) para que puedas encontrarlo todo fácilmente.
-4. Descomprimir los archivos.
 5. En RStudio, ejecuta:
 ```r
  list.files("data/tung")
