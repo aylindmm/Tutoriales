@@ -8,35 +8,72 @@ La secuenciación de ARN de célula única (**scRNA-seq**) es una tecnología re
 
 La metodología de scRNA-seq puede dividirse en dos etapas principales complementarias e interdependientes:
 
-1. <mark>**Fase experimental**</mark>: incluye todos los procedimientos que se llevan a cabo desde la obtención del material biológico hasta la generación de los datos de secuenciación. 
+1. <mark>**Fase experimental**</mark>
 
-   1.1 **Obtención y preparación de la muestra**: consiste en obtener una suspensión de células individuales viables a partir de un tejido o población celular. Para lograrlo, los tejidos suelen someterse a procesos de disociación mecánica y/o enzimática. 
+Incluye todos los procedimientos que se llevan a cabo desde la obtención de la muestra hasta la generación de los datos de secuenciación. 
 
-   1.2 **Aislamiento de células individuales**: involucra asegurar que cada célula sea procesada de forma independiente. Este aislamiento puede realizarse mediante diversas tecnologías, como sistemas de nanopocillos, microgotas o microplacas, cada una con sus ventajas y limitaciones en cuanto al número de células que se pueden analizar, la profundidad de secuenciación y la resolución transcriptómica.
+   1.1 **Obtención y preparación de la muestra**
 
-   1.3 **Captura del ARN y etiquetado molecular**: las células son lisadas y su ARN mensajero (ARNm) es capturado y marcado molecularmente. En este proceso, se añaden códigos de barras celulares (*bardcodes*) que permiten identificar de qué célula proviene cada transcrito, así como identificadores moleculares únicos (UMI, *Unique Molecular Identifier*), que tienen la función de diferenciar las moléculas originales de las copias que se generan durante la amplificación.
+   Consiste en obtener una suspensión de células individuales viables a partir de un tejido o cultivo celular. Para conseguirlo, los tejidos suelen someterse a procesos de disociación mecánica y/o enzimática que permiten separar las células sin dañar su integridad estructural ni la calidad del ARN. Durante este procedimiento, es muy importante priroziar la viabilidad celular y reducir al mínimo el estrés o la degradación del material genético, ya que el éxito del scRNA-seq depende casi totalmente de la calidad inicial de la muestra.
 
-   1.4 **Retrotranscripción y amplificación**: El ARNm se convierte en ADN complementario (ADNc) mediante retrotranscripción, y luego se amplifica para asegurarse de tener suficiente material genético. Esta amplificación, se puede llevar a cabo mediante PCR o transcripción *in vitro*.
-
-   1.5 **Construcción de librerías y secuenciación**: el ADNc amplificado se utiliza para construir librerías de secuenciación que son procesadas mediante plataformas de secuenciación masiva.
-
-2. <mark>**Fase computacional**</mark>: comienza una vez que se han generado los datos de secuenciación, se busca transformar los datos crudos en información biólogica que se pueda analizar.
-
-   2.1 **Preprocesamiento**: las lecturas pasan por un procesamiento primario que incluye asignar cada lectura a su célula de origen usando los *bardcodes*, el alineamiento o pseudoalineamiento a un genoma o transcriptoma de referencia, y el conteo de las moléculas con los UMIs. Al final de este proceso, se genera una matriz de expresión génica, donde las filas representan genes y las columnas representan células individuales. Los valores numéricos dentro de la matriz corresponden al número de lecturas (*reads*) asignadas a cada gen en cada célula. Estos valores son datos discretos y generalmente presentan una distribución altamente sesgada, con muchos ceros.
-
-   2.2 **Control de calidad**: tiene la finalidad de identificar y eliminar células dañadas, dobletes o multipletes, así como restos celulares. Se basa en métricas como el número de genes detectados por célula, el número total de transcritos y la proporción de ARN mitocondrial.
-
-   2.3 **Normalización**: su propósito es hacer comparables las células entre sí, corrigiendo diferencias debidas a la profundidad de secuenciación u otras fuentes de variación técnica. También, puede incluir la corrección de efectos de lote (*batch effects*) cuando los datos provienen de múltiples experimentos o condiciones.
-
-   2.4 **Selección de genes marcadores**: se identifican aquellos genes que presentan una variabilidad significativa entre células y que son más útiles para distinguir diferentes tipos o estados celulares.
-
-   2.5 **Reducción de dimensionalidad**: dado que la matriz de expresión génica tiene una alta dimensionalidad, se aplican técnicas de reducción para representar los datos en un espacio más simple. Técnicas como el análisis de componentes principales (PCA, *Principal Component Analyisis*), UMAP (*Uniform Manifold Approximation and Projection*) o t-SNE (*t-Distributed Stochastic Neighbor Embedding*) ayudan a capturar las principales fuentes de variación, lo que a su vez facilita la exploración visual de los datos.
-
-   2.6 **Agrupamiento**: su objetivo es identificar conjuntos de células con perfiles transcriptómicos similares.
-
-   2.7 **Identificación de genes marcadores**: los grupos celulares obtenidos se caracterizan por la identificación de genes distintivos, que permiten asignar identidades celulares o estados funcionales a cada grupo. Para ello, es necesario integrar el conocimiento previo que ya existe en la literatura y en bases de datos especializadas.
+   1.2 **Aislamiento de células individuales**
    
-En resumen, la fase experimental establece la calidad y el tipo de información disponible, mientras que la fase computacional se ocupa de cómo se analiza e interpreta dicha información.
+   Una vez que se ha obtenido la suspensión celular, es fundamental procesar cada célula de manera individual. Este aislamiento se puede llevar a cabo utilizando diversas tecnologías, como sistemas de microgotas, nanopocillos o microplacas, cada una con sus ventajas y limitaciones. La elección del método adecuado depende de cuántas células se necesiten analizar, la profundidad de secuenciación que se requiera y la resolución transcriptómica que se desee alcanzar.
+
+   1.3 **Captura del ARN y etiquetado molecular**
+   
+   Tras el aislamiento, las células son lisadas y se captura su ARN mensajero (ARNm). Durante este proceso, se añaden códigos de barras celulares (*bardcodes*) que identifican de qué célula proviene cada transcrito, junto con identificadores moleculares únicos (UMI, *Unique Molecular Identifier*) que ayudan a diferenciar las moléculas originales de las copias que se generan durante la amplificación. 
+   
+   1.4 **Retrotranscripción y amplificación**
+   
+   El ARNm se convierte en ADN complementario (ADNc) mediante retrotranscripción. Luego, este ADNc se amplifica, generalmente mediante la reacción en cadena de la polimerasa (PCR) o transcripción *in vitro*, con el fin de obtener suficiente material para crear librerías de secuenciación.
+
+   1.5 **Construcción de librerías y secuenciación**
+
+   El ADNc amplificado se prepara añadiendo adaptadores que son compatibles con la plataforma de secuenciación. Antes de avanzar a la secuenciación, se lleva a cabo un control de calidad para verificar la concentración, el tamaño de los fragmentos y la integridad de las librerías. Esta revisión garantiza que el material cumpla con los requisitos técnicos necesarios.
+
+   1.6 **Secuenciación**
+
+   Las librerías pasan por un proceso de secuenciación masiva, lo que da lugar a archivos de lecturas crudas en formato FASTQ. Estos archivos son el punto de partida para el análisis computacional que se realizará más adelante.
+   
+2. <mark>**Fase computacional**</mark>
+
+Comienza una vez que se han generado los datos de secuenciación, se busca transformar los datos crudos en información biólogica interpretable.
+
+   2.1 **Preprocesamiento**
+
+   El análisis computacional comienza con el procesamiento inicial de las lecturas que se generan a partir de la secuenciación. Este primer paso abarca el demultiplexado de las muestras, la corrección de posibles errores en los códigos de barras, el filtrado de lecturas de baja calidad y el alineamiento o pseudoalineamiento con un genoma o transcriptoma de referencia. Herramientas como *Cell Ranger* se encargan de automatizar gran parte de este proceso. Gracias al uso de los UMIs, se lleva a cabo el conteo de moléculas, lo que da lugar a una matriz de expresión génica donde las filas representan genes, las columnas son células individuales y los valores indican el número de transcritos detectados. Estos datos suelen mostrar una distribución muy dispersa y una alta proporción de ceros.
+
+   2.2 **Control de calidad**
+
+   Una vez obtenida la matriz de expresión, se realiza un filtrado tanto a nivel celular como génico. Se eliminan las células que tienen un número muy bajo de genes detectados, así como aquellas que presentan una alta proporción de ARN mitocondrial, ya que esto puede ser un signo de daño celular. También se descartan posibles dobletes o multipletes. Del mismo modo, se eliminan los genes que se expresan en un número muy reducido de células, ya que no aportan mucha información al análisis del conjunto de datos.
+
+   2.3 **Normalización y transformación**
+
+   El propósito de esta etapa es hacer que las células sean comparables entre sí, ajustando las diferencias que pueden surgir debido a la profundidad de secuenciación y otras variaciones técnicas. Este proceso puede incluir la normalización según el tamaño de la biblioteca, la transformación logarítmica de los datos, el escalado y, en algunos casos, la regresión de variables no deseadas, como el porcentaje de ARN mitocondrial o el estado del ciclo celular. Cuando se analizan varias muestras, también se puede aplicar una corrección por efectos de lote (*batch effects*).
+
+   2.4 **Selección de genes altamente variables**
+   
+  En esta fase, se identifican los genes cuya variabilidad entre las células supera la variación técnica esperada. Estos genes que presentan alta variabilidad son muy informativos para entender la heterogeneidad biológica del sistema y son fundamentales para los análisis de reducción de dimensionalidad y agrupamiento.
+
+   2.5 **Reducción de dimensionalidad**
+   
+   Dado que la matriz de expresión génica tiene una alta dimensionalidad, se utilizan métodos que ayudan a representar los datos en un espacio más simple. Primero, se lleva a cabo un análisis de componentes principales (PCA, *Principal Component Analyisis*), que resume las principales fuentes de variación. Luego, se emplean técnicas no lineales como UMAP (*Uniform Manifold Approximation and Projection*) o t-SNE (*t-Distributed Stochastic Neighbor Embedding*), que facilitan la visualización de las células en dos o tres dimensiones, permitiendo así explorar patrones y subpoblaciones celulares.
+
+   2.6 **Construcción del grafo de vecinos y agrupamiento (*clustering*)**
+
+   A partir de los componentes principales seleccionados, se crea un grafo de vecinos más cercanos que muestra la similitud transcriptómica entre las células. A partir de este grafo, se utilizan algoritmos de *clustering* para identificar grupos de células con perfiles similares. Estos grupos pueden representar diferentes tipos celulares o distintos estados funcionales dentro de una misma población.
+
+   2.7 **Identificación de genes marcadores y anotación celular**
+
+   Finalmente, se lleva a cabo un análisis de expresión diferencial (DE, *Differencial expression*) entre los grupos identificados para reconocer genes que son marcadores distintivos de cada clúster. Estos genes son clave para caracterizar funcionalmente las poblaciones celulares y sirven como base para asignar identidades biológicas, integrando conocimientos previos de la literatura o de bases de datos especializadas.
+
+   2.8 **Análisis complementarios**
+
+   Dependiendo de la pregunta de investigación, se pueden llevar a cabo análisis más avanzados, como la inferencia de trayectorias celulares, la integración de múltiples *datasets*, el análisis de interacciones entre células o la estimación de dinámicas transcriptómicas.
+   
+
+>En resumen, la fase experimental establece la calidad y el tipo de información disponible, mientras que la fase computacional se ocupa de cómo se analiza e interpreta dicha información.
 
 ## 🔎 3. Aplicaciones, ventajas y desventajas
 
@@ -511,7 +548,7 @@ Al igual que el ejercicio anterior, esta guía es una adaptación educativa del 
 
 ####  ¿Qué datos se van a estudiar?
 
-El conjunto de datos que se utilizarán son de células madre pluripotentes inducidas (iPSC) generado por [Tung et al. (2017)](https://www.nature.com/articles/srep39921) en la Universidad de Chicago. 
+El conjunto de datos que se utilizarán son de células madre pluripotentes inducidas (iPSC) generadas a partir de tres individuos diferentes realizado por [Tung et al. (2017)](https://www.nature.com/articles/srep39921) en la Universidad de Chicago. 
 
 En general, los datos de scRNA-seq pueden obtenerse de repositorios públicos como GEO o ArrayExpress, o bien pueden generarse en el propio laboratorio mediante plataformas como 10x Genomics. En este caso, los datos ya se encuentran procesados y consisten en dos archivos principales que se explicarán más adelante.
 
@@ -560,6 +597,7 @@ library(igraph)
 ```
 
 **¿Para qué sirve cada librería?**
+
 - `SingleCellExperiment`: contenedor de los datos.
 - `scater`: control de calidad y la visualización.
 - `scran`: es la biblioteca para el análisis estadístico.
@@ -577,9 +615,10 @@ Para leer los dos archivos descargados anteriormente en R, se utiliza la funció
 Cuando se ejecuta:
 
 ```r
-tung_counts <- read.table("data/tung/molecules.txt", sep = "\t")
-tung_annotation <- read.table("data/tung/annotation.txt", sep = "\t", header = TRUE)
+tung_counts <- read.table("ruta/a/tus/datos/", sep = "\t", header = TRUE, row.names = 1)
+tung_annotation <- read.table("ruta/a/tus/datos/", sep = "\t", header = TRUE)
 ```
+
 Se le dice a R que lea un archivo cuyos valores están separados por tabuladores `sep = "\t"`. El argumento `header = TRUE` revela que la primera fila del archivo contiene los nombres de las variables descriptivas asociadas a cada célula.
 
 **Resultado esperado:**
@@ -596,7 +635,7 @@ Se crean dos objetos en el *Environment*:
 
 #### 1.3 Crear el objetivo `SingleCellExperiment`
 
-El siguiente paso es crear el objeto estándar de *Bioconductor* `SingleCellExperiment` en donde se almacena tanto la matriz de recuentos como los metadatos celulares. El argumento `assays` guarda la matriz de expresión, en este caso, se deposita bajo el nombre *counts*. Por otro lado, el argumento `colData` se encarga de reunir la información relacionada con cada célula. Es primordial entender que cada fila del `colData` debe coincidir exactamente con una columna de la matriz de conteos; de lo contrario, el objeto no tendría coherencia.
+El siguiente paso es crear el objeto estándar de *Bioconductor* `SingleCellExperiment` en donde se almacena tanto la matriz de recuentos como los metadatos celulares. El argumento `assays` guarda una o más matrices de cuantificación de expresión, en este caso, se deposita bajo el nombre *counts*. Por otro lado, el argumento `colData` se encarga de reunir la información relacionada con cada célula. Es primordial entender que cada fila del `colData` debe coincidir exactamente con una columna de la matriz de conteos; de lo contrario, el objeto no tendría coherencia.
 
 ```r
 tung <- SingleCellExperiment(
@@ -613,7 +652,9 @@ rm(tung_counts, tung_annotation)
 
 **Resultado esperado:**
 
-El objeto SingleCellExperiment resultante `tung` se almacena en el *Environment*. Cuenta con dimensiones 19027 × 864, lo que indica que contiene información de 19,027 genes (filas) y 864 células (columnas).
+El objeto SingleCellExperiment resultante `tung` se almacena en el *Environment*. 
+
+Cuenta con dimensiones 19027 × 864, lo que indica que contiene información de 19,027 genes (filas) y 864 células (columnas).
 
 <img width="921" height="388" alt="image" src="https://github.com/user-attachments/assets/a341a819-ca6e-4056-bf80-a51fbc551bcc" />
 
@@ -630,11 +671,19 @@ rowData(tung)     # Muestra los metadatos de los genes
 
 ### 2. Transformación logarítmica
 
-Los datos de conteo no se distribuyen de manera normal. Muestran una gran variabilidad y una gran cantidad de ceros. Para facilitar análisis posteriores y visualizaciones, es bastante común aplicar una transformación logarítmica.  La función `counts(tung)` extrae la matriz original, el +1 evita problemas matemáticos asociados con el logaritmo de cero, y `log2()` aplica la transformación en base 2.
+Los datos de conteo no se distribuyen de manera normal. Muestran una gran variabilidad y una gran cantidad de ceros. Para facilitar los análisis posteriores, se emplea una transformación logarítmica. La función `counts(tung)` extrae la matriz original, el +1 evita problemas matemáticos asociados con el logaritmo de cero, y `log2()` aplica la transformación en base 2.
 
 ```r
 assay(tung, "logcounts") <- log2(counts(tung) + 1)
 ```
+
+Para visualizar las primeras 10 filas y 4 columnas de la nueva matriz:
+
+```r
+logcounts(tung)[1:10, 1:4] # or: assay(tung, "logcounts")[1:10, 1:5]
+```
+
+<img width="976" height="287" alt="image" src="https://github.com/user-attachments/assets/a75697eb-3665-45df-a55b-860ca4327a42" />
 
 **Resultado esperado:**
 
