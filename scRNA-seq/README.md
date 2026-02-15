@@ -533,9 +533,9 @@ Es necesario importar los datos, para ello:
  list.files("data/tung")
 ```
 Si ves:
-```r
-[1] "annotation.txt" "molecules.txt"
-```
+
+<img width="730" height="55" alt="image" src="https://github.com/user-attachments/assets/cc12e346-eb51-4ab2-8b86-08929e812b77" />
+
 Los datos ya están descargados.
 
 
@@ -588,18 +588,15 @@ Se crean dos objetos en el *Environment*:
 
 - `tung_counts`, data frame que contiene la matriz de conteos.
 
+<img width="921" height="412" alt="image" src="https://github.com/user-attachments/assets/fd02633a-cf6d-49b3-adb2-3ee87ee02e97" />
+
 - `tung_annotation`, que contiene la información sobre cada célula (por ejemplo, individuo, lote, id de la muestra, etc.).
 
 <img width="755" height="597" alt="image" src="https://github.com/user-attachments/assets/95596572-dc24-46f4-b3c3-2423d6996800" />
 
 #### 1.3 Crear el objetivo `SingleCellExperiment`
 
-El siguiente paso es crear el objeto estándar de *Bioconductor* `SingleCellExperiment` para almacenar los datos de scRNA-seq. Guarda: 
-- Matrices de expresión (genes vs. células).
-- Metadatos sobre genes.
-- Metadatos sobre células.
-
-La función `SingleCellExperiment()` crea un objeto estructurado que almacena tanto la matriz de expresión como los metadatos celulares. El argumento `assays` guarda la matriz de expresión. En este caso, estamos almacenando la matriz de conteos bajo el nombre *counts*. Por otro lado, el argumento `colData` se encarga de almacenar la información relacionada con cada célula. Es fundamental entender que cada fila de `colData` debe coincidir exactamente con una columna de la matriz de conteos; de lo contrario, el objeto no tendría coherencia.
+El siguiente paso es crear el objeto estándar de *Bioconductor* `SingleCellExperiment` en donde se almacena tanto la matriz de recuentos como los metadatos celulares. El argumento `assays` guarda la matriz de expresión, en este caso, se deposita bajo el nombre *counts*. Por otro lado, el argumento `colData` se encarga de reunir la información relacionada con cada célula. Es primordial entender que cada fila del `colData` debe coincidir exactamente con una columna de la matriz de conteos; de lo contrario, el objeto no tendría coherencia.
 
 ```r
 tung <- SingleCellExperiment(
@@ -616,11 +613,35 @@ rm(tung_counts, tung_annotation)
 
 **Resultado esperado:**
 
-El objeto Seurat resultante `pbmc` se almacena en el *Environment*. 
+El objeto SingleCellExperiment resultante `tung` se almacena en el *Environment*. Cuenta con dimensiones 19027 × 864, lo que indica que contiene información de 19,027 genes (filas) y 864 células (columnas).
 
-Se filtra la **matriz de conteos cruda**, y ahora se cuenta con 13 714 genes y 2 700 células.
+<img width="921" height="388" alt="image" src="https://github.com/user-attachments/assets/a341a819-ca6e-4056-bf80-a51fbc551bcc" />
 
-<img width="921" height="547" alt="image" src="https://github.com/user-attachments/assets/87fab070-524c-4c31-9913-fb814c0f1e40" />
+#### Algunos comados para explorar la matriz de expresión:
+
+```r
+dim(assay(tung))   # Muestra las dimensiones de la matriz
+assay(tung)[1:5, 1:5] # Muestra una submatriz
+assayNames(tung)  # Muestra qué matrices contiene el objeto
+table(tung$batch)  # Muestra el número de células por lote experimental
+colData(tung)      # Muestra los metadatos de las células
+rowData(tung)     # Muestra los metadatos de los genes
+```
+
+### 2. Transformación logarítmica
+
+Los datos de conteo no se distribuyen de manera normal. Muestran una gran variabilidad y una gran cantidad de ceros. Para facilitar análisis posteriores y visualizaciones, es bastante común aplicar una transformación logarítmica.  La función `counts(tung)` extrae la matriz original, el +1 evita problemas matemáticos asociados con el logaritmo de cero, y `log2()` aplica la transformación en base 2.
+
+```r
+assay(tung, "logcounts") <- log2(counts(tung) + 1)
+```
+
+**Resultado esperado:**
+
+Se elabora una nueva matriz dentro del objeto `tung`.
+
+El resultado se almacena bajo el nombre *logcounts*.
+
 
 
 
