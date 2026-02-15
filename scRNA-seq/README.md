@@ -22,7 +22,7 @@ La metodología de scRNA-seq puede dividirse en dos etapas principales complemen
 
 2. <mark>**Fase computacional**</mark>: comienza una vez que se han generado los datos de secuenciación, se busca transformar los datos crudos en información biólogica que se pueda analizar.
 
-   2.1 **Preprocesamiento**: las lecturas pasan por un procesamiento primario que incluye asignar cada lectura a su célula de origen usando los *bardcodes*, el alineamiento o pseudoalineamiento a un genoma o transcriptoma de referencia, y el conteo de las moléculas con los UMIs. Al final de este proceso, se genera una matriz de expresión génica, donde las filas representan genes y las columnas representan células individuales.
+   2.1 **Preprocesamiento**: las lecturas pasan por un procesamiento primario que incluye asignar cada lectura a su célula de origen usando los *bardcodes*, el alineamiento o pseudoalineamiento a un genoma o transcriptoma de referencia, y el conteo de las moléculas con los UMIs. Al final de este proceso, se genera una matriz de expresión génica, donde las filas representan genes y las columnas representan células individuales. Los valores numéricos dentro de la matriz corresponden al número de lecturas (*reads*) asignadas a cada gen en cada célula. Estos valores son datos discretos y generalmente presentan una distribución altamente sesgada, con muchos ceros.
 
    2.2 **Control de calidad**: tiene la finalidad de identificar y eliminar células dañadas, dobletes o multipletes, así como restos celulares. Se basa en métricas como el número de genes detectados por célula, el número total de transcritos y la proporción de ARN mitocondrial.
 
@@ -505,11 +505,15 @@ Al finalizar este ejercicio, habrás pasado por todas las etapas del flujo gener
 
 ## 💻 5. Análisis de datos de scRNA-seq con Bioconductor en RStudio
 
-Ahora, se llevará a cabo otro ejercicio práctico para analizar datos de scRNA-seq, pero utilizando la paquetería **Bioconductor** en **R**. Al igual que el ejercicio anterior, esta guía es una adaptación educativa del material original [*Single Cell RNA-seq Analysis with Bioconductor*](https://www.singlecellcourse.org/introduction-to-rbioconductor.html)*, realizado por Alexander Predeus, Hugo Tavares, Vladimir Kiselev, y colaboradores asociados con el Instituto Sanger y la Universidad de Cambridge. El contenido ha sido ajustado con fines didácticos para facilitar la comprensión de este tipo de análisis bioinformático para estudiantes principiantes.
+Ahora, se llevará a cabo otro ejercicio práctico para analizar datos de scRNA-seq, pero utilizando herramientas del proyecto **Bioconductor** dentro del entorno de trabajo **R**. 
+
+Al igual que el ejercicio anterior, esta guía es una adaptación educativa del material original [*Single Cell RNA-seq Analysis with Bioconductor*](https://www.singlecellcourse.org/introduction-to-rbioconductor.html)*, realizado por Alexander Predeus, Hugo Tavares, Vladimir Kiselev, y colaboradores asociados con el Instituto Sanger y la Universidad de Cambridge. El contenido ha sido ajustado con fines didácticos para facilitar la comprensión de este tipo de análisis bioinformático para estudiantes principiantes.
 
 ####  ¿Qué datos se van a estudiar?
 
-El conjunto de datos que se utilizarán son de células madre pluripotentes inducidas (iPSC) generado por [Tung et al. (2017)](https://www.nature.com/articles/srep39921) en la Universidad de Chicago.
+El conjunto de datos que se utilizarán son de células madre pluripotentes inducidas (iPSC) generado por [Tung et al. (2017)](https://www.nature.com/articles/srep39921) en la Universidad de Chicago. 
+
+En general, los datos de scRNA-seq pueden obtenerse de repositorios públicos como GEO o ArrayExpress, o bien pueden generarse en el propio laboratorio mediante plataformas como 10x Genomics. En este caso, los datos ya se encuentran procesados y consisten en dos archivos principales que se explicarán más adelante.
 
 ### 1. Preparación del entorno y carga del conjunto de datos Tung
 
@@ -568,20 +572,21 @@ library(igraph)
 
 #### 1.2 Leer los datos en R
 
-Para leer los dos archivos descargados anteriormente, se utiliza la función `read.table()` que se encarga de leer archivos de texto. 
+Para leer los dos archivos descargados anteriormente en R, se utiliza la función `read.table()` que se encarga de leer archivos de texto. 
 
-- `sep = "\t"` indica que los valores están separados por tabuladores.
-- `header = TRUE` indica que la primera fila contiene los nombres de las columnas.
+Cuando se ejecuta:
 
 ```r
 tung_counts <- read.table("data/tung/molecules.txt", sep = "\t")
 tung_annotation <- read.table("data/tung/annotation.txt", sep = "\t", header = TRUE)
 ```
+Se le dice a R que lea un archivo cuyos valores están separados por tabuladores `sep = "\t"`. El argumento `header = TRUE` revela que la primera fila del archivo contiene los nombres de las variables descriptivas asociadas a cada célula.
 
 **Resultado esperado:**
 
-Se crean dos tablas en el *Environment*: 
-- `tung_counts`, que contiene los conteos de expresión.
+Se crean dos objetos en el *Environment*: 
+
+- `tung_counts`, data frame que contiene la matriz de conteos.
 
 - `tung_annotation`, que contiene la información sobre cada célula (por ejemplo, individuo, lote, id de la muestra, etc.).
 
@@ -594,9 +599,7 @@ El siguiente paso es crear el objeto estándar de *Bioconductor* `SingleCellExpe
 - Metadatos sobre genes.
 - Metadatos sobre células.
 
-Aquí, la función `SingleCellExperiment()` crea un objeto que almacena la matriz de expresión en la ranura denominada “assays” bajo el nombre “counts” y las anotaciones de las células en la ranura “colData”. Al imprimir este objeto en la consola, el estudiante verá el número de genes (filas) y células (columnas), junto con información de metadato
-
-Para crear un objeto Seurat se utiliza la función `CreateSeuratObject`. El parámetro `projet` menciona el nombre del proyecto y `min.cells` asegura que solo se mantendrán aquellos genes que estén presentes en al menos tres células, lo que ayuda a eliminar genes que probablemente sean ruido. Por otro lado, el parámetro `min.features` determina que solo se incluirán células que tengan al menos 200 genes detectados, descartando aquellas con muy poca información transcriptómica.
+La función `SingleCellExperiment()` crea un objeto estructurado que almacena tanto la matriz de expresión como los metadatos celulares. El argumento `assays` guarda la matriz de expresión. En este caso, estamos almacenando la matriz de conteos bajo el nombre *counts*. Por otro lado, el argumento `colData` se encarga de almacenar la información relacionada con cada célula. Es fundamental entender que cada fila de `colData` debe coincidir exactamente con una columna de la matriz de conteos; de lo contrario, el objeto no tendría coherencia.
 
 ```r
 tung <- SingleCellExperiment(
