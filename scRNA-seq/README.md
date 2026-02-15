@@ -557,7 +557,7 @@ library(igraph)
 
 **¿Para qué sirve cada librería?**
 - `SingleCellExperiment`: contenedor de los datos.
-- `scater`: control de calidad y la visualización..
+- `scater`: control de calidad y la visualización.
 - `scran`: es la biblioteca para el análisis estadístico.
 - `DropletUtils`: importación y filtrado de células.
 - `igraph`: librería general de teoría de redes y grafos.
@@ -594,9 +594,30 @@ El siguiente paso es crear el objeto estándar de *Bioconductor* `SingleCellExpe
 - Metadatos sobre genes.
 - Metadatos sobre células.
 
+Aquí, la función `SingleCellExperiment()` crea un objeto que almacena la matriz de expresión en la ranura denominada “assays” bajo el nombre “counts” y las anotaciones de las células en la ranura “colData”. Al imprimir este objeto en la consola, el estudiante verá el número de genes (filas) y células (columnas), junto con información de metadato
+
 Para crear un objeto Seurat se utiliza la función `CreateSeuratObject`. El parámetro `projet` menciona el nombre del proyecto y `min.cells` asegura que solo se mantendrán aquellos genes que estén presentes en al menos tres células, lo que ayuda a eliminar genes que probablemente sean ruido. Por otro lado, el parámetro `min.features` determina que solo se incluirán células que tengan al menos 200 genes detectados, descartando aquellas con muy poca información transcriptómica.
 
+```r
+tung <- SingleCellExperiment(
+  assays = list(counts = as.matrix(tung_counts)),
+  colData = tung_annotation
+)
+```
 
+Para eliminar las tablas originales porque ya no las necesitamos:
+
+```r
+rm(tung_counts, tung_annotation)
+```
+
+**Resultado esperado:**
+
+El objeto Seurat resultante `pbmc` se almacena en el *Environment*. 
+
+Se filtra la **matriz de conteos cruda**, y ahora se cuenta con 13 714 genes y 2 700 células.
+
+<img width="921" height="547" alt="image" src="https://github.com/user-attachments/assets/87fab070-524c-4c31-9913-fb814c0f1e40" />
 
 
 
