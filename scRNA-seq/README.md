@@ -68,7 +68,7 @@ Comienza una vez que se han generado los datos de secuenciación, se busca trans
 
    Finalmente, se lleva a cabo un análisis de expresión diferencial (DE, *Differencial expression*) entre los grupos identificados para reconocer genes que son marcadores distintivos de cada clúster. Estos genes son clave para caracterizar funcionalmente las poblaciones celulares y sirven como base para asignar identidades biológicas, integrando conocimientos previos de la literatura o de bases de datos especializadas.
 
-   2.8 **Análisis complementarios**
+   2.8 **Análisis exploratorios**
 
    Dependiendo de la pregunta de investigación, se pueden llevar a cabo análisis más avanzados, como la inferencia de trayectorias celulares, la integración de múltiples *datasets*, el análisis de interacciones entre células o la estimación de dinámicas transcriptómicas.
    
@@ -609,7 +609,7 @@ library(igraph)
 
 #### 1.2 Leer los datos en R
 
-Para leer los dos archivos descargados anteriormente en R, se utiliza la función `read.table()` que se encarga de leer archivos de texto. 
+Para leer los dos archivos descargados anteriormente en R, se utiliza la función `read.table()` que se encarga de leer archivos de texto estructurados en formato tabular. 
 
 Cuando se ejecuta:
 
@@ -634,7 +634,9 @@ Se crean dos objetos en el *Environment*:
 
 #### 1.3 Crear el objetivo `SingleCellExperiment`
 
-El siguiente paso es crear el objeto estándar de *Bioconductor* `SingleCellExperiment` en donde se almacena tanto la matriz de recuentos como los metadatos celulares. El argumento `assays` guarda una o más matrices de cuantificación de expresión, en este caso, se deposita bajo el nombre *counts*. Por otro lado, el argumento `colData` se encarga de reunir la información relacionada con cada célula. Es primordial entender que cada fila del `colData` debe coincidir exactamente con una columna de la matriz de conteos; de lo contrario, el objeto no tendría coherencia.
+El siguiente paso es crear el objeto estándar de *Bioconductor* `SingleCellExperiment` en donde se almacena tanto la matriz de recuentos como los metadatos celulares. El argumento `assays` guarda una o más matrices de cuantificación de expresión, en este caso, se deposita bajo el nombre *counts*. Por otro lado, el argumento `colData` se encarga de reunir la información relacionada con cada célula. 
+
+Es primordial verificar que cada fila del `colData` debe coincidir exactamente con una columna de la matriz de conteos; de lo contrario, el objeto no tendría coherencia.
 
 ```r
 tung <- SingleCellExperiment(
@@ -643,7 +645,7 @@ tung <- SingleCellExperiment(
 )
 ```
 
-Para eliminar las tablas originales porque ya no las necesitamos:
+Para eliminar las tablas originales porque ya no son necesarias:
 
 ```r
 rm(tung_counts, tung_annotation)
@@ -670,7 +672,7 @@ rowData(tung)     # Muestra los metadatos de los genes
 
 ### 2. Transformación logarítmica
 
-Los datos de conteo no se distribuyen de manera normal. Muestran una gran variabilidad y una gran cantidad de ceros. Para facilitar los análisis posteriores, se emplea una transformación logarítmica. La función `counts(tung)` extrae la matriz original, el +1 evita problemas matemáticos asociados con el logaritmo de cero, y `log2()` aplica la transformación en base 2.
+Los datos de conteo no se distribuyen de manera normal. Muestran una gran variabilidad y una gran cantidad de ceros. Para facilitar los análisis posteriores, se emplea una transformación logarítmica. La función `counts(tung)` extrae la matriz original, el +1 evita problemas matemáticos asociados con el logaritmo de cero, y `log2()` aplica la transformación en base 2. Después de hacer esta transformación, los valores extremos se reducen y la distribución se vuelve mucho más fácil de manejar.
 
 ```r
 assay(tung, "logcounts") <- log2(counts(tung) + 1)
@@ -679,16 +681,84 @@ assay(tung, "logcounts") <- log2(counts(tung) + 1)
 Para visualizar las primeras 10 filas y 4 columnas de la nueva matriz:
 
 ```r
-logcounts(tung)[1:10, 1:4] # or: assay(tung, "logcounts")[1:10, 1:5]
+logcounts(tung)[1:10, 1:4]
 ```
 
 <img width="976" height="287" alt="image" src="https://github.com/user-attachments/assets/a75697eb-3665-45df-a55b-860ca4327a42" />
 
 **Resultado esperado:**
 
-Se elabora una nueva matriz dentro del objeto `tung`.
+El objeto `tung` ahora tiene dos formas diferentes de representar los datos: la matriz de expresión cruda y la matriz transformada. 
 
-El resultado se almacena bajo el nombre *logcounts*.
+### 3. Visualización exploratoria
+
+Una vez que se han importado y almacenado los datos de expresión y metadatos en el objeto `SingleCellExperiment`, es relevante explorar las características del *dataset* antes de avanzar con análisis más complejos. La visualización inicial facilita evaluar la calidad de los datos, comprender patrones biológicos y tomar decisiones informadas para los estudios posteriores.
+
+Para crear estos gráficos se utiliza principalmente la librería `ggplot2`, complementada por funciones auxiliares específicas de *Bioconductor*, como las del paquete `scater`.
+
+Un gráfico `ggplot2` se construye a partir de:
+1. Un data.frame que contiene los datos a representar.
+2. Estética: asignación de las variables del data.frame a los ejes, colores, formas, etc (`aes()`).
+3. Geometrías (`geom_`) que definen el tipo de representación, por ejemplo puntos (`geom_point()`), violines (`geom_violin()`), líneas, etc.
+
+#### Distribución de conteos por célula
+
+Para ver cómo se distribuyen los conteos totales por célula según el lote de procesamiento, primero se extrae la información del objeto `SingleCellExperiment` y se convierte en un data.frame. Luego, se puede utilizar un gráfico de violines para ilustrar las variaciones entre los diferentes grupos:
+
+```r
+ggplot(data = cell_info, aes(x = batch, y = total_counts)) +
+  geom_violin(fill = 'brown') + theme_bw() + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+```
+
+**Resultado esperado:**
+
+Cada violín representa la distribución de conteos en un lote. Si observas diferencias marcadas entre grupos, podría existir un efecto técnico de *batch*.
+
+También se puede evitar la manipulación manual de los datos utilizando la función `ggcells()` de *scater*, que se encarga de extraer automáticamente la información necesaria del objeto `SingleCellExperiment`.
+
+```r
+ggcells(tung, aes(x = batch, y = total_counts)) + 
+  geom_violin(fill = 'orange') + theme_bw() + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+```
+
+#### Visualización de expresión génica
+
+Si deseas visualizar la expresión de un gen en específico entre condiciones o grupos. Con `scater` y `ggcells()` se puede realizar especificando qué matriz de expresión usar (por ejemplo *logcounts*):
+
+```r
+ggcells(tung, aes(x = batch, y = ENSG00000198938), exprs_values = "logcounts") + 
+  geom_violin(fill = 'coral2') + theme_bw() + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+```
+
+#### Relación entre la media y la varianza de los recuentos brutos por celda
+
+Otra forma muy útil de explorar la estructura de los datos es a través de un diagrama de dispersión que ilustre la relación entre la media de los conteos por célula y su varianza. Esto ayuda a identificar si existe una correlación entre estas métricas, lo cual es clave para seleccionar de manera adecuada los genes que son altamente variables.
+
+Para lograrlo, se calcula la varianza de conteos por célula y se agrega como una columna en el objeto 'colData':
+
+```r
+colData(tung)$var_counts <- colVars(counts(tung))
+```
+Luego se construye el diagrama:
+
+```r
+ggcells(tung, aes(mean_counts, var_counts)) +
+  geom_point(aes(colour = batch)) + theme_bw()
+```
+
+**Resultado esperado:**
+
+Cada punto representa una célula. Usualmente se observa una correlación positiva entre la media y la varianza. Esto confirma que los datos siguen una distribución típica.
+
+## 📖 Bibliografía
+
+*Haque, A., Engel, J., Teichmann, S. A., & Lönnberg, T. (2017). A practical guide to single-cell RNA-sequencing for biomedical research and clinical applications. Genome Medicine, 9(1), 75. https://doi.org/10.1186/s13073-017-0467-4*
+
+*Jovic, D., Liang, X., Zeng, H., Lin, L., Xu, F., & Luo, Y. (2022). Single‐cell RNA sequencing technologies and applications: A brief overview. Clinical And Translational Medicine, 12(3), e694. https://doi.org/10.1002/ctm2.694*
+
 
 
 
