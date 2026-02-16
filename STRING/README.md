@@ -101,7 +101,7 @@ En el panel izquierdo:
 
 Puedes mostrar:
 - Solo las proteínas consultadas
-- Interactores de primer nivel
+- Interactores de primer nivel (proteínas que no están en la lista que ingresé pero que interactúan con las proteínas que sí)
 - Interactores de segundo nivel
 
 > ⚠️ Agregar demasiados interactores puede dificultar la interpretación biológica.
