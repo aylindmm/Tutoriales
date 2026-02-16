@@ -1,4 +1,4 @@
-#  Tutorial: Uso de STRING para redes de interacción proteína–proteína (PPI)
+#  Uso de STRING para redes de interacción proteína–proteína (PPI)
 
 ##  Introducción
 
