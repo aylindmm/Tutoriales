@@ -81,11 +81,10 @@ La scRNA-seq permite abordar preguntas biológicas que requieren una resolución
 
 | Aplicaciones | Ventajas | Desventajas |
 |--------------|----------|-------------|
-| Identificación de tipos celulares | Resolución a nivel de celular| Costo elevado |
+| Identificación de tipos celulares | Resolución a nivel celular | Costo elevado |
 | Estudio de heterogeneidad tumoral | Detección de poblaciones raras | Complejidad técnica y computacional |
-| Análisis de diferenciación y desarrollo | Análisis de procesos dinámicos | Alta proporción de ceros (*dropouts*) |
-| Análisis de interacción célula–célula | Estudio de heterogeneidad biológica | Posibles sesgos técnicos y efectos de lote |
-| Estudio de estados funcionales | Alto rendimiento | Pérdida de información espacial |
+| Análisis de diferenciación y desarrollo | Estudio de heterogeneidad biológica | Alta proporción de ceros (*dropouts*) |
+| Análisis de interacción célula–célula | Alto rendimiento | Posibles sesgos técnicos y efectos de lote |
 
 ## 📦 4. Paquetes para análisis de scRNA-seq en R
 
@@ -593,7 +592,6 @@ library(igraph)
 - `SingleCellExperiment`: contenedor de los datos.
 - `scater`: control de calidad y la visualización.
 - `scran`: es la biblioteca para el análisis estadístico.
-- `DropletUtils`: importación y filtrado de células.
 - `igraph`: librería general de teoría de redes y grafos.
   
 **Resultado esperado:**
@@ -701,13 +699,13 @@ El objeto `tung` ahora tiene dos formas diferentes de representar los datos: la 
 
 ### 3. Visualización exploratoria
 
-Una vez que se han importado y almacenado los datos de expresión y metadatos en el objeto `SingleCellExperiment`, es relevante explorar las características del *dataset* antes de avanzar con análisis más complejos. La visualización inicial facilita evaluar la calidad de los datos, comprender patrones biológicos y tomar decisiones informadas para los estudios posteriores.
+Una vez que se han importado y almacenado los datos de expresión y metadatos en el objeto `SingleCellExperiment`, es relevante explorar las características del *dataset*. La visualización inicial facilita evaluar la calidad de los datos, comprender patrones biológicos y tomar decisiones informadas para los estudios posteriores.
 
 Para crear estos gráficos se utiliza principalmente la librería `ggplot2`, complementada por funciones auxiliares específicas de *Bioconductor*, como las del paquete `scater`.
 
 Un gráfico `ggplot2` se construye a partir de:
 1. Un data.frame que contiene los datos a representar.
-2. Estética: asignación de las variables del data.frame a los ejes, colores, formas, etc (`aes()`).
+2. Estética: asignación de las variables del data.frame a los ejes, colores, formas, etc (con la función `aes()`).
 3. Geometrías (`geom_`) que definen el tipo de representación, por ejemplo puntos (`geom_point()`), violines (`geom_violin()`), líneas, etc.
 
 #### Distribución de conteos por célula
@@ -715,6 +713,8 @@ Un gráfico `ggplot2` se construye a partir de:
 Para ver cómo se distribuyen los conteos totales por célula según el lote de procesamiento, primero se extrae la información del objeto `SingleCellExperiment` y se convierte en un data.frame. Luego, se puede utilizar un gráfico de violines para ilustrar las variaciones entre los diferentes grupos:
 
 ```r
+cell_info <- as.data.frame(colData(tung))
+
 ggplot(data = cell_info, aes(x = batch, y = total_counts)) +
   geom_violin(fill = 'brown') + theme_bw() + 
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
@@ -722,7 +722,7 @@ ggplot(data = cell_info, aes(x = batch, y = total_counts)) +
 
 **Resultado esperado:**
 
-Cada violín representa la distribución de conteos en un lote. Si observas diferencias marcadas entre grupos, podría existir un efecto técnico de *batch*.
+Cada violín representa la distribución de conteos en un lote. Si observas diferencias marcadas entre grupos, podría existir un *batch effect*.
 
 También se puede evitar la manipulación manual de los datos utilizando la función `ggcells()` de *scater*, que se encarga de extraer automáticamente la información necesaria del objeto `SingleCellExperiment`.
 
