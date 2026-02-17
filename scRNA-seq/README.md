@@ -708,11 +708,13 @@ Un gráfico `ggplot2` se construye a partir de:
 2. Estética: asignación de las variables del data.frame a los ejes, colores, formas, etc (con la función `aes()`).
 3. Geometrías (`geom_`) que definen el tipo de representación, por ejemplo puntos (`geom_point()`), violines (`geom_violin()`), líneas, etc.
 
-#### Distribución de conteos por célula
+#### Ejemplos
 
-Para ver cómo se distribuyen los conteos totales por célula según el lote de procesamiento, primero se extrae la información del objeto `SingleCellExperiment` y se convierte en un data.frame. Luego, se puede utilizar un gráfico de violines para ilustrar las variaciones entre los diferentes grupos:
+Para ver cómo se distribuyen los conteos totales por célula según el lote de procesamiento, primero se obtienen los recuentos totales por celda con la función `colSums()`, y luego se extrae la información del objeto `SingleCellExperiment` y se convierte en un data.frame. Después, se puede utilizar un gráfico de violines para ilustrar las variaciones entre los diferentes grupos.
 
 ```r
+colData(tung)$total_counts <- colSums(counts(tung))
+
 cell_info <- as.data.frame(colData(tung))
 
 ggplot(data = cell_info, aes(x = batch, y = total_counts)) +
@@ -724,6 +726,9 @@ ggplot(data = cell_info, aes(x = batch, y = total_counts)) +
 
 Cada violín representa la distribución de conteos en un lote. Si observas diferencias marcadas entre grupos, podría existir un *batch effect*.
 
+<img width="1233" height="708" alt="totalcounts" src="https://github.com/user-attachments/assets/e3269fd7-d727-4bf4-aaf2-494e7a104429" />
+
+
 También se puede evitar la manipulación manual de los datos utilizando la función `ggcells()` de *scater*, que se encarga de extraer automáticamente la información necesaria del objeto `SingleCellExperiment`.
 
 ```r
@@ -732,7 +737,10 @@ ggcells(tung, aes(x = batch, y = total_counts)) +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
 ```
 
-#### Visualización de expresión génica
+**Resultado esperado:**
+
+<img width="1353" height="708" alt="plot" src="https://github.com/user-attachments/assets/6641ce6f-15cd-4f28-98c1-017b7ca55ae8" />
+
 
 Si deseas visualizar la expresión de un gen en específico entre condiciones o grupos. Con `scater` y `ggcells()` se puede realizar especificando qué matriz de expresión usar (por ejemplo *logcounts*):
 
@@ -741,26 +749,13 @@ ggcells(tung, aes(x = batch, y = ENSG00000198938), exprs_values = "logcounts") +
   geom_violin(fill = 'coral2') + theme_bw() + 
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
 ```
-
-#### Relación entre la media y la varianza de los recuentos brutos por celda
-
-Otra forma muy útil de explorar la estructura de los datos es a través de un diagrama de dispersión que ilustre la relación entre la media de los conteos por célula y su varianza. Esto ayuda a identificar si existe una correlación entre estas métricas, lo cual es clave para seleccionar de manera adecuada los genes que son altamente variables.
-
-Para lograrlo, se calcula la varianza de conteos por célula y se agrega como una columna en el objeto 'colData':
-
-```r
-colData(tung)$var_counts <- colVars(counts(tung))
-```
-Luego se construye el diagrama:
-
-```r
-ggcells(tung, aes(mean_counts, var_counts)) +
-  geom_point(aes(colour = batch)) + theme_bw()
-```
-
 **Resultado esperado:**
 
-Cada punto representa una célula. Usualmente se observa una correlación positiva entre la media y la varianza. Esto confirma que los datos siguen una distribución típica.
+<img width="1292" height="708" alt="Rplot" src="https://github.com/user-attachments/assets/9e4d8355-0fc3-41be-8ec2-e05d7f2ff207" />
+
+
+
+
 
 ### 📝 Para cerrar
 Este tutorial se enfoca intencionalmente en la fase de preparación y exploración inicial de los datos. Las etapas que se describen en este ejercicio son cruciales dado que si no se realiza un preprocesamiento adecuado, los análisis posteriores pueden dar lugar a resultados engañosos.
