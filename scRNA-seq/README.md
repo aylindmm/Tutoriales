@@ -1,4 +1,4 @@
-# 👨🏻‍💻 Análisis de datos de secuenciación de ARN unicelular (scRNA-seq)
+# 👨🏻‍💻 Análisis de datos de secuenciación de ARN de célula única (scRNA-seq)
 
 ## 🔬 1. ¿Qué es scRNA-seq?
 
@@ -724,7 +724,9 @@ ggplot(data = cell_info, aes(x = batch, y = total_counts)) +
 
 **Resultado esperado:**
 
-Cada violín representa la distribución de conteos en un lote. Si observas diferencias marcadas entre grupos, podría existir un *batch effect*.
+Cada violín representa la distribución de conteos en un lote. En el eje x se encuentran los distintos grupos de células, y en el eje y el número total de conteos por célula. La altura del violín indica el rango de valores (desde los más bajos hasta los más altos). El ancho del violín en cada punto refleja la densidad de datos:
+- Zonas más anchas sugieren que hay más células con ese número de conteos.
+- Zonas más estrechas sugieren que hay menos células con esos valores.
 
 <img width="1233" height="708" alt="totalcounts" src="https://github.com/user-attachments/assets/e3269fd7-d727-4bf4-aaf2-494e7a104429" />
 
@@ -737,11 +739,6 @@ ggcells(tung, aes(x = batch, y = total_counts)) +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
 ```
 
-**Resultado esperado:**
-
-<img width="1353" height="708" alt="plot" src="https://github.com/user-attachments/assets/6641ce6f-15cd-4f28-98c1-017b7ca55ae8" />
-
-
 Si deseas visualizar la expresión de un gen en específico entre condiciones o grupos. Con `scater` y `ggcells()` se puede realizar especificando qué matriz de expresión usar (por ejemplo *logcounts*):
 
 ```r
@@ -751,14 +748,30 @@ ggcells(tung, aes(x = batch, y = ENSG00000198938), exprs_values = "logcounts") +
 ```
 **Resultado esperado:**
 
+Se muestra un diagrama de violín que representa la distribución de la expresión del gen *ENSG00000198938* (en valores transformados) en los distintos grupos. En el eje x se observan los grupos y en el eje y los niveles de expresión del gen. La forma de cada violín indica cómo se distribuyen los valores dentro de cada *batch*: las zonas más anchas representan mayor concentración de células con ese nivel de expresión, mientras que las zonas estrechas indican menor frecuencia.
+
 <img width="1292" height="708" alt="Rplot" src="https://github.com/user-attachments/assets/9e4d8355-0fc3-41be-8ec2-e05d7f2ff207" />
 
 
+### ▶ Formas de manipular datos en un objeto `SingleCellExperiment`
 
+Por último, se presenta una tabla en donde se resume los principales operadores o funciones para explorar y manejar los datos que integran un objeto `SingleCellExperiment`.
+
+| Elemento / Acción | Descripción | Ejemplo |
+|-------------------|-------------------|----------|
+| **assay** | Contiene una o más matrices de expresión | `assay(sce, "counts")` |
+| **rowData** | Información sobre los genes (filas) | `rowData(sce)` |
+| **colData** | Información sobre las células (columnas) | `colData(sce)` |
+| **reducedDim** | Representaciones en dimensiones reducidas (PCA, UMAP, etc.) | `reducedDim(sce, "PCA")` |
+| **Acceso a componentes** | Se entra usando funciones con el mismo nombre del componente | `assay()`, `rowData()`, `colData()` |
+| **Añadir o modificar datos** | Se usa el operador `<-` para agregar nuevas matrices o metadatos | `assay(sce, "logcounts") <- log2(counts(sce) + 1)` |
+| **Resúmenes de matrices** | Permiten explorar propiedades globales de los datos | `rowSums()`, `colSums()`, `rowMeans()`, `colMeans()` |
+| **Subconjunto condicional** | Se pueden combinar métricas con operadores lógicos para filtrar datos | `sce[, colSums(counts(sce)) > 1000]` |
+| **Visualización** | Permite generar gráficos para represtar los datos | `ggcells()`, `ggplot` |
 
 
 ### 📝 Para cerrar
-Este tutorial se enfoca intencionalmente en la fase de preparación y exploración inicial de los datos. Las etapas que se describen en este ejercicio son cruciales dado que si no se realiza un preprocesamiento adecuado, los análisis posteriores pueden dar lugar a resultados engañosos.
+Este ejercicio se enfoca en la fase de preparación y exploración inicial de los datos. Las etapas que se describen en este ejercicio son cruciales dado que si no se realiza un preprocesamiento adecuado, los análisis posteriores pueden dar lugar a resultados engañosos.
 
 ## 📖 Bibliografía
 
