@@ -767,7 +767,7 @@ Por último, se presenta una tabla en donde se resume los principales operadores
 | **Añadir o modificar datos** | Se usa el operador `<-` para agregar nuevas matrices o metadatos | `assay(sce, "logcounts") <- log2(counts(sce) + 1)` |
 | **Resúmenes de matrices** | Permiten explorar propiedades globales de los datos | `rowSums()`, `colSums()`, `rowMeans()`, `colMeans()` |
 | **Subconjunto condicional** | Se pueden combinar métricas con operadores lógicos para filtrar datos | `sce[, colSums(counts(sce)) > 1000]` |
-| **Visualización** | Permite generar gráficos para represtar los datos | `ggcells()`, `ggplot` |
+| **Visualización** | Permite generar gráficos para representar los datos | `ggcells()`, `ggplot` |
 
 
 ### 📝 Para cerrar
