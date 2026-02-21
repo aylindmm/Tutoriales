@@ -1,4 +1,4 @@
-# 💻 5. Análisis de datos de scRNA-seq con Bioconductor en RStudio
+# 💻 Análisis de datos de scRNA-seq con Bioconductor en RStudio
 
 Ahora, se llevará a cabo otro ejercicio práctico centrándose únicamente en las etapas de **preprocesamiento y exploración inicial de datos** de scRNA-seq utilizando herramientas del proyecto **Bioconductor** en el entorno de **RStudio**. 
 
