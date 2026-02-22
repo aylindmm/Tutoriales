@@ -1,10 +1,10 @@
-# 👨🏻‍💻 Análisis de datos de secuenciación de ARN de célula única (scRNA-seq)
+# 👨🏻‍💻 Secuenciación de ARN de célula única (scRNA-seq)
 
-## 🔬 1. ¿Qué es scRNA-seq?
+## 🔬 ¿Qué es scRNA-seq?
 
-La secuenciación de ARN de célula única (**scRNA-seq**) es una tecnología reciente que permite medir la expresión génica a nivel de cada célula individual. A diferencia del RNA-seq masivo (*bulk*), que mide el promedio de expresión génica en una población de células, el scRNA-seq permite capturar la heterogeneidad biológica, analizando la diversidad de tipos celulares en un tejido complejo e identificando estados celulares nuevos.
+La secuenciación de ARN de célula única (scRNA-seq) es una tecnología reciente que permite medir la expresión génica a nivel de cada célula individual. A diferencia del RNA-seq masivo (*bulk*), que mide el promedio de expresión génica en una población de células, la scRNA-seq permite capturar la heterogeneidad biológica, analizando la diversidad de tipos celulares en un tejido complejo e identificando estados celulares nuevos.
 
-## 📍 2. Flujo de trabajo general
+## 📍 Flujo de trabajo general
 
 La metodología de scRNA-seq puede dividirse en dos etapas principales complementarias e interdependientes:
 
@@ -14,7 +14,7 @@ Incluye todos los procedimientos que se llevan a cabo desde la obtención de la 
 
    1.1 **Obtención y preparación de la muestra**
 
-   Consiste en obtener una suspensión de células individuales viables a partir de un tejido o cultivo celular. Para conseguirlo, los tejidos suelen someterse a procesos de disociación mecánica y/o enzimática que permiten separar las células sin dañar su integridad estructural ni la calidad del ARN. Durante este procedimiento, es muy importante priroziar la viabilidad celular y reducir al mínimo el estrés o la degradación del material genético, ya que el éxito del scRNA-seq depende casi totalmente de la calidad inicial de la muestra.
+   Consiste en obtener una suspensión de células individuales viables a partir de un tejido o cultivo celular. Para conseguirlo, los tejidos suelen someterse a procesos de disociación mecánica y/o enzimática que permiten separar las células sin dañar su integridad estructural ni la calidad del ARN. Durante este procedimiento, es muy importante priorizar la viabilidad celular y reducir al mínimo el estrés o la degradación del material genético, ya que el éxito del scRNA-seq depende casi totalmente de la calidad inicial de la muestra.
 
    1.2 **Aislamiento de células individuales**
    
@@ -42,7 +42,7 @@ Comienza una vez que se han generado los datos de secuenciación, se busca trans
 
    2.1 **Preprocesamiento**
 
-   El análisis computacional comienza con el procesamiento inicial de las lecturas que se generan a partir de la secuenciación. Este primer paso abarca el demultiplexado de las muestras, la corrección de posibles errores en los códigos de barras, el filtrado de lecturas de baja calidad y el alineamiento o pseudoalineamiento con un genoma o transcriptoma de referencia. Herramientas como *Cell Ranger* se encargan de automatizar gran parte de este proceso. Gracias al uso de los UMIs, se lleva a cabo el conteo de moléculas, lo que da lugar a una matriz de expresión génica donde las filas representan genes, las columnas son células individuales y los valores indican el número de transcritos detectados. Estos datos suelen mostrar una distribución muy dispersa y una alta proporción de ceros.
+   El análisis computacional inicia con el procesamiento de las lecturas que se generaron a partir de la secuenciación. Este primer paso abarca la clasificación de las muestras, la corrección de posibles errores en los códigos de barras, el filtrado de lecturas de baja calidad y el alineamiento o pseudoalineamiento con un genoma o transcriptoma de referencia. Herramientas como *Cell Ranger* se encargan de automatizar gran parte de este proceso. Gracias al uso de los UMIs, se lleva a cabo el conteo de moléculas, lo que da lugar a una matriz de expresión génica donde las filas representan genes, las columnas son células individuales y los valores indican el número de transcritos detectados. Estos datos suelen mostrar una distribución muy dispersa y una alta proporción de ceros.
 
    2.2 **Control de calidad**
 
@@ -75,7 +75,7 @@ Comienza una vez que se han generado los datos de secuenciación, se busca trans
 
 >En resumen, la fase experimental establece la calidad y el tipo de información disponible, mientras que la fase computacional se ocupa de cómo se analiza e interpreta dicha información.
 
-## 🔎 3. Aplicaciones, ventajas y desventajas
+## 🔎 Aplicaciones, ventajas y desventajas
 
 La scRNA-seq permite abordar preguntas biológicas que requieren una resolución detallada, aunque también implica desafíos tanto técnicos como analíticos. En la tabla siguiente se resumen sus principales aplicaciones, ventajas y limitaciones.
 
@@ -86,13 +86,27 @@ La scRNA-seq permite abordar preguntas biológicas que requieren una resolución
 | Análisis de diferenciación y desarrollo | Estudio de heterogeneidad biológica | Alta proporción de ceros (*dropouts*) |
 | Análisis de interacción célula–célula | Alto rendimiento | Posibles sesgos técnicos y efectos de lote |
 
-## 📦 4. Paquetes para análisis de scRNA-seq en R
+## 📦 Paquetes para análisis de datos de scRNA-seq
 
-Para realizar un análisis de scRNA-seq en R la elección de las librerías es fundamental. Existen varias herramientas, sin embargo en este tutorial abordaremos las siguientes dos debido a que ambas permiten hacer todo el flujo, desde el control de calidad hasta la identificación de tipos celulares.
+Para analizar datos de scRNA-seq, existen varias herramientas dependiendo del lenguaje de programación que se desee utilizar: R o Python. 
 
-- [**Seurat**](https://satijalab.org/seurat/): Es la más utilizada ya que agrupa todas las herramientas necesarias para procesar y visualizar los datos en un solo lugar. Utiliza un objeto `Seurat` que organiza los datos de conteo, los metadatos y el análisis dimensional. Es excelente gracias a su amplia documentación y versatilidad.
+Aquí se presentan tres de  los paquetes líderes en la industria:
+
+### Ecosistema en R
+
+R continúa siendo el referente principal debido a la vasta cantidad de paquetes estadísticos que ofrece.
+
+- [**Seurat**](https://satijalab.org/seurat/): Es la más utilizada ya que agrupa todas las herramientas necesarias para procesar y visualizar los datos en un solo lugar. Es excelente gracias a su amplia documentación y versatilidad. Usa un objeto `Seurat`.
 
 - [**SingleCellExperiment (Bioconductor)**](https://www.bioconductor.org/about/): Es un conjunto de librerías especializadas y rigurosas que se pueden combinar libremente para realizar análisis estadísticos más personalizados y profundos. Utiliza una estructura común llamada `SingleCellExperiment` (SCE).
+
+### Ecosistema en Python
+
+Python ha ganado mucha popularidad, especialmente para trabajar con grandes volúmenes de datos, gracias a su gran eficiencia en el uso de memoria.
+
+- [**Scanpy**](https://scanpy.readthedocs.io/en/stable/): Es una librería que resalta por su gran escalabilidad, capaz de procesar millones de células rápidamente. Es la opción preferida en entornos de ciencia de datos por su integración con algoritmos de aprendizaje automático. Emplea la estructura `AnnData`.
+
+
 
 ## 💻 4. Análisis de datos de scRNA-seq con Seurat en RStudio
 
