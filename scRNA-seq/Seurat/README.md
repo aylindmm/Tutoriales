@@ -14,7 +14,7 @@ Los datos que se utilizarán provienen del conjunto [*PBMC*](https://cf.10xgenom
 
 ### 1.1 Antes de empezar
 
-Se requiere descargar el archivo del dataset y descomprimirlo.
+Se requiere descargar el archivo del *dataset* y descomprimirlo.
 
 >Tip: Se sugiere crear un proyecto específico y organizar los archivos en una carpeta bien estructurada (por ejemplo, una carpeta llamada “scRNA-seq_ej1”) ya que ayuda a mantener la reproducibilidad y el orden.
 
