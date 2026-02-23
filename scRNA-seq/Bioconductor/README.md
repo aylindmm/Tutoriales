@@ -1,10 +1,10 @@
 # 💻 Análisis de datos de scRNA-seq con Bioconductor en RStudio
 
-Ahora, se llevará a cabo otro ejercicio práctico centrándose únicamente en las etapas de **preprocesamiento y exploración inicial de datos** de scRNA-seq utilizando herramientas del proyecto **Bioconductor** en el entorno de **RStudio**. 
+Ahora, se llevará a cabo otro ejercicio práctico centrándose únicamente en las etapas de preprocesamiento y exploración inicial de datos de scRNA-seq utilizando las herramientas del proyecto **Bioconductor** en el entorno de **RStudio**. 
 
-Al igual que el ejercicio anterior, esta guía es una adaptación educativa del material original [*Single Cell RNA-seq Analysis with Bioconductor*](https://www.singlecellcourse.org/introduction-to-rbioconductor.html)*, realizado por Alexander Predeus, Hugo Tavares, Vladimir Kiselev, y colaboradores asociados con el Instituto Sanger y la Universidad de Cambridge. El contenido ha sido ajustado con fines didácticos para facilitar la comprensión de este tipo de análisis bioinformático para estudiantes principiantes.
+Al igual que el ejercicio anterior, esta guía es una adaptación educativa del material original [*Single Cell RNA-seq Analysis with Bioconductor*](https://www.singlecellcourse.org/introduction-to-rbioconductor.html), realizado por Alexander Predeus, Hugo Tavares, Vladimir Kiselev, y colaboradores asociados con el Instituto Sanger y la Universidad de Cambridge. El contenido ha sido ajustado con fines didácticos para facilitar la comprensión de este tipo de análisis bioinformático para estudiantes principiantes.
 
-Es esencial aclarar que este ejercicio no abarca todo el flujo de trabajo, ya que su propósito es entender cómo se preparan y exploran los datos con la paquetería *Bionconductor*.
+Es esencial aclarar que este ejercicio no abarca todo el flujo de trabajo, ya que su propósito es entender cómo se preparan y exploran los datos con la paquetería Bioconductor.
 
 ###  ¿Qué datos se van a estudiar?
 
@@ -80,7 +80,7 @@ Se crean dos objetos en el *Environment*:
 
 ### 1.3 Crear el objetivo `SingleCellExperiment`
 
-El siguiente paso es crear el objeto estándar de *Bioconductor* `SingleCellExperiment`, en donde se almacena en un solo lugar las matrices de conteo, los metadatos de las células (columnas) y los metadatos de los genes (filas). Esta estructura garantiza que cada columna de la matriz de expresión esté correctamente asociada con su información descriptiva. Además, permite almacenar múltiples versiones de los datos (por ejemplo, conteos crudos y datos transformados).
+El siguiente paso es crear el objeto estándar de Bioconductor `SingleCellExperiment`, en donde se almacena en un solo lugar las matrices de conteo, los metadatos de las células (columnas) y los metadatos de los genes (filas). Esta estructura garantiza que cada columna de la matriz de expresión esté correctamente asociada con su información descriptiva. Además, permite almacenar múltiples versiones de los datos (por ejemplo, conteos crudos y datos transformados).
 
 ```r
 tung <- SingleCellExperiment(
@@ -106,9 +106,9 @@ tung
 
 Aparece un resumen que muestra:
 - Clase del objeto: `SingleCellExperiment`.
-- Dimensiones: 19,027 genes (filas) y 864 células (columnas).
+- Dimensiones: 19 027 genes (filas) y 864 células (columnas).
 - assays(1): counts, contiene una sola matriz de expresión llamada *counts*.
-- rownames(19027): identificadores de los genes (IDs Ensembl como ENSG...).
+- rownames(19027): identificadores de los genes (IDs de Ensembl como ENSG...).
 - colnames(864): cada columna representa una célula individual. Los nombres codifican individuo, réplica y pozo.
 - colData names(5): hay 5 variables asociadas a cada célula: individuo, réplica, pozo, lote y id.
 - metadata(0): no hay metadatos adicionales.
@@ -156,11 +156,11 @@ El objeto `tung` ahora tiene dos formas diferentes de representar los datos: la 
 
 Una vez que se han importado y almacenado los datos de expresión y metadatos en el objeto `SingleCellExperiment`, es relevante explorar las características del *dataset*. La visualización inicial facilita evaluar la calidad de los datos, comprender patrones biológicos y tomar decisiones informadas para los estudios posteriores.
 
-Para crear estos gráficos se utiliza principalmente la librería `ggplot2`, complementada por funciones auxiliares específicas de *Bioconductor*, como las del paquete `scater`.
+Para crear estos gráficos se utiliza principalmente la librería `ggplot2`, complementada por funciones auxiliares específicas de Bioconductor, como las del paquete `scater`.
 
 Un gráfico `ggplot2` se construye a partir de:
 1. Un data.frame que contiene los datos a representar.
-2. Estética: asignación de las variables del data.frame a los ejes, colores, formas, etc (con la función `aes()`).
+2. Estética: asignación de las variables del data.frame a los ejes, colores, formas, etc. (con la función `aes()`).
 3. Geometrías (`geom_`) que definen el tipo de representación, por ejemplo puntos (`geom_point()`), violines (`geom_violin()`), líneas, etc.
 
 ### Ejemplos
@@ -186,7 +186,7 @@ Cada violín representa la distribución de conteos en un lote. En el eje x se e
 <img width="1233" height="708" alt="totalcounts" src="https://github.com/user-attachments/assets/e3269fd7-d727-4bf4-aaf2-494e7a104429" />
 
 
-También se puede evitar la manipulación manual de los datos utilizando la función `ggcells()` de *scater*, que se encarga de extraer automáticamente la información necesaria del objeto `SingleCellExperiment`.
+También se puede evitar la manipulación manual de los datos utilizando la función `ggcells()` de `scater`, que se encarga de extraer automáticamente la información necesaria del objeto `SingleCellExperiment`.
 
 ```r
 ggcells(tung, aes(x = batch, y = total_counts)) + 
@@ -194,7 +194,7 @@ ggcells(tung, aes(x = batch, y = total_counts)) +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
 ```
 
-Si deseas visualizar la expresión de un gen en específico entre condiciones o grupos. Con `scater` y `ggcells()` se puede realizar especificando qué matriz de expresión usar (por ejemplo *logcounts*):
+Si deseas visualizar la expresión de un gen en específico entre condiciones o grupos. Con `scater` y `ggcells()` se puede realizar especificando qué matriz de expresión usar (por ejemplo *logcounts*).
 
 ```r
 ggcells(tung, aes(x = batch, y = ENSG00000198938), exprs_values = "logcounts") + 
