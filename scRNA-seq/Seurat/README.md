@@ -1,20 +1,20 @@
 # 💻 Análisis de datos de scRNA-seq con Seurat en RStudio
 
-A continuación, se llevará a cabo un ejercicio práctico para aprender a realizar un **análisis completo** de un conjunto de datos reales de células individuales usando el paquete **Seurat** en el entorno de **RStudio**. 
-
-Más allá de simplemente aprender a ejecutar comandos en R, el *objetivo principal* es que comprendan la lógica biológica y computacional que hay detrás de cada paso, y que sean capaces de interpretar de manera crítica los resultados que obtienen.
+A continuación, se llevará a cabo un ejercicio práctico para aprender a realizar un análisis completo de un conjunto de datos de células individuales usando el paquete **Seurat** en el entorno de **RStudio**. 
 
 Esta guía es una adaptación educativa del tutorial oficial de [*Seurat Guided Clustering Tutorial*](https://satijalab.org/seurat/articles/pbmc3k_tutorial), desarrollado por Rahul Satija y colaboradores. El contenido ha sido ajustado con fines didácticos para facilitar la comprensión de este tipo de análisis bioinformático para estudiantes principiantes.
 
+Más allá de simplemente aprender a ejecutar comandos en R, el objetivo principal es que se comprenda la lógica biológica y computacional que hay detrás de cada paso, y que sean capaces de interpretar de forma crítica los resultados que se obtienen.
+
 ###  ¿Qué datos se van a estudiar?
 
-Los datos que se utilizarán provienen del conjunto [PBMCs](https://cf.10xgenomics.com/samples/cell/pbmc3k/pbmc3k_filtered_gene_bc_matrices.tar.gz) que incluye 2 700 células mononucleares de sangre periférica humana secuenciadas utilizando la tecnología de 10x Genomics. 
+Los datos que se utilizarán provienen del conjunto [*PBMC*](https://cf.10xgenomics.com/samples/cell/pbmc3k/pbmc3k_filtered_gene_bc_matrices.tar.gz) que incluye 2 700 células mononucleares de sangre periférica humana secuenciadas utilizando la tecnología de 10x Genomics. 
 
 ## 1. Preparación del entorno y carga del conjunto de datos *PBMC*
 
 ### 1.1 Antes de empezar
 
-Se requiere descargar el archivo del *dataset* y descomprimirlo.
+Se requiere descargar el archivo del dataset y descomprimirlo.
 
 >Tip: Se sugiere crear un proyecto específico y organizar los archivos en una carpeta bien estructurada (por ejemplo, una carpeta llamada “scRNA-seq_ej1”) ya que ayuda a mantener la reproducibilidad y el orden.
 
@@ -40,7 +40,7 @@ library(patchwork)
 
 ### 1.2 Leer los datos desde 10x Genomics
 
-Para trabajar con los datos en el entorno de R, primero necesitas leer los archivos que generó 10x Genomics. Seurat tiene una función llamada `Read10X` que se encarga de leer automáticamente los archivos que contienen la matriz de conteos, los nombres de los genes y los identificadores de las células, y los combina en una sola matriz manipulable en R.
+Para trabajar con los datos en el entorno de R, primero se requiere leer los archivos que generó 10x Genomics. Seurat tiene una función llamada `Read10X` que se encarga de leer automáticamente los archivos que contienen la matriz de conteos, los nombres de los genes y los identificadores de las células, y los combina en una sola matriz manipulable en R.
 
 ```r
 pbmc.data <- Read10X(data.dir = "ruta/a/tus/datos/")
@@ -50,7 +50,7 @@ pbmc.data <- Read10X(data.dir = "ruta/a/tus/datos/")
 
 El objeto resultante `pbmc.data` se guarda en el *Environment*.
 
-Se carga la **matriz de conteos cruda**, en donde:
+Se carga la matriz de conteos cruda, en donde:
 - Filas = genes (32 738).
 - Columnas = células (2 700).
 
@@ -70,7 +70,7 @@ pbmc <- CreateSeuratObject(counts = pbmc.data, project = "pbmc3k", min.cells = 3
 
 El objeto Seurat resultante `pbmc` se almacena en el *Environment*. 
 
-Se filtra la **matriz de conteos cruda**, y ahora se cuenta con 13 714 genes y 2 700 células.
+Se filtra la matriz de conteos cruda, y ahora se cuenta con 13 714 genes y 2 700 células.
 
 <img width="921" height="547" alt="image" src="https://github.com/user-attachments/assets/87fab070-524c-4c31-9913-fb814c0f1e40" />
 
@@ -119,14 +119,14 @@ Cómo interpretar las gráficas:
 
 Una vez evaluadas las métricas de calidad y visualizadas sus distribuciones, el siguiente paso es eliminar aquellas células que no cumplen con los criterios mínimos para un análisis confiable. Este proceso, conocido como **filtrado**, tiene como objetivo conservar solo las células que presentan perfiles de expresión representativos. Se lleva a cabo utilizando la función `subset` seleccionando únicamente las células que cumplen con los criterios establecidos.
 
-En este ejercicio se eliminan células:
-- Que expresan menos de 200 genes, ya que suelen ser células muertas, fragmentos celulares o resultado de errores técnicos.
-- Que expresan más de 2,500 genes, ya que podrían ser dobletes (dos células que se capturaron como una sola durante la secuenciación).
-- Cuyo porcentaje de genes mitocondriales supera el 5%, ya que un valor alto suele estar asociado con estrés celular o degradación del ARN.
-
 ```r
 pbmc <- subset(pbmc, subset = nFeature_RNA > 200 & nFeature_RNA < 2500 & percent.mt < 5)
 ```
+
+En este ejercicio se eliminarán las  células:
+- Que expresan menos de 200 genes, ya que suelen ser células muertas, fragmentos celulares o resultado de errores técnicos.
+- Que expresan más de 2,500 genes, ya que podrían ser dobletes (dos células que se capturaron como una sola durante la secuenciación).
+- Cuyo porcentaje de genes mitocondriales supera el 5%, ya que un valor alto suele estar asociado con estrés celular o degradación del ARN.
 
 **Resultado esperado:**
 
@@ -191,7 +191,7 @@ Los resultados se almacenan en `all.genes` en el *Environment*.
 
 
 ## 6. Análisis de componentes principales (PCA)
-El análisis de componentes principales (*PCA*, por sus siglas en inglés) es una técnica estadística que ayuda a simplificar la complejidad de los datos puesto que convierte la expresión de muchos genes en un conjunto más pequeño de componentes que logran capturar la mayor parte de la variación entre las células.
+El análisis de componentes principales (PCA, *Principal Component Analysis*) es una técnica estadística que ayuda a simplificar la complejidad de los datos puesto que convierte la expresión de muchos genes en un conjunto más pequeño de componentes que logran capturar la mayor parte de la variación entre las células.
 
 Para realizar el PCA, se utiliza la función `RunPCA`, que requiere como entrada los datos escalados. 
 
@@ -243,6 +243,7 @@ Se observa:
 
 - Las filas son genes con mayor relevancia en PC1.
 - Las columnas son las 500 células seleccionadas.
+- El color indica el nivel de expresión (amarillo = alta expresión, morado = baja expresión).
 - Las células están ordenadas según su valor en PC1.
 
 <img width="1043" height="708" alt="PCA3" src="https://github.com/user-attachments/assets/d8bd23da-e2fa-40fb-bf46-d095012e8433" />
@@ -269,7 +270,7 @@ En este ejemplo, se observa una inclinación o "codo" alrededor de los component
 
 <img width="1043" height="708" alt="Elbowplot" src="https://github.com/user-attachments/assets/27b4c056-7fdf-4a18-a3bd-e5ecefe3e2aa" />
 
-## 7. Agrupar las células (clustering)
+## 7. Agrupar las células (*clustering*)
 Antes de agrupar las células, es necesario identificar qué células son similares entre sí. Esta similitud se determina por la distancia entre las células en el espacio de los componentes principales, ya que estos componentes capturan la información más relevante sobre la expresión génica. Para lograr esto, Seurat crea un grafo de vecinos más cercanos, donde cada célula se conecta con aquellas que tienen perfiles de expresión similares. Este grafo es la base para el posterior agrupamiento de las células en clústeres. 
 
 La función `FindNeighbors` se encarga de calcular estas relaciones utilizando los componentes principales seleccionados previamente.
@@ -285,7 +286,9 @@ En este comando, el argumento `dims = 1:10` indica que se utilizarán los primer
 
 En la consola se muestran mensajes que indican que el grafo está siendo construido correctamente.
 
-Ahora sí, sigue el **clustering* que es una técnica que ayuda a identificar grupos de células que tienen perfiles de expresión similares, lo que generalmente se relaciona con diferentes tipos o estados celulares. En Seurat, este proceso se lleva a cabo a través de algoritmos de detección de comunidades, como el método de Louvain cuyo objetivo es agrupar nodos de tal manera que los miembros de un mismo grupo estén fuertemente conectados entre sí, mientras que las conexiones entre diferentes grupos sean mínimas. 
+
+
+Ahora sí, sigue el *clustering* que es una técnica que ayuda a identificar grupos de células que tienen perfiles de expresión similares, lo que generalmente se relaciona con diferentes tipos o estados celulares. En Seurat, este proceso se lleva a cabo a través de algoritmos de detección de comunidades, como el método de Louvain cuyo objetivo es agrupar nodos de tal manera que los miembros de un mismo grupo estén fuertemente conectados entre sí, mientras que las conexiones entre diferentes grupos sean mínimas. 
 
 Para realizar el agrupamiento de células, se utiliza la función `FindClusters`, que asigna a cada célula una etiqueta de clúster. Un aspecto clave de esta función es el parámetro `resolution`, que determina el nivel de detalle en el agrupamiento. Si se utilizan valores bajos, se obtienen pocos clústeres grandes, mientras que valores más altos generan un mayor número de clústeres más pequeños. Los clústeres se pueden encontrar utilizando la función `Idents()`.
 
@@ -295,7 +298,7 @@ pbmc <- FindClusters(pbmc, resolution = 0.5)
 
 **Resultado esperado:**
 
-Se muestra información en la consola que detalla el análisis de 2638 nodos (células) conectados por 95,927 aristas (relaciones de vecindad). Después de ejecutar el algoritmo, se logró una modularidad máxima de 0.8723, lo que indica una separación clara y bien definida entre los grupos. El algoritmo identificó 9 comunidades, es decir, 9 clústeres celulares que comparten perfiles de expresión génica similares.
+Se muestra información en la consola que detalla el análisis de 2 638 nodos (células) conectados por 95 927 aristas (relaciones de vecindad). Después de ejecutar el algoritmo, se logró una modularidad máxima de 0.8723, lo que indica una separación clara y bien definida entre los grupos. El algoritmo identificó 9 comunidades, es decir, 9 clústeres celulares que comparten perfiles de expresión génica similares.
 
 <img width="921" height="318" alt="image" src="https://github.com/user-attachments/assets/874b950d-f278-4edc-b83b-aa4df5878301" />
 
@@ -313,7 +316,7 @@ Cada nombre largo (por ejemplo, AAACATACAACCAC-1) es el *barcode* de una célula
 ## 8. Reducción dimensional no lineal (UMAP/t-SNE)
 Existen métodos adicionales de reducción de dimensionalidad que son algoritmos diseñados específicamente para mostrar las relaciones complejas entre las células en un mapa visual de dos dimensiones. Uno de los métodos más populares es UMAP (*Uniform Manifold Approximation and Projection*), que se basa en la topología (el estudio de las formas geométricas) para crear un mapa que logra mantener tanto la estructura local como la global de los datos, y otro es tSNE (*t-Distributed Stochastic Neighbor Embedding*) que se basa en probabilidades y estadística, centrándose exclusivamente en mantener juntos a los puntos que son casi idénticos.
 
-Para ejecutar UMAP se utiliza la función `RunUMAP`, la cual emplea los mismos componentes principales usados para el *clustering*.
+Para ejecutar un UMAP se utiliza la función `RunUMAP`, la cual emplea los mismos componentes principales usados para el *clustering*.
 
 ```r
 pbmc <- RunUMAP(pbmc, dims = 1:10)
@@ -339,7 +342,7 @@ Los puntos se colorean según el clúster al que pertenecen.
 <img width="1047" height="708" alt="umap" src="https://github.com/user-attachments/assets/164d9ff6-5cb3-47e8-8c2b-84d7d280146e" />
 
 ## 9. Identificación de genes marcadores de cada cluster
-Una vez que tenemos los clústeres, el siguiente paso es entender qué genes definen a cada grupo. Para ello, es necesario identificar aquellos genes que se expresen de manera preferencial en cada grupo. Estos genes, conocidos como **genes marcadores**, permiten distinguir entre distintos tipos celulares. 
+Una vez que se tienen los clústeres, el siguiente paso es entender qué genes definen a cada grupo. Para ello, es necesario identificar aquellos genes que se expresen de manera preferencial en cada grupo. Estos genes, conocidos como genes marcadores, permiten distinguir entre los distintos tipos celulares. 
 
 Seurat identifica estos genes comparando la expresión génica de un clúster contra todos los demás,  pero también puede comparar grupos de clústeres entre sí. Este análisis se realiza mediante la función `FindMarkers`.
 
@@ -365,7 +368,7 @@ En resumen, los valores p muy bajos y los log2FC positivos sugieren que estos ge
 
 
 
-En grandes conjuntos de datos, calcular genes marcadores puede resultar bastante costoso computacionalmente. Para hacer este proceso más eficiente, se puede integrar el paquete **Presto**, que ofrece versiones muy optimizadas de pruebas estadísticas. Una vez que el paquete Presto está instalado y cargado en el entorno de R, Seurat lo utiliza automáticamente para acelerar los cálculos de expresión diferencial.
+En grandes conjuntos de datos, calcular genes marcadores puede resultar bastante costoso computacionalmente. Para hacer este proceso más eficiente, se puede integrar el paquete **Presto**, que ofrece versiones muy optimizadas de pruebas estadísticas. Una vez que el paquete Presto está instalado y cargado en el entorno de R, Seurat lo utiliza automáticamente para acelerar los cálculos de expresión diferencial (DE, *Differential expression*).
 
 ```r
 install.packages('devtools')
@@ -426,9 +429,9 @@ Un mapa de calor donde cada fila representa un gen específico y cada columna se
 <img width="1079" height="683" alt="heatmap" src="https://github.com/user-attachments/assets/322f48dc-7080-4dc0-99bf-a1406378349e" />
 
 ## 10. Anotación de los clústeres con identidades celulares
-Finalmente, es posible asignar un significado biológico a cada clúster. Este proceso, conocido como **anotación**, se basa en el conocimiento previo de genes marcadores característicos de distintos tipos celulares. Por ejemplo, la expresión de genes como *GNLY* y *NKG7* suele relacionarse con células *Natural Killer*, mientras que el gen *MS4A1* es un marcador representativo de los linfocitos B.
+Finalmente, es posible asignar un significado biológico a cada clúster. Este proceso, conocido como anotación, se basa en el conocimiento previo de genes marcadores característicos de distintos tipos celulares. Por ejemplo, la expresión de genes como *GNLY* y *NKG7* suele relacionarse con células *Natural Killer*, mientras que el gen *MS4A1* es un marcador representativo de los linfocitos B.
 
-Al definir la identidad de cada clúster, se puede renombrarlos con la función `RenameIdents`.
+Al definir la identidad de cada clúster, es posible renombrarlos con la función `RenameIdents`.
 
 ```r
 new.cluster.ids <- c("Naive CD4 T", "CD14+ Mono", "Memory CD4 T", "B", "CD8 T", "FCGR3A+ Mono",
