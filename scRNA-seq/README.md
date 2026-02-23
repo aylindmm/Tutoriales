@@ -104,13 +104,13 @@ R continúa siendo el referente principal debido a la vasta cantidad de paquetes
 
 Python ha ganado mucha popularidad, especialmente para trabajar con grandes volúmenes de datos, gracias a su gran eficiencia en el uso de memoria.
 
-- [**Scanpy**](https://scanpy.readthedocs.io/en/stable/): Es una librería que resalta por su gran escalabilidad, capaz de procesar millones de células rápidamente. Es la opción preferida en entornos de ciencia de datos por su integración con algoritmos de aprendizaje automático. Emplea la estructura `AnnData`.
+- [**Scanpy**](https://scanpy.readthedocs.io/en/stable/): Es una librería que resalta por su gran escalabilidad, siendo capaz de procesar millones de células rápidamente. Es la opción preferida en entornos de ciencia de datos por su integración con algoritmos de aprendizaje automático. Emplea la estructura `AnnData`.
 
-La decisión entre usar R o Python para el análisis de scRNA-seq depende del equilibrio entre rigor estadístico y capacidad de cómputo. Ambos ecosistemas son complementarios y definen el estándar actual para desglosar la complejidad celular con alta precisión.
+La decisión entre usar R o Python para el análisis de scRNA-seq depende del equilibrio entre profundidad analítica y capacidad de cómputo. Ambos ecosistemas son complementarios y definen el estándar actual para desglosar la complejidad celular con alta precisión.
 
 ## ✍️ Conclusión
 
-La scRNA-seq integra una fase experimental de alta precisión con un análisis computacional avanzado, lo que ayuda a revelar la heterogeneidad celular que los métodos tradicionales suelen pasar por alto. Gracias a la potencia de los algoritmos en R y Python, esta tecnología transforma datos crudos en mapas biológicos detallados, lo que la convierte en una herramienta indispensable para afrontar los retos que la ciencia enfrenta actualmente.
+La scRNA-seq es una tecnología que facilita el estudio de la expresión de genes en cada célula por separado, ofreciendo una visión más clara y detallada de los tejidos. Con esta herramienta, se pueden identificar subpoblaciones celulares y tener una mejor comprensión de procesos biológicos complejos. Ha sido especialmente útil en campos como el desarrollo, la inmunología y el cáncer, lo que la convierte en una herramienta esencial para afrontar los retos que la ciencia enfrenta actualmente.
 
 ## 📖 Bibliografía
 
