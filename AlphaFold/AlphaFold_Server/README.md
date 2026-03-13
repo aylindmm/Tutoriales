@@ -61,35 +61,17 @@ AlphaFold 3 permite predecir complejos macromoleculares con alta precisión.
 
 ## 📊 Paso 3: Análisis de Resultados (Métricas de Confianza)
 
-Una vez que AlphaFold termina, no basta con ver la estructura; debemos saber si la predicción es científicamente válida. AlphaFold nos da dos métricas para esto:
+Una vez que AlphaFold termina, nos dara dos métricas para esto, incluida la estructura 3D:
 
 ### 1. pLDDT (Confianza Local)
 Mide la confianza en la estructura de cada residuo individual (0 a 100).
 * **Azul oscuro (>90):** Muy alta confianza. Equivalente a un experimento cristalográfico.
 * **Azul claro (70-90):** Confianza alta. El "backbone" es fiable.
-* **Amarillo/Naranja (<50):** Muy baja confianza. A menudo indica regiones **intrínsecamente desordenadas**. *Nota: PRC2 tiene varias regiones desordenadas funcionales, así que es normal ver naranja en los extremos.*
+* **Amarillo/Naranja (<50):** Muy baja confianza. A menudo indica regiones **intrínsecamente desordenadas**. 
 
 ### 2. PAE (Predicted Aligned Error - Confianza Global)
 Esta es la métrica más importante para complejos. Es una matriz 2D que nos dice: *"Si alineo la proteína A, ¿qué tanto error espero en la posición de la proteína B?"*.
-* **Interpretación:** Buscamos cuadros **azules oscuros** en la intersección entre dos proteínas diferentes.
-* **En PRC2:** Deberías ver regiones azules fuertes entre EZH2 y EED, confirmando que AlphaFold predice una interacción rígida y específica entre ellas. Si la matriz es verde/amarilla entre las proteínas, AlphaFold no está seguro de que interactúen.
+* **Interpretación:** Buscamos cuadros **verdes oscuros** en la intersección entre dos proteínas diferentes.
+<img width="1230" height="756" alt="Captura de pantalla 2026-01-28 a la(s) 10 59 58 a m" src="https://github.com/user-attachments/assets/bda75aa0-f6af-462c-874e-9f7d07b350ec" />
 
 ---
-
-## Paso 4 (Ópcional): Visualización
-AlphaFold Server tiene un visor integrado, pero para imágenes más detalladas podemos descargar los resultados.
-
-1. Haz clic en **"Download"** (descargarás un archivo `.zip`).
-2. Descomprime el archivo y busca el modelo con el mejor ranking (generalmente `seed_000` o `rank_0`).
-3. Abre el archivo `.cif` (o `.pdb`) en **PyMOL**.
-
-**Visualización:**
-Intenta colorear cada cadena de un color distinto en PyMOL para identificar cómo EED "abraza" a EZH2, regulando su actividad metiltransferasa.
-
-```python
-# Comandos útiles en PyMOL
-color blue, chain A  # EZH2
-color red, chain B   # EED
-color green, chain C # SUZ12
-show surface         # Para ver el complejo como un volumen
-```
