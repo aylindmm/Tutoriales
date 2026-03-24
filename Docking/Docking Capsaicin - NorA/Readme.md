@@ -236,7 +236,7 @@ a. **Collection of files to collapse into single dataset**: Docking SD-File <img
 
 b. **Keep one header line**: Yes
 
-c. **Append File name**: No
+c. **Append File name**: Yes
 
 3.1. Al finalizar el proceso renombra el archivo generado como `Collapse Collection-Docking Capsaicin` 
 
