@@ -63,14 +63,16 @@ Para cargar la estructura inicial:
 1. **Crea un nuevo historial en Galaxy**
    1. En la esquina superior derecha de Galaxy, haz clic en *Histories*.
    2. Selecciona *Create New History* ✚ .
-![newhistory](/DinamicaMolecular/Imágenes/newhistory.png)
+
+<img width="1749" height="831" alt="newhistory" src="https://github.com/user-attachments/assets/20d90099-5f5d-43b2-bc3b-4424fe48655e" />
+
    3. Ponle un nombre descriptivo, por ejemplo: Simulación_1AKI. 
    Esto te ayudará a mantener organizados todos los archivos de esta simulación.
 
-2. **Descargar el archivo PDB**
-   1. Debes ir a la página de PDB y buscar el ID 1AKI.
-   2. Desgarga el archivo "Legacy PDB" y súbelo a una historia nueva de Galaxy.
-3. **Limpiar el archivo PDB (eliminar átomos que no son de la proteína)**   
+3. **Descargar el archivo PDB**
+   1. Debes ir a la página de PDB y buscar el ID: 1AKI.
+   2. Desgarga el archivo *Legacy PDB* y súbelo a una historia nueva de Galaxy.
+4. **Limpiar el archivo PDB (eliminar átomos que no son de la proteína)**   
    1. Busca la herramienta **Search in textfiles (grep)** en Galaxy.
    2. En el campo *Select lines from*, selecciona el archivo PDB que acabas de descargar (1AKI).
    3. Configura los siguientes parámetros:
@@ -83,11 +85,11 @@ Las líneas de un archivo PDB que comienzan con *HETATM* describen átomos que n
 
 <pre><span style="background-color:yellow">Lisozima</span>
 En este tutorial analizaremos la lisozima de la clara de huevo de gallina, una enzima ampliamente estudiada por su capacidad para degradar los polisacáridos presentes en las paredes celulares de numerosas bacterias.
-Se trata de una proteína globular pequeña, compuesta por 129 residuos, caracterizada por su gran estabilidad, cualidades que la convierten en un modelo ideal para nuestros objetivos de estudio. <!-- Falta añadir imagen -->
+Se trata de una proteína globular pequeña, compuesta por 129 residuos, caracterizada por su gran estabilidad, cualidades que la convierten en un modelo ideal para nuestros objetivos de estudio.
 </pre>
 
-![1aki](/DinamicaMolecular/Imágenes/1aki.jpeg)
-    
+![1aki](https://github.com/user-attachments/assets/22a83e0b-7915-4fc2-ad00-89db903b41ff)
+
 ## 🧩 Configuración
 En este paso se utiliza la herramienta **GROMACS initial setup**, que toma como entrada un archivo PDB y genera tres archivos esenciales para la simulación de MD: 
 
@@ -324,6 +326,7 @@ Una vez completada la simulación y obtenidos los archivos de salida, podemos vi
 **Archivos necesarios**
 - Archivo de estructura: `.gro`
 - Archivo de trayectoria: `.xtc`
+
 Estos dos archivos permiten reproducir la dinámica del sistema.
 
 
