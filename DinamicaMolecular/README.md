@@ -53,9 +53,9 @@ La trayectoria es un archivo binario que almacena las coordenadas atómicas del 
 ## 📁 Obtención de datos
 Para llevar a cabo las simulaciones, es fundamental disponer de los datos adecuados. Primero, se requiere la estructura tridimensional de la proteína, normalmente obtenida de bases de datos como el [PDB](https://www.rcsb.org/) (Protein Data Bank). Esta estructura sirve como punto de partida para la simulación, debe estar libre de disolvente y cualquier otro átomo no proteico. El disolvente se volverá a añadir más adelante.
 
-<pre><span style="background-color:yellow">Protein Data Bank</span>
-El PDB almacena las coordenadas atómicas de biomoléculas y ofrece una forma estandarizada de presentar la información estructural obtenida a partir de estudios de difracción de rayos X y resonancia magnética nuclear (RMN). Cada una de las estructuras incluidas en esta base de datos se identifica mediante un código único de cuatro letras. Por ejemplo, el archivo PDB que utilizaremos en este tutorial corresponde al código <a href="https://www.rcsb.org/structure/1AKI" target="_blank">1AKI</a>
-</pre>
+> 🟡 **Protein Data Bank:**
+ El PDB almacena las coordenadas atómicas de biomoléculas y ofrece una forma estandarizada de presentar la información estructural obtenida a partir de estudios de difracción de rayos X y resonancia magnética nuclear (RMN). Cada una de las estructuras incluidas en esta base de datos se identifica mediante un código único de cuatro letras. Por ejemplo, el archivo PDB que utilizaremos en este tutorial corresponde al código <a href="https://www.rcsb.org/structure/1AKI" target="_blank">1AKI</a>
+
 
 Durante y después de la simulación, se generan archivos de trayectoria y energía que contienen información detallada sobre el movimiento de los átomos y las interacciones en el sistema. Estos datos permiten analizar cómo se comporta la proteína en su entorno, identificar cambios conformacionales y estudiar propiedades dinámicas como la estabilidad y la flexibilidad de la molécula.
 
@@ -83,25 +83,25 @@ Para cargar la estructura inicial:
 🔍 Explicación:
 Las líneas de un archivo PDB que comienzan con *HETATM* describen átomos que no pertenecen a la cadena principal de la proteína (como iones, ligandos o moléculas de agua). Al usar la opción *Don’t Match* con la expresión regular *HETATM*, el resultado conservará únicamente las líneas correspondientes a los átomos de proteína (ATOM), eliminando las demás.
 
-<pre><span style="background-color:yellow">Lisozima</span>
+> 🟡 **Lisozima:**
 En este tutorial analizaremos la lisozima de la clara de huevo de gallina, una enzima ampliamente estudiada por su capacidad para degradar los polisacáridos presentes en las paredes celulares de numerosas bacterias.
 Se trata de una proteína globular pequeña, compuesta por 129 residuos, caracterizada por su gran estabilidad, cualidades que la convierten en un modelo ideal para nuestros objetivos de estudio.
-</pre>
+
 
 ![1aki](https://github.com/user-attachments/assets/22a83e0b-7915-4fc2-ad00-89db903b41ff)
 
 ## 🧩 Configuración
 En este paso se utiliza la herramienta **GROMACS initial setup**, que toma como entrada un archivo PDB y genera tres archivos esenciales para la simulación de MD: 
 
-<u>1. Archivo de topología (.top)</u>
+**1. Archivo de topología (.top)**
   
 Describe las propiedades químicas y físicas de la molécula, como masas, tipos de átomos, enlaces y cargas. Esta información define cómo interactúan los átomos durante la simulación. Para su generación, es necesario seleccionar un campo de fuerza y un modelo de agua compatibles. En este tutorial usaremos el campo de fuerza *OPLS/AA*, junto con el modelo de agua *SPC/E*.
 
-<u>2. Archivo de estructura (.gro)</u>
+**2. Archivo de estructura (.gro)**
    
 Contiene las coordenadas tridimensionales de los átomos en el formato nativo de GROMACS. Este formato es más eficiente que el PDB y permite centrar la proteína dentro de la caja de simulación.
 
-<u>3. Archivo de restricciones de posición (.itp)</u>
+**3. Archivo de restricciones de posición (.itp)**
 
 Especifica qué átomos permanecerán fijos durante las etapas de equilibración (NVT y NPT). Esto permite que el disolvente se acomode alrededor de la proteína sin distorsionar su estructura inicial.
 
@@ -271,10 +271,9 @@ Ejecuta la herramienta **GROMACS simulation** con los siguientes parámetros:
 
 - **Generate detailed log**: `Yes`
 
-<pre><span style="background-color:yellow">¿Por qué es importante mantener la proteína restringida durante el equilibrio NVT?</span>
+> 🟡 **¿Por qué es importante mantener la proteína restringida durante el equilibrio NVT?**
 Durante el equilibrio NVT, es importante mantener la proteína restringida para evitar movimientos o deformaciones bruscas mientras el solvente y los iones se ajustan a su entorno. En esta fase, el sistema aún no está completamente equilibrado, por lo que liberar la proteína podría provocar desplazamientos no naturales debido a fuerzas iniciales desequilibradas.
 Al aplicar restricciones de posición, la estructura principal de la proteína se mantiene estable mientras el agua y los iones alcanzan una distribución más realista y uniforme alrededor de ella.
-</pre>
 
 ## ▶️ Simulación de producción
 La simulación de producción es la etapa principal de la dinámica molecular: una vez que el sistema está minimizado y equilibrado (NVT → NPT), se ejecuta una simulación prolongada para muestrear el comportamiento dinámico de la proteína bajo condiciones termodinámicas estables. El objetivo es obtener trayectorias físicas (posiciones y velocidades a lo largo del tiempo) que permitan analizar propiedades como fluctuaciones conformacionales, interacciones ligando-proteína, estabilidad estructural, y otras magnitudes termodinámicas y cinéticas.
