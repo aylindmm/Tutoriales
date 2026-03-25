@@ -70,8 +70,13 @@ Para cargar la estructura inicial:
    Esto te ayudará a mantener organizados todos los archivos de esta simulación.
 
 3. **Descargar el archivo PDB**
-   1. Debes ir a la página de PDB y buscar el ID: 1AKI.
-   2. Desgarga el archivo *Legacy PDB* y súbelo a una historia nueva de Galaxy.
+   1. Busca la herramienta **Get PDB** en Galaxy.
+   2. Ingresa el código de acceso PDB: `1AKI`.
+   3. Ejecuta la herramienta y se decargará el archivo PDB de la proteína a tu historial.
+  
+<img width="1655" height="164" alt="PDB" src="https://github.com/user-attachments/assets/8e058514-1cfa-4118-9c28-b0d5cf5e70fb" />
+
+
 4. **Limpiar el archivo PDB (eliminar átomos que no son de la proteína)**   
    1. Busca la herramienta **Search in textfiles (grep)** en Galaxy.
    2. En el campo *Select lines from*, selecciona el archivo PDB que acabas de descargar (1AKI).
