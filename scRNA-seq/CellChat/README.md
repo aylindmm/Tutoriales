@@ -3,11 +3,7 @@
 ## 👋 Introducción
 Recientemente, el uso de **datos de transcriptómica de célula única (scRNA-seq)** ha cambiado por completo la forma en la que estudiamos los sistemas biológicos. Hoy en día no solo podemos caracterizar distintos tipos celulares dentro de un tejido, sino también explorar cómo varían entre condiciones. Sin embargo, hay una pregunta igual de importante que muchas veces queda sin responder: **¿cómo se comunican estas células entre sí?**
 
-Aquí es donde entra **CellChat**, una herramienta desarrollada en **R** que permite inferir y analizar la comunicación célula-célula a partir de datos de scRNA-seq. A grandes rasgos, CellChat utiliza información conocida sobre interacciones ligando-receptor para construir redes que representan cómo las células “envían” y “reciben” señales. Esto brinda la oportunidad de ver a las células como entidades aisladas a entenderlas como parte de un sistema dinámico e interconectado.
-
-
-Este tutorial está basado en el material original desarrollado por los autores de CellChat y disponible en su [repositorio oficial de GitHub](https://github.com/sqjin/CellChat
-). Nuestro objetivo aquí no es reemplazar ese material, sino **adaptarlo, traducirlo y explicarlo** de una manera más accesible cualquier apasionado de la bioinformática. Buscamos que comprendas **qué está pasando en cada etapa del análisis**, desde la preparación de los datos hasta su visualización, para que después puedas aplicar estos conocimientos en tus propios proyectos y no solo reproducir un flujo de trabajo.
+Aquí es donde entra **CellChat**, una herramienta desarrollada en **R** que permite inferir y analizar la comunicación célula-célula a partir de datos de scRNA-seq. 
 
 ## 🧠 ¿Qué es CellChat?
 CellChat es un **modelo computacional** que intenta **reconstruir la comunicación célula-célula** a partir de **datos de expresión génica**. Conceptualmente, se basa en que las células se comunican principalmente mediante **interacciones ligando-receptor**, donde una célula secreta una molécula (ligando) que activa un receptor en otra célula.
@@ -81,6 +77,10 @@ Mediante esta herramienta puedes llevar a cabo muchos análisis, sin embargo, es
 En resumidas cuentas, **CellChat** es una herramienta que te ayuda a ver a **las células** no como entidades aisladas, sino como **un sistema que se comunica constantemente**. Eso es justo lo que la hace tan valiosa: te permite interpretar tus datos desde una perspectiva más funcional y cercana a lo que realmente ocurre en un tejido.
 
 Pero también hay que usarla con criterio. Lo que obtienes no son interacciones reales comprobadas, sino **posibles escenarios de comunicación basados en la expresión génica**. Por eso, es un excelente punto de partida para generar ideas y preguntas interesantes.
+
+## 🤓 Hora de practicar
+
+La mejor manera de consolidar los conocimientos aprendidos es aplicándolos. Por ello, en el siguiente tutorial [*Análisis de comunicación célula-célula con CellChat en R*](https://github.com/aylindmm/Tutoriales/tree/main/scRNA-seq/CellChat/Tutorial) realizaremos un ejercicio práctico paso a paso, basado en el material original, donde podrás ejecutar cada comando, explorar las salidas y reforzar lo aprendido en este apartado.
 
 ## Bibliografía
  *Jin, S., Guerrero-Juarez, C. F., Zhang, L., Chang, I., Ramos, R., Kuan, C., Myung, P., Plikus, M. V., & Nie, Q. (2021). Inference and analysis of cell-cell communication using CellChat. Nature Communications, 12(1), 1088. https://doi.org/10.1038/s41467-021-21246-9*
