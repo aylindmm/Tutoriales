@@ -80,7 +80,7 @@ Pero también hay que usarla con criterio. Lo que obtienes no son interacciones 
 
 ## 🤓 Hora de practicar
 
-La mejor manera de consolidar los conocimientos aprendidos es aplicándolos. Por ello, en el siguiente tutorial [*Análisis de comunicación célula-célula con CellChat en R*](https://github.com/aylindmm/Tutoriales/tree/main/scRNA-seq/CellChat/Tutorial) realizaremos un ejercicio práctico paso a paso, basado en el material original, donde podrás ejecutar cada comando, explorar las salidas y reforzar lo aprendido en este apartado.
+La mejor manera de consolidar los conocimientos aprendidos es aplicándolos. Por ello, en el siguiente tutorial [*Análisis de comunicación celular con CellChat en R*](https://github.com/aylindmm/Tutoriales/tree/main/scRNA-seq/CellChat/Tutorial) realizaremos un ejercicio práctico paso a paso, basado en el material original, donde podrás ejecutar cada comando, explorar las salidas y reforzar lo aprendido en este apartado.
 
 ## Bibliografía
  *Jin, S., Guerrero-Juarez, C. F., Zhang, L., Chang, I., Ramos, R., Kuan, C., Myung, P., Plikus, M. V., & Nie, Q. (2021). Inference and analysis of cell-cell communication using CellChat. Nature Communications, 12(1), 1088. https://doi.org/10.1038/s41467-021-21246-9*

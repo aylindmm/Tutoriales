@@ -1,4 +1,4 @@
-# Análisis de comunicación célula-célula con CellChat en R
+# 💻 Análisis de comunicación celular con CellChat en R
 
 Este tutorial está basado en el material original desarrollado por los autores de CellChat y disponible en su [repositorio oficial de GitHub](https://github.com/sqjin/CellChat
 ). Nuestro objetivo aquí no es reemplazar ese material, sino **adaptarlo, traducirlo y explicarlo** de una manera más accesible cualquier apasionado de la bioinformática. Buscamos que comprendas **qué está pasando en cada etapa del análisis**, desde la preparación de los datos hasta su visualización, para que después puedas aplicar estos conocimientos en tus propios proyectos y no solo reproducir un flujo de trabajo.
