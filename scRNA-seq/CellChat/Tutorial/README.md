@@ -2,18 +2,20 @@
 
 En este tutorial aplicaremos **CellChat** paso a paso para analizar la comunicación célula-célula a partir de datos de scRNA-seq, siguiendo un flujo de trabajo completo en **R**. Aquí trabajaremos directamente con las funciones de la herramienta para **construir e interpretar redes de comunicación intercelular**.
 
-Este tutorial está basado en el material original desarrollado por los autores de CellChat y disponible en su [repositorio oficial de GitHub](https://github.com/sqjin/CellChat
-). Nuestro objetivo reemplazarlo, sino **adaptarlo, traducirlo y explicarlo** de una manera más accesible. Buscamos que comprendas **qué está pasando en cada etapa del análisis**, para que después puedas aplicar estos conocimientos en tus propios proyectos y no solo reproducir un flujo de trabajo.
+Este tutorial está basado en el material original desarrollado por los autores de CellChat y disponible en su [**repositorio oficial de GitHub**](https://github.com/sqjin/CellChat
+). Nuestro objetivo no es reemplazarlo, sino **adaptarlo, traducirlo y explicarlo** de una manera más accesible. Buscamos que comprendas **qué está pasando en cada etapa del análisis**, para que después puedas poner en práctica estos conocimientos en tus propios proyectos y no solo reproducir un flujo de trabajo.
 
 ## 🔧 Antes de empezar
 Antes de comenzar con el análisis en CellChat, es importante contar con algunos requisitos básicos para asegurar que el flujo de trabajo funcione correctamente.
 
 1. Disponer de R y un entorno de trabajo como RStudio.
 2. Contar con conocimientos básicos de R y análisis de scRNA-seq.
-3. Se requiere un objeto de scRNA-seq previamente procesado. Es vital tener la anotación de tipos celulares, puesto que CellChat utiliza estas etiquetas para inferir la comunicación entre grupos celulares.
+3. Se requiere un objeto de scRNA-seq previamente procesado. 
+
+>Es vital tener la anotación de tipos celulares, puesto que CellChat utiliza estas etiquetas para inferir la comunicación entre grupos celulares.
 
 ## ⚙️ Parte 0. Instalación de CellChat
-Para comenzar, es primordial instalar CellChat y algunas dependencias en R. Dado que CellChat no siempre está disponible directamente en CRAN, se instala desde GitHub.
+Para comenzar, es primordial instalar CellChat y algunas dependencias en R. Dado que CellChat no siempre está disponible directamente en CRAN (*Comprehensive R Archive Network*, ecosistema central de R que alberga decenas de miles de paquetes), se instala desde GitHub.
 
 Primero, asegúrate de tener instalado el paquete devtools (o remotes), que permite instalar paquetes desde GitHub:
 ```
@@ -24,14 +26,16 @@ Luego, puedes instalar CellChat con el siguiente comando:
 ```
 devtools::install_github("jinworks/CellChat")
 ```
-Durante la instalación, es posible que se instalen automáticamente varias dependencias. Si ocurre algún error, verifica que tengas actualizadas tus versiones de R y de los paquetes requeridos.
+Durante la instalación, es posible que se instalen automáticamente varias dependencias, por lo que es posible que tarde un rato.
+
+Si ocurre algún error, verifica que tengas actualizadas tus versiones de R y de los paquetes requeridos.
 
 ### 0.1  Cargar librerías
 Una vez instalado, carga CellChat junto con otros paquetes necesarios:
 
- - `patchwork`: se emplea para combinar gráficos en una sola figura.
+ - `patchwork`: se emplea para combinar gráficos ggplot en una sola figura.
  - `Cellchat`: permite usar todas sus funciones para explorar la comunicación celular en datos de scRNA-seq.
- - `stringsAsFactors = FALSE`: Evita que los strings se conviertan en factores al crear dataframes.
+ - `stringsAsFactors = FALSE`: Evitar que texto se convierta automáticamente en factor.
 
 ```
 library(CellChat)
@@ -42,7 +46,7 @@ options(stringsAsFactors = FALSE)
 
 Para este tutorial utilizaremos un conjunto de datos de scRNA-seq que ya ha sido procesado y anotado. Este *dataset* combina información sobre piel humana en 2 condiciones biológicas: LS (piel lesionada) y NL (piel normal).
 
-En el tutorial original, estos datos se proporcionan como un objeto de Seurat llamado `data_humanSkin`, el cual contiene la matriz de expresión génica y la anotación de tipos celulares, que son los 2 archivos que Cellchat necesita para trabajar.
+En el tutorial original, estos datos se proporcionan como un objeto Seurat llamado `data_humanSkin`, el cual contiene la matriz de expresión génica y la anotación de tipos celulares, que son los 2 archivos que Cellchat necesita para trabajar.
 
 ### 1.1 Cargar los datos 
 
@@ -53,22 +57,24 @@ Comenzamos cargando el objeto `data_humanSkin`en R. Para ello:
 ![alt text](image-1.png)
 3. Haz clic en **Upload**.
 ![alt text](image-2.png)
-4. Selecciona el archivo previamente descargado y haz clic en **OK**
-![alt text](image.png).
-5. Cuando lo encuentres en el panel Files, haz clic en el archivo.
+4. Selecciona el archivo previamente descargado y haz clic en **OK**.
+![alt text](image.png)
+5. Cuando lo encuentres en el panel **Files**, haz clic en el **archivo**.
 6. Luego te aparecerá la siguiente ventana, haz clic en **Yes**.
 ![alt text](image-3.png)
 
-Otra opción es utilizar la ruta de acceso al arhivo:
+Otra opción es utilizar la ruta completa de acceso al archivo:
 
 ```
 load("/ruta/completa/a/data_humanSkin_CellChat.rda")
 ```
 📤 **Salida esperada:** El objeto `data_humanSkin` se encuentra disponible en el entorno de trabajo. El cual incluye: 
 - Una matriz de expresión génica (`data`).
-- Un data frame con metadatos (`meta`).
+- Un *data frame* con los metadatos (`meta`).
 
-#### 1.1.1 Extraer lamatriz de expresión y los metadatos
+![alt text](image-4.png)
+
+#### 1.1.1 Extraer la matriz de expresión y los metadatos
 
 Aquí se separan los dos componentes principales:
 - `data.input`: matriz de expresión.
@@ -81,13 +87,20 @@ meta = data_humanSkin$meta
 
 📤 **Salida esperada:**: dos objetos listos para manipulación.
 
+- data.input
+![alt text](image-5.png)
+- meta
+![alt text](image-6.png)
+
 #### 1.1.2 Seleccionar las células de interés
 
 En este paso se filtran las células que pertenecen a la condición "LS" (en este caso, enfermedad).
 ```
 cell.use = rownames(meta)[meta$condition == "LS"]
 ```
-📤 **Salida esperada:**: `cell.use`: vector con los nombres (IDs) de las células seleccionadas.
+📤 **Salida esperada:** En el entorno de trabajo, en la sección *Values*, se encuentra `cell.use`, que consiste en un vector con los nombres (IDs) de las células seleccionadas.
+
+![alt text](image-7.png)
 
 #### 1.1.3 Filtrar la matriz de expresión
 
@@ -96,7 +109,7 @@ Se conservan únicamente las columnas (células) que cumplen la condición selec
 ```
 data.input = data.input[, cell.use]
 ```
-📤 **Salida esperada:**: Matriz de expresión reducida (solo células LS).
+📤 **Salida esperada:** Matriz de expresión reducida (solo células LS).
 
 #### 1.1.4 Filtrar los metadatos
 
@@ -105,7 +118,7 @@ Se ajusta el data frame de metadatos para que coincida con las células filtrada
 ```
 meta = meta[cell.use, ]
 ```
-📤 **Salida esperada:**: `meta` contiene solo la información de las células seleccionadas.
+📤 **Salida esperada:** `meta` contiene solo la información de las células seleccionadas.
 
 #### 1.1.5 Verificar los tipos celulares
 
@@ -114,7 +127,15 @@ Este comando permite visualizar los tipos celulares presentes en los datos.
 ```
 unique(meta$labels)
 ```
-📤 **Salida esperada:**: Un vector con las etiquetas únicas.
+📤 **Salida esperada:** Un vector que contiene las etiquetas únicas encontradas.
+
+Se identificaron 12 etiquetas posibles (desde Inflam. FIB hasta NKT). Este dataset contiene diversos tipos celulares, principalmente:
+- **Fibroblastos (FIB):** Inflamatorios, FBN1+, APOE+, COL11A1+.
+- **Células Dendríticas (DC/cDC):** cDC1, cDC2, Inflam. DC.
+- **Células T (TC):** CD40LG+, Inflam. TC, TC general.
+- **Otros:** LC (Langerhans o Linfáticas) y NKT (células Natural Killer T).
+
+![alt text](image-8.png)
 
 
 ### 1.2 Crear el objeto CellChat
@@ -127,28 +148,127 @@ cellchat <- createCellChat(object = data.input, meta = meta, group.by = "labels"
 
 📤 **Salida esperada:**: Crea un objeto llamado `Cellchat` que contiene los datos de expresión organizados por grupo celular y los metadatos, por ahora.
 
+![alt text](image-9.png)
+
 ### 1.3 Añadir la base de datos
 
-Ahora se selecciona la base de datos para humano de interacciones ligando-receptor. Si fuera para ratón sería `CellChatDB.mouse`
+Recordemos que CellChat usa una base de datos llamada **CellChatDB**, que contiene los pares ligando–receptor conocidos. El algoritmo usa la matriz de expresión para detectar qué células podrían comunicarse usando esos pares.
+
+Para ello, se selecciona la base de datos, en este escenario de humano, con las interacciones ligando-receptor. Si el dataset fuera de ratón usarías: `CellChatDB.mouse`
 ```
 CellChatDB <- CellChatDB.human
 ```
-📤 **Salida esperada:**: No verás un cambio visual, pero ahora el objeto contiene una inmesa listas de ligandos, receptores, complejos y cofactores.
+📤 **Salida esperada:**: Ahora el objeto `CellChat`contiene una inmesa lista de ligandos, receptores, complejos y cofactores.
 
 Puedes verificarlo con:
 ```
 showDatabaseCategory(CellChatDB)
 ```
-📤 **Salida esperada:**:
+📤 **Salida esperada:** Un resumen estadístico que muestra cómo está compuesta CellChatDB.
 
-### 1.3 Filtrar genes relevantes
+El primer gráfico muestra cómo ocurre la señalización celular. La base de datos incluye 4 tipos principales de comunicación: 
+ 1. **Secreted signaling:** Señales que una célula libera al espacio extracelular.
+ 2. **ECM-Receptor:** Interacciones con la matriz extracelular.
+ 3. **Cell-cell contact:** Señales que requieren contacto directo entre células.
+ 4. **Non-protein signaling:** Interacciones que no usan proteínas como ligando principal.
 
-Ahora vamos a filtrar genes que no participan en señalización, lo que reduce el ruido en el análisis.
+ El segundo gráfico muestra el tipo de complejo molecular, es decir, cómo están formados los receptores o ligandos. Un heterodímero es un receptor formado por dos proteínas distintas
+ 
+ El tercer gráfico muestra la fuente de evidencia. Esto demuestra de dónde provienen las interacciones de la base de datos. Ya sea de literatura científica o KEGG que es una base de datos de rutas biológicas.
+
+![alt text](CellChatDB.png)
+
+Para explorar detalladamente la estructura interna de la base de datos:
+```
+dplyr::glimpse(CellChatDB$interaction)
+```
+📤 **Salida esperada:** Una vista previa exhaustiva que confirma que estás trabajando con un catálogo muy robusto de 3,233 interacciones (filas) y 28 variables (columnas) que describen cada evento de comunicación.
+
+Algunas de las columnas más importantes son:
+- `interaction_name`: El identificador técnico de la pareja (ej. TGFB1_TGFBR1_TGFBR2). 
+> CellChat agrupa complejos de receptores con un guion bajo.
+- `pathway_name`: Agrupa las interacciones en vías biológicas (ej. todas las variantes de TGF-beta se agrupan en la vía TGFb). 
+- `ligand y receptor:` Quién envía la señal y quién la recibe.
+- `annotation:` Clasifica la interacción en las categorías mencionadas anteriormente.
+- `evidence:` Es el respaldo científico (códigos de KEGG o IDs de PubMed) que garantiza que esa interacción está probada y no es una predicción al azar.
+- Columnas de localización (`location`, `transmembrane`): Indican si el ligando es secretado al espacio extracelular o si el receptor está anclado a la membrana, lo cual es importante para la lógica biológica del modelo.
+
+![alt text](image-10.png)
+
+Puedes crear un subconjunto de CellChatDB para filtrar si hay algún el tipo de señalización en específico que desees explorar.
+```
+CellChatDB.use <- subsetDB(CellChatDB, search = "Secreted Signaling")
+```
+
+O puedes utilizar todas las interacciones posibles.
+```
+CellChatDB.use <- CellChatDB
+```
+Para guardar la base en el objeto. Esto le dice al objeto qué base de datos usar para detectar la comunicación celular.
+```
+cellchat@DB <- CellChatDB.use
+```
+
+### 1.3 Preprocesamiento: Filtrar genes relevantes
+
+Ahora vamos a preparar los datos antes de calcular la comunicación entre células. Básicamente, CellChat intenta identificar qué ligandos y receptores están activos en cada tipo celular. Esto reduce el dataset a solo genes que participan en señalización celular. Elimina genes como *housekeeping* y metabólicos y conserva genes como ligandos, receptores y cofactores, lo cual acelera el análisis.
+
+> Este paso es obligatorio, incluso si usas toda la base de datos.
 
 ```
 cellchat <- subsetData(cellchat)
 ```
 📤 **Salida esperada:**: Internamente disminuye el número de genes analizados y se optimiza el rendimiento.
+
+Analizar miles de células y calcular todas las posibles interacciones ligando-receptor (como las 3,233 que vimos previamente) requiere mucho esfuerzo computacional.
+
+Al emplear:
+```
+future::plan("multiprocess", workers = 4)
+```
+Habilitas el procesamiento en paralelo en tu sesión de R. Es una forma de decirle a tu computadora: "No uses un solo núcleo de mi procesador; usa varios al mismo tiempo para terminar más rápido". Ej. R divide 10,000 células en 4 grupos de 2,500 y procesa cada grupo en un núcleo distinto al mismo tiempo. Esto puede reducir el tiempo de espera casi a la cuarta parte.
+
+Mediante este comando, Cellchat busca genes de señalización que estén sobreexpresados en cada tipo celular.
+```
+cellchat <- identifyOverExpressedGenes(cellchat)
+```
+
+Para luego detectar genes ligando/receptor activos y entonces considerar una posible comunicación celular.
+```
+cellchat <- identifyOverExpressedInteractions(cellchat)
+```
+📤 **Salida esperada:** CellChat encontró 1645 pares ligando–receptor relevantes.
+
+![alt text](image-11.png)
+
+### Proyección a red PPI (opcional):
+ Esto usa una red de interacciones proteína–proteína: PPI. Sirve para corregir el problema de *dropout* en single-cell RNA-seq. 
+
+**Dropout** significa que un gen aparece con expresión 0 aunque sí esté activo. Esto pasa mucho con genes de señalización. La proyección usa difusión en la red proteica para suavizar la expresión.
+
+```
+cellchat <- projectData(cellchat, PPI.human)
+```
+
+**¿Debes usar projectData()?**
+
+Depende.
+
+- Recomendable si tienes poca profundidad de secuenciación o muchos genes salen como 0.
+- No siempre necesario si tus datos están bien normalizados o tienes buena cobertura.
+
+### Evaluación de calidad
+ Para revisar que no haya grupos con muy pocas células (ej. < 10) o niveles vacíos, el siguiente comando te muestra cuántas células tienes en cada tipo celular.
+```
+table(cellchat@idents)
+```
+📤 **Salida esperada:** Cada número es el tamaño de cada grupo celular.
+
+CellChat usa estos tamaños para normalizar interacciones.
+
+No es lo mismo 1200 fibroblastos enviando señales vs 67 células LC. Los grupos grandes tienden a generar más interacciones.
+
+![alt text](image-12.png)
 
 ## 🗪 Parte 2. Inferencia de la comunicación celular
 El objetivo de esta sección es transformar los datos de expresión génica en una representación de cómo se relacionan las células entre sí. Para ello, **calcula una probablidad de interacción para cada par ligando-receptor** entre los distintos grupos celulares.
