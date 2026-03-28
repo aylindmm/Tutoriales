@@ -293,16 +293,22 @@ Usa por defecto el método `triMean` para resumir la expresión génica por grup
 cellchat <- computeCommunProb(cellchat)
 ```
 
-📤 **Salida esperada:**: El resultado de esta función se guarda en el interior del objeto `CellChat`. Dentro de `object@options$parameter` se almacenan las probabilidades de comunicación y los parámetros usados en el cálculo.
+📤 **Salida esperada:**: El resultado de esta función se guarda en el interior del objeto `CellChat`. Dentro de `object@options$parameter` se almacenan las probabilidades de comunicación y los parámetros usados en el cálculo. `CellChat` ya no es solo una matriz de datos; ahora contiene una red de comunicación.
 
->Nota: Si hay vías de señalización conocidas que esperas ver pero no aparecen, puedes cambiar el método de promedio a uno menos estricto, como *truncated mean*.
+![alt text](image-13.png)
+
+> Si hay vías de señalización conocidas que esperas ver pero no aparecen, puedes cambiar el método de promedio a uno menos estricto, como *truncated mean*.
 
 ### 2.1.2 Filtrado de interacciones poco confiables
 
-Después se aplica un paso de control de calidad con la función `filterCommunication` al eliminar interacciones que involucran grupos celulares con pocas células.
+Ahora que CellChat ya "infirió" quién habla con quién, se aplica un paso de control de calidad con la función `filterCommunication` al eliminar interacciones que son demasiado débiles o poco significativas.
 ```
 cellchat <- filterCommunication(cellchat, min.cells = 10)
 ```
+En este caso, al utilizar `min.cells = 10`, significa que cualquier tipo celular con menos de 10 células será excluido del análisis de comunicación. Esto es relevante porque estimar interacciones con muy pocas células puede ser poco confiable y generar resultados ruidosos o falsos positivos.
+
+📤 **Salida esperada:** Se almacena dentro del objeto `CellChat`.
+
 ### 2.2 Extraer la red de comunicación celular inferida
 
 La función `subsetCommunication` se utiliza para extraer la red de comunicación celular en forma de tabla (*data frame*). Hasta ahora, toda la información está guardada dentro del objeto `CellChat`, pero no es fácil de ver directamente. Esta función hace posible convertir esas interacciones en algo más manejable, donde puedes ver claramente: qué célula envía la señal, cuál la recibe, qué ligando-receptor está involucrado y qué tan fuerte es la interacción.
@@ -312,7 +318,17 @@ Al usar:
 ```
 df.net <- subsetCommunication(cellchat)
 ```
-obtienes todas las interacciones inferidas a nivel de ligando-receptor. Es decir, cada fila representa una interacción específica. Si en lugar de eso usas `slot.name = "netP"`, entonces accedes a las interacciones a nivel de vías de señalización completas, no de pares individuales. Esto es útil porque muchas veces lo que te interesa no es un gen en particular, sino rutas.
+obtienes todas las interacciones inferidas a nivel de ligando-receptor.
+
+📤 **Salida esperada:** Una tabla donde:
+- Filas: Cada fila representa una interacción específica entre dos grupos de células.
+- Columnas: Incluye el nombre del ligando, el receptor, la vía biológica (`pathway_name`), la probabilidad de comunicación (`prob`) y el valor de significancia estadística (`p-val`).
+
+Es el paso previo indispensable para exportar los resultados a Excel o para crear gráficos.
+
+![alt text](image-14.png)
+
+Si en lugar de eso usas `slot.name = "netP"`, entonces accedes a las interacciones a nivel de vías de señalización completas, no de pares individuales. Esto es útil porque muchas veces lo que te interesa no es un gen en particular, sino rutas.
 
 También puedes filtrar la información según lo que te interese. 
 
@@ -330,11 +346,21 @@ Lo que te permite quedarte solo con interacciones asociadas a vías específicas
 
 ### 2.3 Inferir la comunicación celular a nivel de vía de señalización
 
-Mediante la función `computeCommunProbPathway`, CellChat pasa de interacciones individuales a una visión más general. Lo que hace es agrupar todas las interacciones ligando-receptor que pertenecen a una misma vía de señalización y calcular una probabilidad global para esa vía. Es decir, en lugar de ver interacciones aisladas, puedes ver qué tan activa está una ruta completa de comunicación entre células.
+Mediante la función `computeCommunProbPathway`, CellChat pasa de interacciones individuales a una visión más general. 
+
+Lo que hace es agrupar todas las interacciones ligando-receptor que pertenecen a una misma vía de señalización y calcular una probabilidad global para esa vía. Es decir, en lugar de ver interacciones aisladas, puedes ver qué tan activa está una ruta completa de comunicación entre células.
 ```
 cellchat <- computeCommunProbPathway(cellchat)
 ```
-Es esencial entender cómo se organiza esta información dentro del objeto `CellChat`. Las interacciones a nivel de ligando-receptor se guardan en `net`, mientras que las interacciones a nivel de vías de señalización se guardan en `netP`.
+
+📤 **Salida esperada:** Las interacciones a nivel de ligando-receptor se guardan en `object@net`, mientras que las interacciones a nivel de vías de señalización se guardan en `object@netP`.
+
+Para ver el listado de todas las vías que CellChat logró detectar tras correr este comando:
+```
+cellchat@netP$pathways
+```
+![alt text](image-15.png)
+
 
 ### 2.4 Calcular la red de comunicación agregada entre celdas
 
@@ -343,6 +369,123 @@ Después de haber calculado todas las interacciones célula-célula, la función
 1. El número de interacciones que existen entre ellos, y
 2. La fuerza total de comunicación (sumando las probabilidades de todas las interacciones).
 
-Esto es muy útil porque te permite responder preguntas más globales, como: ¿qué tipo celular es el que más se comunica? o ¿qué interacción entre células es más fuerte en general? Además, si te interesa solo un subconjunto de células, puedes usar `sources.use` y `targets.use` para enfocarte en interacciones específicas.
+Esto es muy útil porque permite responder preguntas más globales, como: ¿qué tipo celular es el que más se comunica? o ¿qué interacción entre células es más fuerte en general? 
 
-## Parte 3. Visualización y análisis
+Además, si te interesa solo un subconjunto de células, puedes usar `sources.use` y `targets.use` para enfocarte en interacciones específicas.
+
+```
+cellchat <- aggregateNet(cellchat)
+```
+
+📤 **Salida esperada:** Se almacena dentro del objeto `CellChat`.
+
+Una vez contamos con esta red agregada, puedes visualizarla. Para eso se usa `netVisual_circle`, que genera un diagrama circular (*Circle plot*) tipo red donde:
+- Cada nodo representa un tipo celular.
+- El tamaño del nodo (usando `groupSize`) indica cuántas células hay en ese grupo.
+- Las líneas representan la comunicación entre células.
+
+Cuando se usa `cellchat@net$count`, se visualiza el número de interacciones entre cada par celular. En cambio, cuando se usa `cellchat@net$weight`, se ve la fuerza total de la comunicación. Esto es importante porque no siempre más interacciones significa señales más fuertes; a veces hay pocas interacciones pero muy potentes.
+
+```
+groupSize <- as.numeric(table(cellchat@idents))
+par(mfrow = c(1,2), xpd=TRUE)
+netVisual_circle(cellchat@net$count, vertex.weight = groupSize, weight.scale = T, label.edge= F, title.name = "Number of interactions")
+netVisual_circle(cellchat@net$weight, vertex.weight = groupSize, weight.scale = T, label.edge= F, title.name = "Interaction weights/strength")
+```
+
+📤 **Salida esperada:** *Circle Plot* que resume la red global de comunicación celular del dataset. 
+
+1. **Number of interactions:** Mide la cantidad bruta de pares ligando-receptor únicos que se están "hablando" entre dos grupos. El grosor de las líneas indica cuántas vías diferentes están activas. Si una línea es muy gruesa, significa que esos dos grupos tienen un "diálogo" muy diverso (muchos ligandos y receptores distintos interactuando).
+2. **Interaction weights/strength:** Evalúa la intensidad o fuerza de la señal (la probabilidad de comunicación). No importa cuántas vías haya, sino qué tan fuerte es la señalización total. Aquí el grosor indica dónde hay una señalización "fuerte" o muy expresada. Los círculos que salen y entran al mismo grupo (bucles) representan señalización autocrina, es decir, células que se envían señales a sí mismas.
+
+Los tipos celulares con más líneas actúan como nodos centrales o *hubs* que coordinan la respuesta en el tejido.
+
+![alt text](image-17.png)
+
+ Debido a que estas redes pueden volverse muy complejas (muchos tipos celulares conectados entre sí), es posible **analizar la comunicación célula por célula**. 
+ 
+ Lo que hace el loop es tomar cada tipo celular como “emisor” y mostrar únicamente las señales que salen de él hacia los demás. Para lograrlo, crea una matriz (`mat2`) donde solo se conserva una fila a la vez (la del emisor actual), mientras que el resto se pone en cero.
+
+Esto te permite ver:
+- qué células están enviando más señales.
+- hacia qué tipos celulares se dirigen.
+- qué tan fuertes son esas interacciones.
+
+ El parámetro `edge.weight.max` es importante porque fija una escala común para todas las gráficas. Así puedes comparar visualmente entre diferentes células sin que cambie la escala de los pesos de las interacciones.
+
+```
+mat <- cellchat@net$weight
+par(mfrow = c(3,4), xpd=TRUE)
+for (i in 1:nrow(mat)) {
+  mat2 <- matrix(0, nrow = nrow(mat), ncol = ncol(mat), dimnames = dimnames(mat))
+  mat2[i, ] <- mat[i, ]
+  netVisual_circle(mat2, vertex.weight = groupSize, weight.scale = T, edge.weight.max = max(mat), title.name = rownames(mat)[i])
+}
+```
+
+📤 **Salida esperada:** Un *Circle Plot* que muestra una descomposición de la red de comunicación, donde cada panel individual visualiza las señales enviadas exclusivamente por un solo tipo de célula (el emisor) hacia todos los demás (los receptores).
+
+Es la forma más clara de identificar el rol específico de cada población en el tejido.
+
+El grosor de las flechas indica una mayor fuerza de señalización. Un panel con muchas flechas indica una población "parlanchina" que regula a casi todo el sistema Los lazos sobre la propia célula dan lugar a señales de autorregulación (autocrinas).
+
+![alt text](image-18.png)
+
+## 📶 Parte 3. Visualización y análisis
+
+En esta sección, vamos a realmente interpretar los resultados visualmente, es momento de explorar la red de comunicación que construiste.
+
+### 3.1 Visualizar cada vía de señalización utilizando diagramas
+
+ CellChat ofrece varias formas de representar la comunicación célula-célula, cada una con un propósito distinto. Entre las principales están: el *hierarchy plot*, el *circle plot*, el *chord diagram* y el *bubble plot*. Todas estas representaciones te permiten ver quién le habla a quién, pero desde diferentes perspectivas: algunas enfatizan dirección, otras intensidad, y otras la organización global de la red.
+
+ Además, no solo muestra conexiones, sino que también permite analizar información de alto nivel, como cuáles son las células que más envían señales (*outputs*), cuáles reciben más (*inputs*), y cómo se coordinan entre sí mediante distintas vías de señalización.
+
+ Una de las visualizaciones más informativas es el `hierarchy plot`. En este tipo de gráfico, tú defines qué células quieres analizar como “receptoras principales” usando la función `vertex.receiver`. 
+
+```
+ pathways.show <- c("CXCL") 
+# Hierarchy plot
+# Here we define `vertex.receive` so that the left portion of the hierarchy plot shows signaling to fibroblast and the right portion shows signaling to immune cells 
+vertex.receiver = seq(1,4) # a numeric vector. 
+netVisual_aggregate(cellchat, signaling = pathways.show,  vertex.receiver = vertex.receiver)
+# Circle plot
+par(mfrow=c(1,1))
+netVisual_aggregate(cellchat, signaling = pathways.show, layout = "circle")
+```
+
+ El gráfico se divide en dos partes:
+- A la izquierda, se muestran las señales dirigidas hacia las células que definiste.
+- A la derecha, se muestran las señales hacia el resto de las células.
+ Esto es muy útil si tienes una hipótesis específica.
+
+ ![alt text](image-20.png)
+
+ El `circle plot` es más utilizado. Representa todos los tipos celulares como nodos en un círculo y dibuja conexiones entre ellos. Aquí puedes ver rápidamente: qué células están más conectadas, qué interacciones son más fuertes (líneas más gruesas) y qué poblaciones son más grandes (nodos más grandes). Es ideal para tener una visión general de la red completa.
+
+ El `chord diagram` es otra forma de visualizar la red, pero más detallada. Tiene dos variantes:
+ - `netVisual_chord_cell`: Muestra interacciones entre tipos celulares (cada sector es un tipo celular).
+ - `netVisual_chord_gene`: Muestra interacciones a nivel de ligando-receptor o vías.
+
+ Una ventaja importante es que puedes agrupar células, lo cual simplifica mucho la interpretación cuando tienes muchos clusters. Además, los colores y barras internas ayudan a entender quién envía y quién recibe señales, aunque a veces puede verse complejo.
+
+```
+par(mfrow=c(1,1))
+netVisual_aggregate(cellchat, signaling = pathways.show, layout = "chord")
+```
+
+ En todos estos gráficos hay reglas comunes de interpretación:
+ - El color de las líneas indica la célula que envía la señal.
+ - El grosor de las líneas indica qué tan fuerte es la interacción.
+ - El tamaño de los nodos refleja el número de células en cada grupo.
+ - En algunos gráficos, se distingue entre célula emisora y receptora con diferentes estilos (por ejemplo, círculos sólidos vs abiertos).
+
+ Otra idea importante es que puedes visualizar la comunicación en dos niveles distintos:
+ - A nivel de vía de señalización completa (por ejemplo, CXCL, WNT, TGFβ) usando `netVisual_aggregate`.
+ - A nivel de pares ligando-receptor individuales usando `netVisual_individual`.
+
+ Así, primero puedes ver el panorama general (qué vías están activas) y luego a detalle (qué genes específicos lo están causando).
+
+ Se puede acceder a todas las vías de señalización que muestran comunicaciones significativas mediante la función `cellchat@netP$pathways`.
+
+ En el siguiente ejemplo, se selecciona la vía CXCL (`pathways.show <- c("CXCL"`)) y se visualiza de distintas formas: hierarchy plot, circle plot, heatmap y chord diagram. Esto ilustra cómo una sola vía puede explorarse desde múltiples ángulos para entender completamente su papel en la comunicación celular.
