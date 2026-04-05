@@ -101,7 +101,7 @@ cell.use = rownames(meta)[meta$condition == "LS"]
 
 ![alt text](image-7.png)
 
-#### 1.1.3 Filtrar la matriz de expresión
+#### 2.1.3 Filtrar la matriz de expresión
 
 Se conservan únicamente las columnas (células) que cumplen la condición seleccionada.
 
@@ -110,7 +110,7 @@ data.input = data.input[, cell.use]
 ```
 📤 **Salida esperada:** Matriz de expresión reducida (solo las células LS).
 
-#### 1.1.4 Filtrar los metadatos
+#### 2.1.4 Filtrar los metadatos
 
 Se ajusta el *data frame* de metadatos para que coincida con las células filtradas.
 
@@ -119,7 +119,7 @@ meta = meta[cell.use, ]
 ```
 📤 **Salida esperada:** `meta` contiene solo la información de las células seleccionadas.
 
-#### 1.1.5 Verificar los tipos celulares
+#### 2.1.5 Verificar los tipos celulares
 
 Este comando permite visualizar los tipos celulares presentes en los datos.
 
@@ -213,7 +213,7 @@ Para guardar la base en el objeto. Esto le dice al objeto qué base de datos usa
 cellchat@DB <- CellChatDB.use
 ```
 
-### 2.3 Preprocesamiento: Filtrar genes relevantes
+### 2.4 Preprocesamiento: Filtrar genes relevantes
 
 Ahora vamos a preparar los datos antes de calcular la comunicación entre células. Básicamente, CellChat intenta identificar qué ligandos y receptores están activos en cada tipo celular. Esto reduce el *dataset* a solo genes que participan en señalización celular. Elimina genes como los *housekeeping* y metabólicos, y conserva genes como los ligandos, receptores y cofactores, lo cual acelera el análisis.
 
@@ -313,7 +313,7 @@ En este caso, al utilizar `min.cells = 10`, significa que cualquier tipo celular
 
 📤 **Salida esperada:** Se almacena dentro del objeto `CellChat`.
 
-### 2.2 Extraer la red de comunicación celular inferida
+### 3.2 Extraer la red de comunicación celular inferida
 
 La función `subsetCommunication` se utiliza para extraer la red de comunicación celular en forma de data frame. Hasta ahora, toda la información está guardada dentro del objeto `CellChat`, pero no es fácil de ver directamente. Esta función hace posible convertir esas interacciones en algo más manejable, donde se puede ver claramente: qué célula envía la señal, cuál la recibe, qué ligando-receptor está involucrado y qué tan fuerte es la interacción.
 
